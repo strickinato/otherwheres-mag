@@ -1,5 +1,12 @@
 @charset "utf-8";
+
 @import "normalize";
+@import "bourbon";
+@import "base/base";
+@import "neat";
+
+@import "partials/layout";
+@import "partials/header";
 
 body {
   background: #ECC561;

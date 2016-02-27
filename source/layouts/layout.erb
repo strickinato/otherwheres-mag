@@ -15,6 +15,9 @@
   </head>
 
   <body class="<%= page_classes %>">
-    <%= yield %>
+    <div id="main">
+      <%= partial "layouts/header" %>
+      <%= yield %>
+    </div>
   </body>
 </html>
