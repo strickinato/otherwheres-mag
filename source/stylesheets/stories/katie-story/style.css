@@ -1,0 +1,55 @@
+@import url(https://fonts.googleapis.com/css?family=Alegreya+Sans:100italic);
+@import url(https://fonts.googleapis.com/css?family=Esteban);
+
+#katie-story-mount {
+  overflow: hidden;
+  background-image: url("/assets/page-background.jpg");
+  background-size: cover;
+  /*
+  The above attrs are important, but size the div however you need to fit it
+  into the site
+  */
+  width: 100%;
+  height: 750px;
+}
+
+#katie-story-mount #katie-story-container{
+  position: relative;
+}
+
+#katie-story-mount ::-webkit-scrollbar {
+  display: none;
+}
+
+#katie-story-mount #katie-story-container{
+  position: relative;
+}
+
+#katie-story-mount #katie-story-woman-section {
+  position: absolute;
+  overflow: hidden;
+}
+
+#katie-story-mount #katie-story-story-section {
+  position: absolute;
+  width: 50%;
+  text-align: center;
+  padding-left: 5%;
+  padding-top: 50px;
+  overflow: hidden;
+}
+
+#katie-story-mount #story-text {
+  text-align: justify;
+  color: #181818;
+}
+
+#katie-story-mount h1, h2 {
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+#katie-story-mount p {
+  font-family: 'Esteban', serif;
+  line-height: 35px;
+  font-size: 18px;
+}
