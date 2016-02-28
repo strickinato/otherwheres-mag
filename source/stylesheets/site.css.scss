@@ -2,8 +2,12 @@
 
 @import "normalize";
 @import "bourbon";
-@import "base/base";
 @import "neat";
+
+@import "colors";
 
 @import "partials/layout";
 @import "partials/header";
+
+
+@import "vendor/nav-bar"
