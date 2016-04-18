@@ -1,0 +1,173 @@
+<h1 id="section">0.15</h1>
+
+<h3 id="syntax">Syntax</h3>
+
+<p>New <code>import</code> syntax with keyword <code>exposing</code>.</p>
+
+<h3 id="module-changes">Module Changes</h3>
+
+<ul>
+  <li>Move <code>Http</code> to <code>elm-http</code> package and totally redo API</li>
+  <li>Remove <code>WebSocket</code> module</li>
+  <li>Add <code>Task</code> module</li>
+</ul>
+
+<h3 id="channels-become-mailboxes">Channels become Mailboxes</h3>
+
+<p><code>Graphics.Input</code> now works with this API (from module <code>Signal</code>):</p>
+
+<p>```elm
+type alias Mailbox a = { address : Address a, signal : Signal a }</p>
+
+<p>mailbox : a -&gt; Mailbox a
+```</p>
+
+<p>You can then send messages to the <code>Address</code> with functions like <code>Signal.send</code>
+and <code>Signal.message</code>, or create forwarding addresses with <code>Signal.forwardTo</code>.</p>
+
+<h3 id="text-in-collages">Text in Collages</h3>
+
+<p><code>Graphics.Collage</code> now has two new functions:</p>
+
+<p><code>elm
+text : Text -&gt; Form
+outlinedText : LineStyle -&gt; Text -&gt; Form
+</code></p>
+
+<p>These functions render text with the canvas, making things quite a bit faster.
+The underlying implementation of <code>Text</code> has also been improved dramatically.</p>
+
+<h3 id="miscellaneous">Miscellaneous</h3>
+
+<ul>
+  <li>Change types of <code>head</code>, <code>tail</code>, <code>maximum</code>, <code>minimum</code> by wrapping output in <code>Maybe</code></li>
+  <li>Move <code>leftAligned</code>, <code>centered</code>, <code>rightAligned</code> from <code>Text</code> to <code>Graphics.Element</code></li>
+  <li>Move <code>asText</code> from <code>Text</code> to <code>Graphics.Element</code>, renaming it to <code>show</code> in the process</li>
+  <li>Remove <code>Text.plainText</code> (can be replaced by <code>Graphics.Element.leftAligned &lt;&lt; Text.fromString</code>)</li>
+  <li>Change type of <code>Keyboard.keysDown</code> from <code>Signal (List KeyCode)</code> to <code>Signal (Set KeyCode)</code></li>
+  <li>Remove <code>Keyboard.directions</code></li>
+  <li>Rename <code>Keyboard.lastPressed</code> to <code>Keyboard.presses</code></li>
+</ul>
+
+<h1 id="section-1">0.14</h1>
+
+<h3 id="syntax-1">Syntax</h3>
+
+<ul>
+  <li>Keyword <code>type</code> becomes <code>type alias</code></li>
+  <li>Keyword <code>data</code> becomes <code>type</code></li>
+  <li>Remove special list syntax in types, so <code>[a]</code> becomes <code>List a</code></li>
+</ul>
+
+<h3 id="reduce-default-imports">Reduce Default Imports</h3>
+
+<p>The set of default imports has been reduced to the following:</p>
+
+<p><code>haskell
+import Basics (..)
+import Maybe ( Maybe( Just, Nothing ) )
+import Result ( Result( Ok, Err ) )
+import List ( List )
+import Signal ( Signal )
+</code></p>
+
+<h3 id="make-json-parsing-easy">Make JSON parsing easy</h3>
+
+<ul>
+  <li>Added <code>Json.Decode</code> and <code>Json.Encode</code> libraries</li>
+</ul>
+
+<h3 id="use-more-natural-names">Use more natural names</h3>
+
+<ul>
+  <li>
+    <p>Rename <code>String.show</code> to <code>String.toString</code></p>
+  </li>
+  <li>Replace <code>List.zip</code> with <code>List.map2 (,)</code></li>
+  <li>
+    <p>Replace <code>List.zipWith f</code> with <code>List.map2 f</code></p>
+  </li>
+  <li>Rename <code>Signal.liftN</code> to <code>Signal.mapN</code></li>
+  <li>Rename <code>Signal.merges</code> to <code>Signal.mergeMany</code></li>
+</ul>
+
+<h3 id="simplify-signal-library">Simplify Signal Library</h3>
+
+<ul>
+  <li>Revamp <code>Input</code> concept as <code>Signal.Channel</code></li>
+  <li>Remove <code>Signal.count</code></li>
+  <li>Remove <code>Signal.countIf</code></li>
+  <li>Remove <code>Signal.combine</code></li>
+</ul>
+
+<h3 id="randomness-done-right">Randomness Done Right</h3>
+
+<ul>
+  <li>No longer signal-based</li>
+  <li>Use a <code>Generator</code> to create random values</li>
+</ul>
+
+<h3 id="revamp-maybes-and-error-handling">Revamp Maybes and Error Handling</h3>
+
+<ul>
+  <li>
+    <p>Add the following functions to <code>Maybe</code></p>
+
+    <pre><code>withDefault : a -&gt; Maybe a -&gt; a
+oneOf : List (Maybe a) -&gt; Maybe a
+map : (a -&gt; b) -&gt; Maybe a -&gt; Maybe b
+andThen : Maybe a -&gt; (a -&gt; Maybe b) -&gt; Maybe b
+</code></pre>
+  </li>
+  <li>
+    <p>Remove <code>Maybe.maybe</code> so <code>maybe 0 sqrt Nothing</code> becomes <code>withDefault 0 (map sqrt Nothing)</code></p>
+  </li>
+  <li>
+    <p>Remove <code>Maybe.isJust</code> and <code>Maybe.isNothing</code> in favor of pattern matching</p>
+  </li>
+  <li>
+    <p>Add <code>Result</code> library for proper error handling. This is for cases when
+you want a computation to succeed, but if there is a mistake, it should
+produce a nice error message.</p>
+  </li>
+  <li>
+    <p>Remove <code>Either</code> in favor of <code>Result</code> or custom union types</p>
+  </li>
+  <li>
+    <p>Revamp functions that result in a <code>Maybe</code>.</p>
+
+    <ul>
+      <li>Remove <code>Dict.getOrElse</code> and <code>Dict.getOrFail</code> in favor of <code>withDefault 0 (Dict.get key dict)</code></li>
+      <li>Remove <code>Array.getOrElse</code> and <code>Array.getOrFail</code> in favor of <code>withDefault 0 (Array.get index array)</code></li>
+      <li>Change <code>String.toInt : String -&gt; Maybe Int</code> to <code>String.toInt : String -&gt; Result String Int</code></li>
+      <li>Change <code>String.toFloat : String -&gt; Maybe Float</code> to <code>String.toFloat : String -&gt; Result String Float</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="make-appending-more-logical">Make appending more logical</h3>
+
+<ul>
+  <li>
+    <p>Add the following functions to <code>Text</code>:</p>
+
+    <pre><code>empty : Text
+append : Text -&gt; Text -&gt; Text
+concat : [Text] -&gt; Text
+join : Text -&gt; [Text] -&gt; Text
+</code></pre>
+  </li>
+  <li>
+    <p>Make the following changes in <code>List</code>:</p>
+    <ul>
+      <li>Replace <code>(++)</code> with <code>append</code></li>
+      <li>Remove <code>join</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="miscellaneous-1">Miscellaneous</h3>
+
+<ul>
+  <li>Rename <code>Text.toText</code> to <code>Text.fromString</code></li>
+</ul>

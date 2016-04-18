@@ -1,0 +1,123 @@
+<h1 id="elm-css-versionhttpsimgshieldsionpmvelm-csssvghttpswwwnpmjscompackageelm-css-travis-build-statushttpstravis-ciorgrtfeldmanelm-csssvgbranchmasterhttptravis-ciorgrtfeldmanelm-css-appveyor-build-statushttpsciappveyorcomapiprojectsstatus0j7x0mpggmtu6mmsbranchmastersvgtruehttpsciappveyorcomprojectrtfeldmanelm-cssbranchmaster">elm-css <a href="https://www.npmjs.com/package/elm-css"><img alt="Version" src="https://img.shields.io/npm/v/elm-css.svg" /></a> <a href="http://travis-ci.org/rtfeldman/elm-css"><img alt="Travis build Status" src="https://travis-ci.org/rtfeldman/elm-css.svg?branch=master" /></a> <a href="https://ci.appveyor.com/project/rtfeldman/elm-css/branch/master"><img alt="AppVeyor build status" src="https://ci.appveyor.com/api/projects/status/0j7x0mpggmtu6mms/branch/master?svg=true" /></a></h1>
+
+<p>A CSS preprocessor where you write <a href="http://elm-lang.org">Elm</a> code and get .css files. Inspired by the excellent <a href="http://sass-lang.com/">Sass</a>, <a href="http://stylus-lang.com/">Stylus</a>, and <a href="http://glenmaddern.com/articles/css-modules">CSS Modules</a>.</p>
+
+<p>(This is a BETA release, so please be careful! The documentation in particular
+is very much a work in progress.)</p>
+
+<p>Try it out! (make sure you already have <a href="http://elm-lang.org">elm</a> installed, e.g. with <code>npm install -g elm</code>)</p>
+
+<p><code>
+$ npm install -g elm-css
+$ git clone https://github.com/rtfeldman/elm-css.git
+$ cd elm-css/examples
+$ elm-css src/Stylesheets.elm
+$ less homepage.css
+</code></p>
+
+<p>Isn't it a pain when you want to rename a CSS class or ID, but can't be sure that the rename wouldn't break things?
+Or when it turns out the reason something wasn't displaying as expected was that you had a typo in the class name?
+How about when you load multiple stylesheets onto the same page and some of the
+class names overlap?</p>
+
+<p>Wouldn't it be sweet if those problems went away?</p>
+
+<p><code>elm-css</code> lets you:</p>
+
+<ol>
+  <li>Write Elm code and get out a .css file</li>
+  <li>Share code between your render logic and your CSS stylesheets (including any inline styles, which you can also write in elm-css), so you can easily keep identifier names and URLs synchronized</li>
+  <li>Use union types instead of strings for class names, IDs, and animation names, so typos will result in compile errors instead of bugs</li>
+  <li>Automatically namespace all your classes, ids, and animation names to avoid name conflicts between stylesheets.</li>
+  <li>Assemble your stylesheets by writing normal Elm code, so you have access to your full suite of programming tools. <code>elm-css</code> doesn't need a special notion of "parameterized mixins" because you can already write arbitrary Elm functions…and not just to parameterize mixins, but to parameterize anything!</li>
+</ol>
+
+<h3 id="examples">Examples</h3>
+
+<p>There are a few examples to check out!</p>
+
+<ul>
+  <li><a href="https://github.com/eeue56/json-to-elm">json-to-elm</a> which can see be seen live <a href="https://noredink.github.io/json-to-elm">here</a></li>
+  <li>the examples folder contains a working project with a readme</li>
+  <li>the example below:</li>
+</ul>
+
+<p>Here's an example:</p>
+
+<p>```elm
+css =
+  (stylesheet « namespace "dreamwriter")
+    [ body
+        [ overflowX auto
+        , minWidth (px 1280)
+        ]</p>
+
+<pre><code>, (#) Page
+    [ backgroundColor (rgb 200 128 64)
+    , color (hex "CCFFFF")
+    , width (pct 100)
+    , height (pct 100)
+    , boxSizing borderBox
+    , padding (px 8)
+    , margin zero
+    ]
+
+, (.) NavBar
+    [ margin zero
+    , padding zero
+
+    , children
+        [ li
+            [ (display inlineBlock) |&gt; important
+            , color primaryAccentColor
+            ]
+        ]
+    ]
+]
+</code></pre>
+
+<p>primaryAccentColor =
+  hex "ccffaa"
+```</p>
+
+<p>The above is vanilla Elm code. <code>Hidden</code> and <code>Page</code> are backed by union types, so
+if they get out of sync with your view code, you'll get a nice build error.
+<code>$</code>, <code>#</code>, <code>~</code>, and the like are custom operators.</p>
+
+<p>The above <code>elm-css</code> stylesheet compiles to the following .css file:</p>
+
+<p>```css
+body {
+    overflow-x: auto;
+    min-width: 1280px;
+}</p>
+
+<h1 id="dreamwriterpage-">dreamwriterPage {</h1>
+<pre><code>background-color: rgb(200, 128, 64);
+color: #CCFFFF;
+width: 100%;
+height: 100%;
+box-sizing: border-box;
+padding: 8px;
+margin: 0; }
+</code></pre>
+
+<p>.dreamwriterNavBar {
+    margin: 0;
+    padding: 0;
+}</p>
+
+<p>.dreamwriterNavBar &gt; li {
+    display: inline-block !important;
+    color: #ccffaa;
+}
+```</p>
+
+<p>You can also use elm-css for inline styles with the <code>asPairs</code> function, like so:</p>
+
+<pre><code>styles = Css.asPairs &gt;&gt; Html.Attributes.style
+
+button
+  [ styles [ position absolute, left (px 5) ] ]
+  [ text "Whee!" ]
+</code></pre>

@@ -1,0 +1,19 @@
+<h1 id="examples">Examples</h1>
+
+<p>There are a bunch of examples here, and <a href="https://github.com/evancz/elm-todomvc">the TodoMVC example</a> is a great
+example of a more complicated app with more robust architecture.</p>
+
+<h3 id="run-an-example">Run an Example</h3>
+
+<p>Let's say you want to see the results of <code>Yogi.elm</code>. You would run the
+following two commands:</p>
+
+<p><code>bash
+elm-package install
+elm-reactor
+</code></p>
+
+<p>Then open <code>http://0.0.0.0:8000/Yogi.elm</code> in your browser!</p>
+
+<p>You only need to run <code>elm-package install</code> once. That will grab the latest
+released version of the <code>elm-html</code> library.</p>

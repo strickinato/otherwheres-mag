@@ -1,0 +1,43 @@
+<h1 id="contributing-to-the-core-libraries">Contributing to the core libraries</h1>
+
+<p>Thanks helping with the development of Elm! This document describes the basic
+standards for opening pull requests and making the review process as smooth as
+possible.</p>
+
+<h2 id="ground-rules">Ground rules</h2>
+
+<ul>
+  <li>Always make pull requests minimal. If it can be split up, it should be split up.</li>
+  <li>Use style consistent with the file you are modifying.</li>
+  <li>Use descriptive titles for PRs</li>
+  <li>Provide all the necessary context for evaluation in the PR.
+If there are relevant issues or examples or discussions, add them.
+If things can be summarized, summarize them. The easiest PRs are ones
+that already address the reviewers questions and concerns.</li>
+</ul>
+
+<h2 id="documentation-fixes">Documentation Fixes</h2>
+
+<p>If you want to fix docs, just open a PR. This is super helpful!</p>
+
+<h2 id="bug-fixes">Bug Fixes</h2>
+
+<p>If you find an issue or see one you want to work on, go for it!</p>
+
+<p>The best strategy is often to dive in. Asking for directions usually
+does not work. If someone knew the specifics and knew how how to fix
+it, it is likely they would have already sent the PR themselves!</p>
+
+<p>Also, be sure you are testing.</p>
+
+<h2 id="adding-new-functions">Adding New Functions</h2>
+
+<p>We are fairly conservative about adding new functions to core libraries.
+If you want to augment the <code>List</code> or <code>Array</code> library, we recommend creating
+small packages called <code>list-extras</code> or <code>array-extras</code> that have all the
+features you want.</p>
+
+<p>Long term, we will set up a process to review <code>*-extras</code> packages to move
+stuff into core. By going through packages, it will be much easier to assess
+whether a function is pleasant and useful in practice before committing to it
+in the core libraries.</p>

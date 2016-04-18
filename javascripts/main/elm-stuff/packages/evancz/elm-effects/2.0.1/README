@@ -1,0 +1,15 @@
+<h1 id="elm-effects">Elm Effects</h1>
+
+<p>A package for working with effects like HTTP and animation within <a href="https://github.com/evancz/elm-architecture-tutorial/">The Elm Architecture</a>.</p>
+
+<h2 id="examples">Examples</h2>
+
+<p>These small examples are set up to clarify the key ideas by progressively introducing new stuff. Read <a href="https://github.com/evancz/elm-architecture-tutorial/">the Elm Architecture tutorial</a> for a full walk through of these examples.</p>
+
+<ul>
+  <li><a href="http://evancz.github.io/elm-architecture-tutorial/examples/5">Random GIF fetcher</a> — <a href="https://github.com/evancz/elm-architecture-tutorial/tree/master/examples/5">code</a></li>
+  <li><a href="http://evancz.github.io/elm-architecture-tutorial/examples/6">Pair of random GIFs</a> — <a href="https://github.com/evancz/elm-architecture-tutorial/tree/master/examples/6">code</a></li>
+  <li><a href="http://evancz.github.io/elm-architecture-tutorial/examples/7">List of random GIFs</a> — <a href="https://github.com/evancz/elm-architecture-tutorial/tree/master/examples/7">code</a></li>
+  <li><a href="http://evancz.github.io/elm-architecture-tutorial/examples/8">Animating Components</a> — <a href="https://github.com/evancz/elm-architecture-tutorial/tree/master/examples/8">code</a></li>
+</ul>
+

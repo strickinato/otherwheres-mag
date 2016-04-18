@@ -1,0 +1,63 @@
+<h1 id="using-elm-is-easier-than-ever">Using Elm is easier than ever</h1>
+
+<p>Getting started with Elm is now easier than ever with the <code>StartApp</code> package.</p>
+
+<p>With <a href="https://github.com/evancz/elm-architecture-tutorial/">the Elm Architecture</a>, it has never been easier to write modular front-end code that is <a href="http://elm-lang.org/blog/Blazing-Fast-Html.elm">shockingly fast</a> and easy to test, refactor, and debug. The <code>StartApp</code> package drastically lowers the barrier to entry, setting everything up so you can focus entirely on writing your app.</p>
+
+<h2 id="example">Example</h2>
+
+<p>The following chunk of code sets up a simple counter that you can increment and decrement. Notice that you focus entirely on setting up <code>model</code>, <code>view</code>, and <code>update</code>. That is it, no distractions!</p>
+
+<p>```elm
+import Html exposing (div, button, text)
+import Html.Events exposing (onClick)
+import StartApp.Simple as StartApp</p>
+
+<p>main =
+  StartApp.start { model = model, view = view, update = update }</p>
+
+<p>model = 0</p>
+
+<p>view address model =
+  div []
+    [ button [ onClick address Decrement ] [ text "-" ]
+    , div [] [ text (toString model) ]
+    , button [ onClick address Increment ] [ text "+" ]
+    ]</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>type Action = Increment</td>
+      <td>Decrement</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>update action model =
+  case action of
+    Increment -&gt; model + 1
+    Decrement -&gt; model - 1
+```</p>
+
+<blockquote>
+  <p>Paste the code into <a href="http://elm-lang.org/try">Elm's online editor</a> to see it in action. From there, <a href="http://elm-lang.org/install">install Elm on your machine</a> and start working through the <a href="https://github.com/evancz/elm-architecture-tutorial/">Elm Architecture tutorial</a> which starts with this counter example and gradually works up to programs with HTTP and animation.</p>
+</blockquote>
+
+<p>Notice that the <code>update</code> and <code>view</code> functions are totally separate. This is great for architecture, but it also makes testing way easier. Your application logic is entirely isolated, so you can make sure it works correctly without worrying about the DOM.</p>
+
+<p>So this is a super simple program, but the core concepts here can grow into great code bases if you follow <a href="https://github.com/evancz/elm-architecture-tutorial/">the Elm Architecture</a>.</p>
+
+<h2 id="further-learning">Further Learning</h2>
+
+<p>Check out the full documentation for this library <a href="http://package.elm-lang.org/packages/evancz/start-app/latest/">here</a>.</p>
+
+<p>For more guidelines and examples of making apps in Elm, check out the following resources:</p>
+
+<ul>
+  <li><a href="http://elm-lang.org/docs">Language Docs</a> — tons of learning resources that go from syntax to language features to design guidelines.</li>
+  <li><a href="https://github.com/evancz/elm-architecture-tutorial/">The Elm Architecture</a> — simple examples demonstrating how our basic counter app can scale to huge applications that are easy to test, maintain, and refactor.</li>
+  <li><a href="https://github.com/evancz/elm-todomvc/blob/master/Todo.elm">elm-todomvc</a> — a typical TodoMVC program (<a href="http://evancz.github.io/elm-todomvc/">live</a>) built on the Elm Architecture. You will see the <code>model</code>, <code>update</code>, <code>view</code> pattern but for a more realistic application than a counter.</li>
+  <li><a href="https://github.com/rtfeldman/dreamwriter/">dreamwriter</a> — a writing app built in Elm that again uses the Elm Architecture. The creator has <em>never</em> had a runtime exception in his Elm code. Unlike JavaScript, Elm is designed for reliability that scales to any size.</li>
+</ul>
+

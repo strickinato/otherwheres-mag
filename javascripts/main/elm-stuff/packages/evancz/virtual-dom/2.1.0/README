@@ -1,0 +1,15 @@
+<h1 id="virtual-dom-for-elm">Virtual DOM for Elm</h1>
+<p><a href="https://travis-ci.org/evancz/virtual-dom"><img alt="Build Status" src="https://travis-ci.org/evancz/virtual-dom.svg" /></a></p>
+
+<p>Minimal bindings to a virtual DOM system. Useful for creating libraries for HTML and SVG.</p>
+
+<h2 id="rebuilding-from-npm">Rebuilding from NPM</h2>
+<p>The build version of virtual-dom is committed to <code>src/Native/VirtualDom.js</code>. To rebuild this file with a newer version of virtual-dom:</p>
+
+<ol>
+  <li>Change the <code>virtual-dom</code> version number in <code>package.json</code>.</li>
+  <li>Run <code>npm install</code></li>
+  <li>Run <code>./rebuild.sh</code></li>
+</ol>
+
+<p>And you should see changes in <code>src/Native/VirtualDom.js</code>.</p>

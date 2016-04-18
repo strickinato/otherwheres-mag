@@ -1,0 +1,22 @@
+<h3 id="example">Example</h3>
+
+<p>For any <code>elm-css</code> project, you will need a minimum of:</p>
+
+<ul>
+  <li>An <code>elm-html</code> view</li>
+  <li>An <code>elm-css</code> file with the style rules within</li>
+</ul>
+
+<p>If you are using the CLI tool to generate pure CSS from the <code>elm-css</code> files, then you will also need an entry point file. This file will contain a <code>port files : CssFileStructure</code> which will tell the CLI tool which files to create.</p>
+
+<p>It is advisible to use a union type for your style classes, so that they can be typechecked.</p>
+
+<p>Inside here you'll find 4 files.</p>
+
+<ul>
+  <li><code>SharedStyles</code> contains the union type for your style classes. This union type needs to be accessed by the CSS file to apply the styles to the tag name. The view file will also use it for giving the divs the correct class, aided by the namespace creator.</li>
+  <li><code>HomepageCss</code> contains the <code>elm-css</code></li>
+  <li><code>HomepageView</code> contains the views</li>
+  <li><code>Stylesheets.elm</code> is only the entry point, for use with the <code>elm-css</code> cli tool! It contains no styling, but instead links the Css files with their expected output filenames.</li>
+</ul>
+

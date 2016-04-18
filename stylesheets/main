@@ -1,0 +1,2 @@
+.issue {
+  transition: all 500ms ease; }
