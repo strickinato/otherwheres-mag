@@ -1,0 +1,58 @@
+Elm.View = Elm.View || {};
+Elm.View.make = function (_elm) {
+   "use strict";
+   _elm.View = _elm.View || {};
+   if (_elm.View.values) return _elm.View.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Model = Elm.Model.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Update = Elm.Update.make(_elm);
+   var _op = {};
+   var renderIssueMenuItem = F3(function (address,maybeExpandedId,issue) {
+      var expandHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Just(issue.id)));
+      var isExpanded = _U.eq(A2($Maybe.withDefault,0,maybeExpandedId),issue.id);
+      var isMenu = function () {    var _p0 = maybeExpandedId;if (_p0.ctor === "Just") {    return false;} else {    return true;}}();
+      var visibility = isMenu || isExpanded ? "visible" : "hidden";
+      var flexBasis = isMenu || isExpanded ? "20%" : "0%";
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: flexBasis}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
+                                                  ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
+                                                  ,{ctor: "_Tuple2",_0: "background-color",_1: "blue"}
+                                                  ,{ctor: "_Tuple2",_0: "border",_1: "1px solid black"}]));
+      return A2($Html.section,_U.list([$Html$Attributes.$class("issue"),styles,expandHandler]),_U.list([$Html.text(issue.symbol)]));
+   });
+   var viewIssueMenu = F2(function (address,model) {    return A2($List.map,A2(renderIssueMenuItem,address,model.expandedIssueId),model.issues);});
+   var viewSingleIssueSidebar = F2(function (address,issue) {
+      var expandHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-color",_1: "green"},{ctor: "_Tuple2",_0: "flex",_1: "0 0 20%"}]));
+      return A2($Html.div,_U.list([styles,expandHandler,$Html$Attributes.$class("issue sidebar")]),_U.list([$Html.text(issue.symbol)]));
+   });
+   var viewSingleIssueContent = F2(function (address,issue) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-color",_1: "red"},{ctor: "_Tuple2",_0: "flex",_1: "0 0 80%"}]));
+      return A2($Html.div,_U.list([styles]),_U.list([$Html.text(issue.title)]));
+   });
+   var viewSingleIssue = F2(function (address,issue) {
+      return _U.list([A2(viewSingleIssueSidebar,address,issue),A2(viewSingleIssueContent,address,issue)]);
+   });
+   var viewContent = F2(function (address,model) {    return A2(viewIssueMenu,address,model);});
+   var view = F2(function (address,model) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"},{ctor: "_Tuple2",_0: "height",_1: "100%"}]));
+      return A2($Html.div,_U.list([$Html$Attributes.id("wrapper"),styles]),A2(viewContent,address,model));
+   });
+   return _elm.View.values = {_op: _op
+                             ,view: view
+                             ,viewContent: viewContent
+                             ,viewSingleIssue: viewSingleIssue
+                             ,viewSingleIssueContent: viewSingleIssueContent
+                             ,viewSingleIssueSidebar: viewSingleIssueSidebar
+                             ,viewIssueMenu: viewIssueMenu
+                             ,renderIssueMenuItem: renderIssueMenuItem};
+};

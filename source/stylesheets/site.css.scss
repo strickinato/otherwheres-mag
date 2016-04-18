@@ -1,13 +1,16 @@
 @charset "utf-8";
 
-@import "normalize";
-@import "bourbon";
-@import "neat";
+html,body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 
-@import "colors";
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-@import "partials/layout";
-@import "partials/header";
-
-
-@import "vendor/nav-bar"
+           
+@import "main";
