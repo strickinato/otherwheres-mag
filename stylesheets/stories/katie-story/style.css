@@ -3,7 +3,7 @@
 
 #katie-story-mount {
   overflow: hidden;
-  background-image: url("../../../assets/page-background.jpg");
+  background-image: url("/assets/page-background.jpg");
   background-size: cover;
   /*
   The above attrs are important, but size the div however you need to fit it
