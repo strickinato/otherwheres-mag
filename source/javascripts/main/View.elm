@@ -3,7 +3,7 @@ module View (..) where
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Model exposing (Model, Issue)
+import Model exposing (Model, Issue, isShowingMenu, findSelectedIssue)
 import Update exposing (Action(..))
 import Signal
 
@@ -15,97 +15,84 @@ view address model =
       style
         [ ( "width", "100%" )
         , ( "height", "100%" )
-     --   , ( "display", "flex" )
-     --   , ( "flex-direction", "row" )
-     --   , ( "align-items", "stretch" )
         ]
   in
     div
       [ id "wrapper", styles ]
-      (viewContent address model)
+      ( List.append
+          (viewIssueMenu address model)
+          [ viewSelectedIssue address model ]
+      )
 
 
-viewContent : Signal.Address Action -> Model -> List Html
-viewContent address model =
-  viewIssueMenu address model
+viewSelectedIssue : Signal.Address Action -> Model -> Html
+viewSelectedIssue address model =
+  case findSelectedIssue model of
+    Just issue ->
+      viewIssueContent address issue
 
+    Nothing ->
+      span [] []
 
-viewSingleIssue : Signal.Address Action -> Issue -> List Html
-viewSingleIssue address issue =
-  [ viewSingleIssueSidebar address issue
-  , viewSingleIssueContent address issue
-  ]
-
-
-viewSingleIssueContent : Signal.Address Action -> Issue -> Html
-viewSingleIssueContent address issue =
+viewIssueContent : Signal.Address Action -> Issue -> Html
+viewIssueContent address issue =
   let
+    closeHandler =
+      onClick address (ExpandIssue Nothing)
+
     styles =
       style
-        [ ( "background-color", "red" )
-        , ( "flex", "0 0 80%" )
-        ]
-  in
-    div
-      [ styles ]
-      [ text issue.title ]
-
-
-viewSingleIssueSidebar : Signal.Address Action -> Issue -> Html
-viewSingleIssueSidebar address issue =
-  let
-    styles =
-      style
-        [ ( "background-color", "green" )
-        , ( "flex", "0 0 20%" )
+        [ ( "width", "80%" )
+        , ( "height", "100%" )
+        , ( "position", "absolute" )
+        , ( "display", "inline-block" )
+        , ( "float", "right" )
+        , ( "background-color", "green" )
         ]
 
-    expandHandler =
-      Nothing
-        |> ExpandIssue
-        |> onClick address
   in
     div
-      [ styles, expandHandler, class "issue sidebar" ]
-      [ text issue.symbol ]
+      [ class "issue-content", styles ]
+      [ closeButton closeHandler
+      , text issue.title
+      ]
+
+closeButton : Html.Attribute -> Html
+closeButton handler =
+  span [ handler ] [ text "X" ]
 
 
 viewIssueMenu : Signal.Address Action -> Model -> List Html
 viewIssueMenu address model =
-  (List.map (renderIssueMenuItem address model.expandedIssueId) model.issues)
+  (List.map (viewIssueMenuItem address model) model.issues)
 
 
-renderIssueMenuItem : Signal.Address Action -> Maybe Int -> Issue -> Html
-renderIssueMenuItem address maybeExpandedId issue =
+isSelectedIssue : Int -> Maybe Int -> Bool
+isSelectedIssue issueId maybeSelectedId =
+  (Maybe.withDefault 0 maybeSelectedId) == issueId
+
+
+viewIssueMenuItem : Signal.Address Action -> Model -> Issue -> Html
+viewIssueMenuItem address model issue =
   let
-    isMenu =
-      case maybeExpandedId of
-        Just _ -> False
-        Nothing -> True
-
     isExpanded =
-      (Maybe.withDefault 0 maybeExpandedId) == issue.id
+      (||)
+        (isShowingMenu model)
+        (isSelectedIssue issue.id model.expandedIssueId)
 
-    visibility =
-      if (isMenu || isExpanded) then
-        "visible"
+    ( visibility, width ) =
+      if isExpanded then
+        ( "visible", "20%" )
       else
-        "hidden"
-
-    flexBasis =
-      if (isMenu || isExpanded) then
-        "20%"
-      else
-        "0%"
+        ( "hidden", "0%" )
 
     styles =
       style
-        [ ( "width", flexBasis )
+        [ ( "width", width )
+        , ( "visibility", visibility )
         , ( "height", "100%" )
         , ( "display", "inline-block" )
-        , ( "background-color", "blue" )
-        -- , ( "visibility", visibility )
-        , ( "border", "1px solid black" )
+        , ( "background-color", issue.backgroundColor )
         ]
 
     expandHandler =

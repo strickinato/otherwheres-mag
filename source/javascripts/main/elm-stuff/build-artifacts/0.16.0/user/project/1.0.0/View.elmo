@@ -16,43 +16,52 @@ Elm.View.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Update = Elm.Update.make(_elm);
    var _op = {};
-   var renderIssueMenuItem = F3(function (address,maybeExpandedId,issue) {
+   var isSelectedIssue = F2(function (issueId,maybeSelectedId) {    return _U.eq(A2($Maybe.withDefault,0,maybeSelectedId),issueId);});
+   var viewIssueMenuItem = F3(function (address,model,issue) {
       var expandHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Just(issue.id)));
-      var isExpanded = _U.eq(A2($Maybe.withDefault,0,maybeExpandedId),issue.id);
-      var isMenu = function () {    var _p0 = maybeExpandedId;if (_p0.ctor === "Just") {    return false;} else {    return true;}}();
-      var visibility = isMenu || isExpanded ? "visible" : "hidden";
-      var flexBasis = isMenu || isExpanded ? "20%" : "0%";
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: flexBasis}
+      var isExpanded = A2(F2(function (x,y) {    return x || y;}),$Model.isShowingMenu(model),A2(isSelectedIssue,issue.id,model.expandedIssueId));
+      var _p0 = isExpanded ? {ctor: "_Tuple2",_0: "visible",_1: "20%"} : {ctor: "_Tuple2",_0: "hidden",_1: "0%"};
+      var visibility = _p0._0;
+      var width = _p0._1;
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: width}
+                                                  ,{ctor: "_Tuple2",_0: "visibility",_1: visibility}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                                                  ,{ctor: "_Tuple2",_0: "background-color",_1: "blue"}
-                                                  ,{ctor: "_Tuple2",_0: "border",_1: "1px solid black"}]));
+                                                  ,{ctor: "_Tuple2",_0: "background-color",_1: issue.backgroundColor}]));
       return A2($Html.section,_U.list([$Html$Attributes.$class("issue"),styles,expandHandler]),_U.list([$Html.text(issue.symbol)]));
    });
-   var viewIssueMenu = F2(function (address,model) {    return A2($List.map,A2(renderIssueMenuItem,address,model.expandedIssueId),model.issues);});
-   var viewSingleIssueSidebar = F2(function (address,issue) {
-      var expandHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-color",_1: "green"},{ctor: "_Tuple2",_0: "flex",_1: "0 0 20%"}]));
-      return A2($Html.div,_U.list([styles,expandHandler,$Html$Attributes.$class("issue sidebar")]),_U.list([$Html.text(issue.symbol)]));
+   var viewIssueMenu = F2(function (address,model) {    return A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);});
+   var closeButton = function (handler) {    return A2($Html.span,_U.list([handler]),_U.list([$Html.text("X")]));};
+   var viewIssueContent = F2(function (address,issue) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
+                                                  ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
+                                                  ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
+                                                  ,{ctor: "_Tuple2",_0: "float",_1: "right"}
+                                                  ,{ctor: "_Tuple2",_0: "background-color",_1: "green"}]));
+      var closeHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));
+      return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler),$Html.text(issue.title)]));
    });
-   var viewSingleIssueContent = F2(function (address,issue) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-color",_1: "red"},{ctor: "_Tuple2",_0: "flex",_1: "0 0 80%"}]));
-      return A2($Html.div,_U.list([styles]),_U.list([$Html.text(issue.title)]));
+   var viewSelectedIssue = F2(function (address,model) {
+      var _p1 = $Model.findSelectedIssue(model);
+      if (_p1.ctor === "Just") {
+            return A2(viewIssueContent,address,_p1._0);
+         } else {
+            return A2($Html.span,_U.list([]),_U.list([]));
+         }
    });
-   var viewSingleIssue = F2(function (address,issue) {
-      return _U.list([A2(viewSingleIssueSidebar,address,issue),A2(viewSingleIssueContent,address,issue)]);
-   });
-   var viewContent = F2(function (address,model) {    return A2(viewIssueMenu,address,model);});
    var view = F2(function (address,model) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"},{ctor: "_Tuple2",_0: "height",_1: "100%"}]));
-      return A2($Html.div,_U.list([$Html$Attributes.id("wrapper"),styles]),A2(viewContent,address,model));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.id("wrapper"),styles]),
+      A2($List.append,A2(viewIssueMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
    });
    return _elm.View.values = {_op: _op
                              ,view: view
-                             ,viewContent: viewContent
-                             ,viewSingleIssue: viewSingleIssue
-                             ,viewSingleIssueContent: viewSingleIssueContent
-                             ,viewSingleIssueSidebar: viewSingleIssueSidebar
+                             ,viewSelectedIssue: viewSelectedIssue
+                             ,viewIssueContent: viewIssueContent
+                             ,closeButton: closeButton
                              ,viewIssueMenu: viewIssueMenu
-                             ,renderIssueMenuItem: renderIssueMenuItem};
+                             ,isSelectedIssue: isSelectedIssue
+                             ,viewIssueMenuItem: viewIssueMenuItem};
 };
