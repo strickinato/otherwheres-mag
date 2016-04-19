@@ -15,28 +15,32 @@ Elm.Model.make = function (_elm) {
    $Util = Elm.Util.make(_elm);
    var _op = {};
    var isShowingMenu = function (model) {    var _p0 = model.expandedIssueId;if (_p0.ctor === "Just") {    return false;} else {    return true;}};
-   var volume2 = F2(function (id,color) {    return {title: "Travel",symbol: "II",id: id,backgroundColor: color};});
-   var volume1 = {title: "Truth or Fiction",symbol: "I",id: 1,backgroundColor: "red"};
+   var volume2 = F2(function (id,color) {    return {id: id,symbol: "II",backgroundAsset: color};});
    var findSelectedIssue = function (model) {
       return $List.head(A2($List.filter,function (issue) {    return A2($Util._op["?=="],issue.id,model.expandedIssueId);},model.issues));
    };
-   var allIssues = _U.list([volume1,A2(volume2,2,"green"),A2(volume2,3,"yellow"),A2(volume2,4,"orange"),A2(volume2,5,"black")]);
-   var otherwheresPhrases = $Array.fromList(_U.list(["artsy fartsy","ready to pop"]));
-   var Issue = F4(function (a,b,c,d) {    return {title: a,symbol: b,id: c,backgroundColor: d};});
+   var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
+   var otherwheresPhrases = $Array.fromList(_U.list(["artsy fartsy","ready to pop","Toby\'s worst nightmare","an OK zine"]));
    var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0.0};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
+   var Issue = F3(function (a,b,c) {    return {id: a,symbol: b,backgroundAsset: c};});
+   var allIssues = _U.list([A3(Issue,1,".","assets/menu/logo.png")
+                           ,A3(Issue,2,"IV","assets/menu/volume_4.jpg")
+                           ,A3(Issue,3,"III","assets/menu/volume_3.jpg")
+                           ,A3(Issue,4,"II","assets/menu/volume_2.jpg")
+                           ,A3(Issue,5,"I","assets/menu/volume_1.jpg")]);
    var init = {issues: allIssues,expandedIssueId: $Maybe.Nothing,phraseAnimationState: initialAnimation,currentPhraseIndex: 0,phrases: otherwheresPhrases};
    var Model = F5(function (a,b,c,d,e) {    return {issues: a,expandedIssueId: b,phraseAnimationState: c,currentPhraseIndex: d,phrases: e};});
    return _elm.Model.values = {_op: _op
                               ,Model: Model
+                              ,Issue: Issue
                               ,init: init
                               ,AnimationState: AnimationState
                               ,initialAnimation: initialAnimation
-                              ,Issue: Issue
                               ,otherwheresPhrases: otherwheresPhrases
+                              ,currentPhrase: currentPhrase
                               ,allIssues: allIssues
                               ,findSelectedIssue: findSelectedIssue
-                              ,volume1: volume1
                               ,volume2: volume2
                               ,isShowingMenu: isShowingMenu};
 };

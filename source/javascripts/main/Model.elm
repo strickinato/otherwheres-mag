@@ -3,6 +3,7 @@ module Model (..) where
 import Util exposing ((?==))
 import Time exposing (Time)
 import Array exposing (Array, fromList)
+import Html exposing (..)
 
 
 type alias Model =
@@ -11,6 +12,13 @@ type alias Model =
   , phraseAnimationState : AnimationState
   , currentPhraseIndex : Int
   , phrases : Array String
+  }
+
+
+type alias Issue =
+  { id : Int
+  , symbol : String
+  , backgroundAsset : String
   }
 
 
@@ -29,16 +37,10 @@ type alias AnimationState =
   , elapsedTime : Time
   }
 
+
 initialAnimation =
   { prevClockTime = 0.0
   , elapsedTime = 0.0
-  }
-
-type alias Issue =
-  { title : String
-  , symbol : String
-  , id : Int
-  , backgroundColor : String
   }
 
 
@@ -47,16 +49,23 @@ otherwheresPhrases =
   fromList
     [ "artsy fartsy"
     , "ready to pop"
+    , "Toby's worst nightmare"
+    , "an OK zine"
     ]
+
+
+currentPhrase : Model -> String
+currentPhrase model =
+  Maybe.withDefault "" (Array.get model.currentPhraseIndex model.phrases)
 
 
 allIssues : List Issue
 allIssues =
-  [ volume1
-  , volume2 2 "green"
-  , volume2 3 "yellow"
-  , volume2 4 "orange"
-  , volume2 5 "black"
+  [ Issue 1 "." "assets/menu/logo.png"
+  , Issue 2 "IV" "assets/menu/volume_4.jpg"
+  , Issue 3 "III" "assets/menu/volume_3.jpg"
+  , Issue 4 "II" "assets/menu/volume_2.jpg"
+  , Issue 5 "I" "assets/menu/volume_1.jpg"
   ]
 
 
@@ -67,21 +76,11 @@ findSelectedIssue model =
     |> List.head
 
 
-volume1 : Issue
-volume1 =
-  { title = "Truth or Fiction"
-  , symbol = "I"
-  , id = 1
-  , backgroundColor = "red"
-  }
-
-
 volume2 : Int -> String -> Issue
 volume2 id color =
-  { title = "Travel"
+  { id = id
   , symbol = "II"
-  , id = id
-  , backgroundColor = color
+  , backgroundAsset = color
   }
 
 
