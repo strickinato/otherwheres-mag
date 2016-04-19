@@ -12,5 +12,14 @@ html,body {
   box-sizing: border-box;
 }
 
-           
+@font-face {
+  font-family: BrandonGrotesque;
+  src: url(/assets/branding/fonts/brandon_reg.otf);   
+};
+
+@font-face {
+  font-family: BrandonGrotesqueLightItalic;
+  src: url(/assets/branding/fonts/brandon_lite_it.otf);   
+};
+
 @import "main";

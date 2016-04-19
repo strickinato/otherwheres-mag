@@ -55,7 +55,6 @@ viewIssueContent address issueView =
         , ( "position", "absolute" )
         , ( "display", "inline-block" )
         , ( "float", "right" )
-        , ( "background-color", "green" )
         ]
   in
     div
@@ -67,7 +66,18 @@ viewIssueContent address issueView =
 
 closeButton : Html.Attribute -> Html
 closeButton handler =
-  span [ handler ] [ text "X" ]
+  let
+    styles =
+      style
+        [ ( "float", "right" )
+        , ( "padding-top", "20px" )
+        , ( "padding-right", "20px" )
+        , ( "padding-right", "20px" )
+        , ( "font-size", "24px" )
+        , ( "color", "white" )
+        ]
+  in
+    span [ styles, handler ] [ text "✗" ]
 
 
 viewIssueMenu : Signal.Address Action -> Model -> List Html
