@@ -1,8 +1,8 @@
-.issue
-  transition: all 500ms ease
+$blur-amount: 10px
+$animation-speed: 500ms
 
 .issue-content
-  transition: all 500ms ease
+  transition: all $animation-speed ease
 
 #elm-main-mount
   font-family: BrandonGrotesque
@@ -22,3 +22,50 @@ h3
   font-style: italic
   letter-spacing: 5px
 
+=beforeBackgroundImage($url)
+  &:before
+    background-image: url($url)
+
+
+=blur
+  &:before
+    filter: blur($blur-amount)
+    -webkit-filter: blur($blur-amount)
+
+=no-blur
+  &:before
+    filter: blur(0px)
+    -webkit-filter: blur(0px)
+
+.issue
+  transition: all $animation-speed ease
+  +blur
+
+  &:before
+    height: 100%
+    width: inherit
+    content: ""
+    background-size: cover
+    background-repeat: no-repeat
+    background-position: center
+    position: absolute
+    z-index: -1
+
+  &:hover
+    +no-blur
+
+.selected-issue
+  +no-blur
+
+
+.volume1
+  +beforeBackgroundImage("/assets/menu/volume_1.jpg")
+
+.volume2
+  +beforeBackgroundImage("/assets/menu/volume_2.jpg")
+
+.volume3
+  +beforeBackgroundImage("/assets/menu/volume_3.jpg")
+
+.volume4
+  +beforeBackgroundImage("/assets/menu/volume_4.jpg")

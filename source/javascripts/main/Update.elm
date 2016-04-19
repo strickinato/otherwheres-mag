@@ -9,6 +9,7 @@ import Array
 
 type Action
   = ExpandIssue (Maybe Int)
+  | HoverIssue (Maybe Int)
   | Tick Time
   | NoOp
 
@@ -45,6 +46,10 @@ update action model =
 
     ExpandIssue maybeIssueId ->
       { model | expandedIssueId = maybeIssueId } => Effects.none
+
+    HoverIssue maybeIssueId ->
+      let _ = Debug.log "click" maybeIssueId in
+      { model | hoveredIssueId = maybeIssueId } => Effects.none
 
     NoOp ->
       model => Effects.none
