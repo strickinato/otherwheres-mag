@@ -1,6 +1,3 @@
-.issue {
-  transition: all 500ms ease; }
-
 .issue-content {
   transition: all 500ms ease; }
 
@@ -21,3 +18,37 @@ h3 {
   font-family: BrandonGrotesqueLightItalic, sans;
   font-style: italic;
   letter-spacing: 5px; }
+
+.issue {
+  transition: all 500ms ease; }
+  .issue:before {
+    filter: blur(10px);
+    -webkit-filter: blur(10px); }
+  .issue:before {
+    height: 100%;
+    width: inherit;
+    content: "";
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    z-index: -1; }
+  .issue:hover:before {
+    filter: blur(0px);
+    -webkit-filter: blur(0px); }
+
+.selected-issue:before {
+  filter: blur(0px);
+  -webkit-filter: blur(0px); }
+
+.volume1:before {
+  background-image: url("/assets/menu/volume_1.jpg"); }
+
+.volume2:before {
+  background-image: url("/assets/menu/volume_2.jpg"); }
+
+.volume3:before {
+  background-image: url("/assets/menu/volume_3.jpg"); }
+
+.volume4:before {
+  background-image: url("/assets/menu/volume_4.jpg"); }

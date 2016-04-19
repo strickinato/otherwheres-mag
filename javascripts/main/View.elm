@@ -7,6 +7,7 @@ import Model exposing (Model, Issue, isShowingMenu, findSelectedIssue)
 import Update exposing (Action(..))
 import Signal
 import Issues.About
+import Css exposing (..)
 
 
 view : Signal.Address Action -> Model -> Html
@@ -72,7 +73,6 @@ closeButton handler =
         [ ( "float", "right" )
         , ( "padding-top", "20px" )
         , ( "padding-right", "20px" )
-        , ( "padding-right", "20px" )
         , ( "font-size", "24px" )
         , ( "color", "white" )
         ]
@@ -98,6 +98,11 @@ viewIssueMenuItem address model issue =
         (isShowingMenu model)
         (isSelectedIssue issue.id model.expandedIssueId)
 
+    showTitle =
+      (||)
+        (not (isShowingMenu model))
+        (isSelectedIssue issue.id model.hoveredIssueId)
+
     ( visibility, width ) =
       if isExpanded then
         ( "visible", "20%" )
@@ -110,16 +115,44 @@ viewIssueMenuItem address model issue =
         , ( "visibility", visibility )
         , ( "height", "100%" )
         , ( "display", "inline-block" )
-        , ( "background-image", "url(" ++ issue.backgroundAsset ++ ")" )
-        , ( "background-repeat", "no-repeat" )
-        , ( "background-position", "center" )
         ]
 
+    hoverHandler =
+      Just issue.id
+        |> HoverIssue
+        |> onMouseOver address
+        
     expandHandler =
       Just issue.id
         |> ExpandIssue
         |> onClick address
+
+    issueDisplay =
+      if showTitle then
+        issue.title
+      else
+        issue.symbol
+
+    classes =
+      classList
+        [ ("issue", True)
+        , (issue.class, True)
+        , ("selected-issue", isSelectedIssue issue.id model.expandedIssueId)
+        ]
+
   in
     section
-      [ class "issue", styles, expandHandler ]
-      [ text issue.symbol ]
+      [ classes, styles, expandHandler, hoverHandler ]
+      [ h3 [] [ text issueDisplay ] ]
+
+
+viewSymbol : String -> Html
+viewSymbol symbol =
+  let
+    styles =
+      style
+        [ ( "float", "right" )
+        , ( "position", "relative" )
+        ]
+  in
+    span [ styles, class "numeral" ] [ h1 [] [ text symbol ] ]

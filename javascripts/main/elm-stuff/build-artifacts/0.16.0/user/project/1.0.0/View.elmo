@@ -17,9 +17,19 @@ Elm.View.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Update = Elm.Update.make(_elm);
    var _op = {};
+   var viewSymbol = function (symbol) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "float",_1: "right"},{ctor: "_Tuple2",_0: "position",_1: "relative"}]));
+      return A2($Html.span,_U.list([styles,$Html$Attributes.$class("numeral")]),_U.list([A2($Html.h1,_U.list([]),_U.list([$Html.text(symbol)]))]));
+   };
    var isSelectedIssue = F2(function (issueId,maybeSelectedId) {    return _U.eq(A2($Maybe.withDefault,0,maybeSelectedId),issueId);});
    var viewIssueMenuItem = F3(function (address,model,issue) {
+      var classes = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "issue",_1: true}
+                                                       ,{ctor: "_Tuple2",_0: issue.$class,_1: true}
+                                                       ,{ctor: "_Tuple2",_0: "selected-issue",_1: A2(isSelectedIssue,issue.id,model.expandedIssueId)}]));
       var expandHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Just(issue.id)));
+      var hoverHandler = A2($Html$Events.onMouseOver,address,$Update.HoverIssue($Maybe.Just(issue.id)));
+      var showTitle = A2(F2(function (x,y) {    return x || y;}),$Basics.not($Model.isShowingMenu(model)),A2(isSelectedIssue,issue.id,model.hoveredIssueId));
+      var issueDisplay = showTitle ? issue.title : issue.symbol;
       var isExpanded = A2(F2(function (x,y) {    return x || y;}),$Model.isShowingMenu(model),A2(isSelectedIssue,issue.id,model.expandedIssueId));
       var _p0 = isExpanded ? {ctor: "_Tuple2",_0: "visible",_1: "20%"} : {ctor: "_Tuple2",_0: "hidden",_1: "0%"};
       var visibility = _p0._0;
@@ -27,23 +37,24 @@ Elm.View.make = function (_elm) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: width}
                                                   ,{ctor: "_Tuple2",_0: "visibility",_1: visibility}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
-                                                  ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                                                  ,{ctor: "_Tuple2"
-                                                   ,_0: "background-image"
-                                                   ,_1: A2($Basics._op["++"],"url(",A2($Basics._op["++"],issue.backgroundAsset,")"))}
-                                                  ,{ctor: "_Tuple2",_0: "background-repeat",_1: "no-repeat"}
-                                                  ,{ctor: "_Tuple2",_0: "background-position",_1: "center"}]));
-      return A2($Html.section,_U.list([$Html$Attributes.$class("issue"),styles,expandHandler]),_U.list([$Html.text(issue.symbol)]));
+                                                  ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}]));
+      return A2($Html.section,_U.list([classes,styles,expandHandler,hoverHandler]),_U.list([A2($Html.h3,_U.list([]),_U.list([$Html.text(issueDisplay)]))]));
    });
    var viewIssueMenu = F2(function (address,model) {    return A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);});
-   var closeButton = function (handler) {    return A2($Html.span,_U.list([handler]),_U.list([$Html.text("X")]));};
+   var closeButton = function (handler) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "float",_1: "right"}
+                                                  ,{ctor: "_Tuple2",_0: "padding-top",_1: "20px"}
+                                                  ,{ctor: "_Tuple2",_0: "padding-right",_1: "20px"}
+                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "24px"}
+                                                  ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
+      return A2($Html.span,_U.list([styles,handler]),_U.list([$Html.text("✗")]));
+   };
    var viewIssueContent = F2(function (address,issueView) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
                                                   ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                                                  ,{ctor: "_Tuple2",_0: "float",_1: "right"}
-                                                  ,{ctor: "_Tuple2",_0: "background-color",_1: "green"}]));
+                                                  ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
       var closeHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));
       return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler),issueView]));
    });
@@ -71,5 +82,6 @@ Elm.View.make = function (_elm) {
                              ,closeButton: closeButton
                              ,viewIssueMenu: viewIssueMenu
                              ,isSelectedIssue: isSelectedIssue
-                             ,viewIssueMenuItem: viewIssueMenuItem};
+                             ,viewIssueMenuItem: viewIssueMenuItem
+                             ,viewSymbol: viewSymbol};
 };
