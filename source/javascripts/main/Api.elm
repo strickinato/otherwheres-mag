@@ -7,13 +7,13 @@ import Json.Decode exposing (Value)
 import Util exposing ((=>))
 
 import Model exposing (init, Model)
-import Update exposing (update)
+import Update exposing (update, Action(..))
 import View exposing (view)
 
 app : StartApp.App Model
 app =
     StartApp.start
-        { init = init => Effects.none
+        { init = init => Effects.tick Tick
         , update = update
         , view = view
         , inputs = []

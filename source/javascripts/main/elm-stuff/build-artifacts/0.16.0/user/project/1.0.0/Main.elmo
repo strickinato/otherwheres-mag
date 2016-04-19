@@ -19,7 +19,7 @@ Elm.Main.make = function (_elm) {
    $Util = Elm.Util.make(_elm),
    $View = Elm.View.make(_elm);
    var _op = {};
-   var app = $StartApp.start({init: A2($Util._op["=>"],$Model.init,$Effects.none),update: $Update.update,view: $View.view,inputs: _U.list([])});
+   var app = $StartApp.start({init: A2($Util._op["=>"],$Model.init,$Effects.tick($Update.Tick)),update: $Update.update,view: $View.view,inputs: _U.list([])});
    var main = app.html;
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
    return _elm.Main.values = {_op: _op,app: app,main: main};
