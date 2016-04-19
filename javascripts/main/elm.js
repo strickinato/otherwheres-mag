@@ -10690,16 +10690,50 @@ Elm.Issues.About.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
    var _op = {};
+   var grey = "#979797";
+   var viewLine = function () {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "border",_1: A2($Basics._op["++"],"1px solid ",grey)}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "0px"}
+                                                  ,{ctor: "_Tuple2",_0: "width",_1: "80%"}
+                                                  ,{ctor: "_Tuple2",_0: "margin",_1: "0 auto"}]));
+      return A2($Html.div,_U.list([styles]),_U.list([]));
+   }();
+   var viewChangingText = function (currentText) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "padding-top",_1: "36px"}
+                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "26px"}
+                                                  ,{ctor: "_Tuple2",_0: "padding-bottom",_1: "8px"}]));
+      return A2($Html.h3,_U.list([styles]),_U.list([$Html.text($String.toUpper(currentText))]));
+   };
+   var viewLiteIs = function () {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "padding-top",_1: "36px"},{ctor: "_Tuple2",_0: "font-size",_1: "26px"}]));
+      return A2($Html.span,_U.list([styles,$Html$Attributes.$class("lite-italic")]),_U.list([$Html.text("IS")]));
+   }();
+   var viewHeader = function () {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "padding-top",_1: "120px"}]));
+      return A2($Html.h1,_U.list([styles]),_U.list([$Html.text("OTHERWHERES")]));
+   }();
    var view = F2(function (address,model) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-image",_1: "url(assets/issues/about/bg.png)"}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
+                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
+                                                  ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
       var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
-      return A2($Html.div,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],"Otherwheres is ",currentPhrase))]));
+      return A2($Html.div,_U.list([styles]),_U.list([viewHeader,viewLiteIs,viewChangingText(currentPhrase),viewLine]));
    });
-   return _elm.Issues.About.values = {_op: _op,view: view};
+   return _elm.Issues.About.values = {_op: _op
+                                     ,view: view
+                                     ,viewHeader: viewHeader
+                                     ,viewLiteIs: viewLiteIs
+                                     ,viewChangingText: viewChangingText
+                                     ,viewLine: viewLine
+                                     ,grey: grey};
 };
 Elm.Util = Elm.Util || {};
 Elm.Util.make = function (_elm) {
@@ -10845,14 +10879,21 @@ Elm.View.make = function (_elm) {
       return A2($Html.section,_U.list([$Html$Attributes.$class("issue"),styles,expandHandler]),_U.list([$Html.text(issue.symbol)]));
    });
    var viewIssueMenu = F2(function (address,model) {    return A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);});
-   var closeButton = function (handler) {    return A2($Html.span,_U.list([handler]),_U.list([$Html.text("X")]));};
+   var closeButton = function (handler) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "float",_1: "right"}
+                                                  ,{ctor: "_Tuple2",_0: "padding-top",_1: "20px"}
+                                                  ,{ctor: "_Tuple2",_0: "padding-right",_1: "20px"}
+                                                  ,{ctor: "_Tuple2",_0: "padding-right",_1: "20px"}
+                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "24px"}
+                                                  ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
+      return A2($Html.span,_U.list([styles,handler]),_U.list([$Html.text("✗")]));
+   };
    var viewIssueContent = F2(function (address,issueView) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
                                                   ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                                                  ,{ctor: "_Tuple2",_0: "float",_1: "right"}
-                                                  ,{ctor: "_Tuple2",_0: "background-color",_1: "green"}]));
+                                                  ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
       var closeHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));
       return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler),issueView]));
    });

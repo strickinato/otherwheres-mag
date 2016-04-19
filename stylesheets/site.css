@@ -8,8 +8,32 @@ html, body {
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
+@font-face {
+  font-family: BrandonGrotesque;
+  src: url(../assets/branding/fonts/brandon_reg.otf); }
+@font-face {
+  font-family: BrandonGrotesqueLightItalic;
+  src: url(../assets/branding/fonts/brandon_lite_it.otf); }
 .issue {
   transition: all 500ms ease; }
 
 .issue-content {
   transition: all 500ms ease; }
+
+#elm-main-mount {
+  font-family: BrandonGrotesque; }
+
+h1 {
+  font-size: 66px;
+  margin: 0px;
+  letter-spacing: 12.8px; }
+
+h3 {
+  font-size: 26px;
+  letter-spacing: 5px;
+  margin: 0px; }
+
+.lite-italic {
+  font-family: BrandonGrotesqueLightItalic, sans;
+  font-style: italic;
+  letter-spacing: 5px; }
