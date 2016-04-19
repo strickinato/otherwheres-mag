@@ -11,6 +11,7 @@ Elm.Util.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   _op["?=="] = F2(function (item,maybeItem) {    var _p0 = maybeItem;if (_p0.ctor === "Just") {    return _U.eq(item,_p0._0);} else {    return false;}});
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    return _elm.Util.values = {_op: _op};
 };

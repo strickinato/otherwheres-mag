@@ -10,3 +10,6 @@ html, body {
 
 .issue {
   transition: all 500ms ease; }
+
+.issue-content {
+  transition: all 500ms ease; }
