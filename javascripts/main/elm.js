@@ -10678,6 +10678,29 @@ Elm.StartApp.make = function (_elm) {
    var Config = F4(function (a,b,c,d) {    return {init: a,update: b,view: c,inputs: d};});
    return _elm.StartApp.values = {_op: _op,start: start,Config: Config,App: App};
 };
+Elm.Issues = Elm.Issues || {};
+Elm.Issues.About = Elm.Issues.About || {};
+Elm.Issues.About.make = function (_elm) {
+   "use strict";
+   _elm.Issues = _elm.Issues || {};
+   _elm.Issues.About = _elm.Issues.About || {};
+   if (_elm.Issues.About.values) return _elm.Issues.About.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Array = Elm.Array.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var view = F2(function (address,model) {
+      var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
+      return A2($Html.div,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],"Otherwheres is ",currentPhrase))]));
+   });
+   return _elm.Issues.About.values = {_op: _op,view: view};
+};
 Elm.Util = Elm.Util || {};
 Elm.Util.make = function (_elm) {
    "use strict";
@@ -10701,31 +10724,43 @@ Elm.Model.make = function (_elm) {
    _elm.Model = _elm.Model || {};
    if (_elm.Model.values) return _elm.Model.values;
    var _U = Elm.Native.Utils.make(_elm),
+   $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Time = Elm.Time.make(_elm),
    $Util = Elm.Util.make(_elm);
    var _op = {};
    var isShowingMenu = function (model) {    var _p0 = model.expandedIssueId;if (_p0.ctor === "Just") {    return false;} else {    return true;}};
-   var volume2 = F2(function (id,color) {    return {title: "Travel",symbol: "II",id: id,backgroundColor: color};});
-   var volume1 = {title: "Truth or Fiction",symbol: "I",id: 1,backgroundColor: "red"};
+   var volume2 = F2(function (id,color) {    return {id: id,symbol: "II",backgroundAsset: color};});
    var findSelectedIssue = function (model) {
       return $List.head(A2($List.filter,function (issue) {    return A2($Util._op["?=="],issue.id,model.expandedIssueId);},model.issues));
    };
-   var allIssues = _U.list([volume1,A2(volume2,2,"green"),A2(volume2,3,"yellow"),A2(volume2,4,"orange"),A2(volume2,5,"black")]);
-   var Issue = F4(function (a,b,c,d) {    return {title: a,symbol: b,id: c,backgroundColor: d};});
-   var init = {issues: allIssues,expandedIssueId: $Maybe.Nothing};
-   var Model = F2(function (a,b) {    return {issues: a,expandedIssueId: b};});
+   var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
+   var otherwheresPhrases = $Array.fromList(_U.list(["artsy fartsy","ready to pop","Toby\'s worst nightmare","an OK zine"]));
+   var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0.0};
+   var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
+   var Issue = F3(function (a,b,c) {    return {id: a,symbol: b,backgroundAsset: c};});
+   var allIssues = _U.list([A3(Issue,1,".","assets/menu/logo.png")
+                           ,A3(Issue,2,"IV","assets/menu/volume_4.jpg")
+                           ,A3(Issue,3,"III","assets/menu/volume_3.jpg")
+                           ,A3(Issue,4,"II","assets/menu/volume_2.jpg")
+                           ,A3(Issue,5,"I","assets/menu/volume_1.jpg")]);
+   var init = {issues: allIssues,expandedIssueId: $Maybe.Nothing,phraseAnimationState: initialAnimation,currentPhraseIndex: 0,phrases: otherwheresPhrases};
+   var Model = F5(function (a,b,c,d,e) {    return {issues: a,expandedIssueId: b,phraseAnimationState: c,currentPhraseIndex: d,phrases: e};});
    return _elm.Model.values = {_op: _op
                               ,Model: Model
-                              ,init: init
                               ,Issue: Issue
+                              ,init: init
+                              ,AnimationState: AnimationState
+                              ,initialAnimation: initialAnimation
+                              ,otherwheresPhrases: otherwheresPhrases
+                              ,currentPhrase: currentPhrase
                               ,allIssues: allIssues
                               ,findSelectedIssue: findSelectedIssue
-                              ,volume1: volume1
                               ,volume2: volume2
                               ,isShowingMenu: isShowingMenu};
 };
@@ -10735,6 +10770,7 @@ Elm.Update.make = function (_elm) {
    _elm.Update = _elm.Update || {};
    if (_elm.Update.values) return _elm.Update.values;
    var _U = Elm.Native.Utils.make(_elm),
+   $Array = Elm.Array.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Effects = Elm.Effects.make(_elm),
@@ -10743,19 +10779,33 @@ Elm.Update.make = function (_elm) {
    $Model = Elm.Model.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
+   $Time = Elm.Time.make(_elm),
    $Util = Elm.Util.make(_elm);
    var _op = {};
+   var nextCurrentPhraseIndex = function (model) {
+      var newCurrentPhraseIndex = model.currentPhraseIndex + 1;
+      var length = $Array.length(model.phrases);
+      return A2($Basics._op["%"],newCurrentPhraseIndex,length);
+   };
+   var NoOp = {ctor: "NoOp"};
+   var Tick = function (a) {    return {ctor: "Tick",_0: a};};
    var update = F2(function (action,model) {
       var _p0 = action;
-      if (_p0.ctor === "ExpandIssue") {
-            return A2($Util._op["=>"],_U.update(model,{expandedIssueId: _p0._0}),$Effects.none);
-         } else {
-            return A2($Util._op["=>"],model,$Effects.none);
-         }
+      switch (_p0.ctor)
+      {case "Tick": var _p2 = _p0._0;
+           var _p1 = model.phraseAnimationState;
+           var elapsedTime = _p1.elapsedTime;
+           var prevClockTime = _p1.prevClockTime;
+           var newElapsedTime = elapsedTime + (_p2 - prevClockTime);
+           var newModel = _U.cmp(newElapsedTime,$Time.second) > 0 ? _U.update(model,
+           {currentPhraseIndex: nextCurrentPhraseIndex(model),phraseAnimationState: {elapsedTime: 0,prevClockTime: _p2}}) : _U.update(model,
+           {phraseAnimationState: {elapsedTime: newElapsedTime,prevClockTime: _p2}});
+           return A2($Util._op["=>"],newModel,$Effects.tick(Tick));
+         case "ExpandIssue": return A2($Util._op["=>"],_U.update(model,{expandedIssueId: _p0._0}),$Effects.none);
+         default: return A2($Util._op["=>"],model,$Effects.none);}
    });
-   var NoOp = {ctor: "NoOp"};
    var ExpandIssue = function (a) {    return {ctor: "ExpandIssue",_0: a};};
-   return _elm.Update.values = {_op: _op,ExpandIssue: ExpandIssue,NoOp: NoOp,update: update};
+   return _elm.Update.values = {_op: _op,ExpandIssue: ExpandIssue,Tick: Tick,NoOp: NoOp,update: update,nextCurrentPhraseIndex: nextCurrentPhraseIndex};
 };
 Elm.View = Elm.View || {};
 Elm.View.make = function (_elm) {
@@ -10768,6 +10818,7 @@ Elm.View.make = function (_elm) {
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
+   $Issues$About = Elm.Issues.About.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Model = Elm.Model.make(_elm),
@@ -10786,12 +10837,16 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "visibility",_1: visibility}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                                                  ,{ctor: "_Tuple2",_0: "background-color",_1: issue.backgroundColor}]));
+                                                  ,{ctor: "_Tuple2"
+                                                   ,_0: "background-image"
+                                                   ,_1: A2($Basics._op["++"],"url(",A2($Basics._op["++"],issue.backgroundAsset,")"))}
+                                                  ,{ctor: "_Tuple2",_0: "background-repeat",_1: "no-repeat"}
+                                                  ,{ctor: "_Tuple2",_0: "background-position",_1: "center"}]));
       return A2($Html.section,_U.list([$Html$Attributes.$class("issue"),styles,expandHandler]),_U.list([$Html.text(issue.symbol)]));
    });
    var viewIssueMenu = F2(function (address,model) {    return A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);});
    var closeButton = function (handler) {    return A2($Html.span,_U.list([handler]),_U.list([$Html.text("X")]));};
-   var viewIssueContent = F2(function (address,issue) {
+   var viewIssueContent = F2(function (address,issueView) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
@@ -10799,12 +10854,15 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "float",_1: "right"}
                                                   ,{ctor: "_Tuple2",_0: "background-color",_1: "green"}]));
       var closeHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));
-      return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler),$Html.text(issue.title)]));
+      return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler),issueView]));
    });
    var viewSelectedIssue = F2(function (address,model) {
-      var _p1 = $Model.findSelectedIssue(model);
+      var _p1 = model.expandedIssueId;
       if (_p1.ctor === "Just") {
-            return A2(viewIssueContent,address,_p1._0);
+            switch (_p1._0)
+            {case 1: return A2(viewIssueContent,address,A2($Issues$About.view,address,model));
+               case 2: return A2(viewIssueContent,address,$Html.text("HI!"));
+               default: return A2($Html.span,_U.list([]),_U.list([]));}
          } else {
             return A2($Html.span,_U.list([]),_U.list([]));
          }
@@ -10845,7 +10903,7 @@ Elm.Main.make = function (_elm) {
    $Util = Elm.Util.make(_elm),
    $View = Elm.View.make(_elm);
    var _op = {};
-   var app = $StartApp.start({init: A2($Util._op["=>"],$Model.init,$Effects.none),update: $Update.update,view: $View.view,inputs: _U.list([])});
+   var app = $StartApp.start({init: A2($Util._op["=>"],$Model.init,$Effects.tick($Update.Tick)),update: $Update.update,view: $View.view,inputs: _U.list([])});
    var main = app.html;
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
    return _elm.Main.values = {_op: _op,app: app,main: main};

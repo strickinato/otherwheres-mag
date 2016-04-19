@@ -6,6 +6,7 @@ import Html.Attributes exposing (..)
 import Model exposing (Model, Issue, isShowingMenu, findSelectedIssue)
 import Update exposing (Action(..))
 import Signal
+import Issues.About
 
 
 view : Signal.Address Action -> Model -> Html
@@ -19,23 +20,30 @@ view address model =
   in
     div
       [ id "wrapper", styles ]
-      ( List.append
-          (viewIssueMenu address model)
-          [ viewSelectedIssue address model ]
+      (List.append
+        (viewIssueMenu address model)
+        [ viewSelectedIssue address model ]
       )
 
 
 viewSelectedIssue : Signal.Address Action -> Model -> Html
 viewSelectedIssue address model =
-  case findSelectedIssue model of
-    Just issue ->
-      viewIssueContent address issue
+  case model.expandedIssueId of
+    Just 1 ->
+      viewIssueContent address (Issues.About.view address model)
+
+    Just 2 ->
+      viewIssueContent address (text "HI!")
+
+    Just _ ->
+      span [] []
 
     Nothing ->
       span [] []
 
-viewIssueContent : Signal.Address Action -> Issue -> Html
-viewIssueContent address issue =
+
+viewIssueContent : Signal.Address Action -> Html -> Html
+viewIssueContent address issueView =
   let
     closeHandler =
       onClick address (ExpandIssue Nothing)
@@ -49,13 +57,13 @@ viewIssueContent address issue =
         , ( "float", "right" )
         , ( "background-color", "green" )
         ]
-
   in
     div
       [ class "issue-content", styles ]
       [ closeButton closeHandler
-      , text issue.title
+      , issueView
       ]
+
 
 closeButton : Html.Attribute -> Html
 closeButton handler =
@@ -92,7 +100,9 @@ viewIssueMenuItem address model issue =
         , ( "visibility", visibility )
         , ( "height", "100%" )
         , ( "display", "inline-block" )
-        , ( "background-color", issue.backgroundColor )
+        , ( "background-image", "url(" ++ issue.backgroundAsset ++ ")" )
+        , ( "background-repeat", "no-repeat" )
+        , ( "background-position", "center" )
         ]
 
     expandHandler =
