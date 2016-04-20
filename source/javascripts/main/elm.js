@@ -10725,7 +10725,9 @@ Elm.Issues.About.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
                                                   ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
       var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
-      return A2($Html.div,_U.list([styles]),_U.list([viewHeader,viewLiteIs,viewChangingText(currentPhrase),viewLine]));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("issue-content")]),
+      _U.list([A2($Html.div,_U.list([styles]),_U.list([viewHeader,viewLiteIs,viewChangingText(currentPhrase),viewLine]))]));
    });
    return _elm.Issues.About.values = {_op: _op
                                      ,view: view
@@ -11085,16 +11087,6 @@ Elm.View.make = function (_elm) {
    var viewIssueMenu = F2(function (address,model) {
       return A2($List._op["::"],A2(viewOtherwheresIssueItem,address,model),A2($List.map,A2(viewIssueMenuItem,address,model),model.issues));
    });
-   var viewIssueContent = F3(function (address,closingAnimating,issueView) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
-                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
-                                                  ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
-                                                  ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                                                  ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class("issue-content"),styles]),
-      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("close-button"),closeHandler(address)]),_U.list([])),issueView]));
-   });
    var issueContentAttributes = function () {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
@@ -11114,20 +11106,22 @@ Elm.View.make = function (_elm) {
               ,A2($Html.img,_U.list([$Html$Attributes.src(_p7),$Html$Attributes.$class("small"),handler($Maybe.Just(_p7))]),_U.list([]))
               ,A2($Html.img,_U.list([$Html$Attributes.src(_p8),$Html$Attributes.$class("small"),handler($Maybe.Just(_p8))]),_U.list([]))]));
    });
-   var viewFromIssue = F3(function (maybeSource,handler,issue) {
+   var viewFromIssue = F4(function (maybeSource,imgHandler,closeHandler,issue) {
       var expanded = function (source) {
          return A2($Html.div,
-         _U.list([$Html$Attributes.$class(A2($Basics._op["++"],"issue-content-",issue.$class))]),
-         _U.list([A2($Html.img,_U.list([$Html$Attributes.$class("big-image"),handler($Maybe.Nothing),$Html$Attributes.src(source)]),_U.list([]))]));
+         _U.list([$Html$Attributes.$class("issue-content")]),
+         _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("minimize-button"),imgHandler($Maybe.Nothing)]),_U.list([]))
+                 ,A2($Html.img,_U.list([$Html$Attributes.$class("big-image"),imgHandler($Maybe.Nothing),$Html$Attributes.src(source)]),_U.list([]))]));
       };
       var unexpanded = A2($Html.div,
-      _U.list([$Html$Attributes.$class(A2($Basics._op["++"],"issue-content-",issue.$class))]),
-      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
+      _U.list([$Html$Attributes.$class("issue-content")]),
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("close-button"),closeHandler]),_U.list([]))
+              ,A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
               ,A2($Html.h3,
               _U.list([$Html$Attributes.$class("issue-number")]),
               _U.list([$Html.text(A2($Basics._op["++"],"VOLUME ",A2($Basics._op["++"],issue.symbol,":")))]))
               ,A2($Html.h3,_U.list([$Html$Attributes.$class("issue-tagline")]),_U.list([$Html.text(issue.tagline)]))
-              ,A2(issueImageView,issue.images,handler)
+              ,A2(issueImageView,issue.images,imgHandler)
               ,A2($Html.div,_U.list([$Html$Attributes.$class("issue-quote")]),_U.list([$Html.text(issue.quote)]))
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
@@ -11144,19 +11138,17 @@ Elm.View.make = function (_elm) {
       var _p10 = model.expandedIssueId;
       if (_p10.ctor === "Just") {
             if (_p10._0 === 1) {
-                  return A3(viewIssueContent,address,model.closingAnimating,A2($Issues$About.view,address,model));
+                  return A2($Issues$About.view,address,model);
                } else {
                   var _p11 = $Model.findSelectedIssue(model);
                   if (_p11.ctor === "Just") {
-                        return A3(viewIssueContent,
-                        address,
-                        model.closingAnimating,
-                        A3(viewFromIssue,
+                        return A4(viewFromIssue,
                         model.maybeExpandedImage,
                         function (maybeImgSource) {
                            return A2($Html$Events.onClick,address,$Update.ExpandImage(maybeImgSource));
                         },
-                        _p11._0));
+                        closeHandler(address),
+                        _p11._0);
                      } else {
                         return A2($Html.span,_U.list([]),_U.list([]));
                      }
@@ -11177,7 +11169,6 @@ Elm.View.make = function (_elm) {
                              ,viewFromIssue: viewFromIssue
                              ,issueImageView: issueImageView
                              ,issueContentAttributes: issueContentAttributes
-                             ,viewIssueContent: viewIssueContent
                              ,viewIssueMenu: viewIssueMenu
                              ,viewOtherwheresIssueItem: viewOtherwheresIssueItem
                              ,handlersDependingOnState: handlersDependingOnState

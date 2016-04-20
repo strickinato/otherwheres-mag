@@ -8,6 +8,11 @@ $text: 16px
 
 .issue-content
   transition: all $animation-speed ease
+  width: 80%
+  height: 100%
+  position: absolute
+  display: inline-block
+  float: right
 
 #elm-main-mount
   font-family: BrandonGrotesque
@@ -58,15 +63,28 @@ h3
   font-size: $text
   letter-spacing: 3px
 
-.close-button
+=button-location
   padding-top: 24px
   padding-right: 24px
   cursor: pointer
   font-size: 42px
   float: right
 
+.close-button
+  +button-location
+
   &:before
     content: "✗"
+
+.minimize-button
+  +button-location
+  margin-top: 24px
+  -webkit-transform: rotate(135deg)
+  transform: rotate(135deg)
+  color: $otherwheres-red
+
+  &:before
+    content: "➡"
 
 =beforeBackgroundImage($url)
   &:before
@@ -176,7 +194,7 @@ h3
 
 
 .big-image
-  width: 98%
+  max-width: 98%
   position: absolute
   left: 1%
   cursor: pointer

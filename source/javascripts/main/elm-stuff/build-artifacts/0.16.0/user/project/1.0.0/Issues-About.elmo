@@ -45,7 +45,9 @@ Elm.Issues.About.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
                                                   ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
       var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
-      return A2($Html.div,_U.list([styles]),_U.list([viewHeader,viewLiteIs,viewChangingText(currentPhrase),viewLine]));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("issue-content")]),
+      _U.list([A2($Html.div,_U.list([styles]),_U.list([viewHeader,viewLiteIs,viewChangingText(currentPhrase),viewLine]))]));
    });
    return _elm.Issues.About.values = {_op: _op
                                      ,view: view
