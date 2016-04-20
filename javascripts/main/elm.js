@@ -10772,46 +10772,53 @@ Elm.Model.make = function (_elm) {
    var findSelectedIssue = function (model) {
       return $List.head(A2($List.filter,function (issue) {    return A2($Util._op["?=="],issue.id,model.expandedIssueId);},model.issues));
    };
-   var disaster = {id: 2
-                  ,symbol: "IV"
-                  ,$class: "volume4"
-                  ,title: "Disaster"
-                  ,tagline: "6 STORIES OF PERSONAL DISASTERS"
-                  ,images: _U.list([])
-                  ,quote: "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
-                  ,quoteCredit: "Katie Wheeler-Dubin"
-                  ,quoteStory: "Storm Season"
-                  ,actionButtonText: "Sold Out"};
-   var comics = {id: 3
-                ,symbol: "III"
-                ,$class: "volume3"
-                ,title: "Comics"
-                ,tagline: "Volume 1, an epic truth statement"
-                ,images: _U.list([])
-                ,quote: "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
-                ,quoteCredit: "Andrew \"Dirtman\" Hine"
-                ,quoteStory: "On Comics"
-                ,actionButtonText: "Sold Out"};
-   var travel = {id: 4
-                ,symbol: "II"
-                ,$class: "volume2"
-                ,title: "Travel"
-                ,tagline: "Volume 1, an epic truth statement"
-                ,images: _U.list([])
-                ,quote: "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
-                ,quoteCredit: "Andrew Wilson"
-                ,quoteStory: "Belgium"
-                ,actionButtonText: "Sold Out"};
+   var imagePaths = function (issueFolder) {
+      var imagePath = A2($Basics._op["++"],"/assets/issues/",A2($Basics._op["++"],issueFolder,"/"));
+      return {ctor: "_Tuple3"
+             ,_0: A2($Basics._op["++"],imagePath,"img1.png")
+             ,_1: A2($Basics._op["++"],imagePath,"img2.png")
+             ,_2: A2($Basics._op["++"],imagePath,"img3.png")};
+   };
    var truthOrFiction = {id: 5
                         ,symbol: "I"
                         ,$class: "volume1"
                         ,title: "Truth or Fiction"
                         ,tagline: "Volume 1, an epic truth statement"
-                        ,images: _U.list([])
+                        ,images: imagePaths("truth_or_fiction")
                         ,quote: "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
                         ,quoteCredit: "Joseph Bien-Kahn"
-                        ,quoteStory: "FACES"
+                        ,quoteStory: "Faces"
                         ,actionButtonText: "Sold Out"};
+   var travel = {id: 4
+                ,symbol: "II"
+                ,$class: "volume2"
+                ,title: "Travel"
+                ,tagline: "Volume 1, an epic truth statement"
+                ,images: imagePaths("travel")
+                ,quote: "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
+                ,quoteCredit: "Adam Wilson"
+                ,quoteStory: "Belgium"
+                ,actionButtonText: "Sold Out"};
+   var comics = {id: 3
+                ,symbol: "III"
+                ,$class: "volume3"
+                ,title: "Comics"
+                ,tagline: "Volume 1, an epic truth statement"
+                ,images: imagePaths("comics")
+                ,quote: "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
+                ,quoteCredit: "Andrew \"Dirtman\" Hine"
+                ,quoteStory: "On Comics"
+                ,actionButtonText: "Sold Out"};
+   var disaster = {id: 2
+                  ,symbol: "IV"
+                  ,$class: "volume4"
+                  ,title: "Disaster"
+                  ,tagline: "6 STORIES OF PERSONAL DISASTERS"
+                  ,images: imagePaths("disaster")
+                  ,quote: "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
+                  ,quoteCredit: "Katie Wheeler-Dubin"
+                  ,quoteStory: "Storm Season"
+                  ,actionButtonText: "Sold Out"};
    var allIssues = _U.list([disaster,comics,travel,truthOrFiction]);
    var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
    var otherwheresPhrases = $Array.fromList(_U.list(["mostly true"
@@ -10834,7 +10841,8 @@ Elm.Model.make = function (_elm) {
               ,currentPhraseIndex: 0
               ,phrases: otherwheresPhrases
               ,closingAnimating: false
-              ,closingAnimationState: $Maybe.Nothing};
+              ,closingAnimationState: $Maybe.Nothing
+              ,maybeExpandedImage: $Maybe.Nothing};
    var Issue = function (a) {
       return function (b) {
          return function (c) {
@@ -10856,7 +10864,7 @@ Elm.Model.make = function (_elm) {
          };
       };
    };
-   var Model = F8(function (a,b,c,d,e,f,g,h) {
+   var Model = F9(function (a,b,c,d,e,f,g,h,i) {
       return {issues: a
              ,expandedIssueId: b
              ,hoveredIssueId: c
@@ -10864,7 +10872,8 @@ Elm.Model.make = function (_elm) {
              ,currentPhraseIndex: e
              ,phrases: f
              ,closingAnimating: g
-             ,closingAnimationState: h};
+             ,closingAnimationState: h
+             ,maybeExpandedImage: i};
    });
    return _elm.Model.values = {_op: _op
                               ,Model: Model
@@ -10876,6 +10885,7 @@ Elm.Model.make = function (_elm) {
                               ,otherwheresPhrases: otherwheresPhrases
                               ,currentPhrase: currentPhrase
                               ,allIssues: allIssues
+                              ,imagePaths: imagePaths
                               ,truthOrFiction: truthOrFiction
                               ,travel: travel
                               ,comics: comics
@@ -10935,6 +10945,7 @@ Elm.Update.make = function (_elm) {
            $Effects.none) : A2($Util._op["=>"],
            _U.update(model,{closingAnimating: true,closingAnimationState: $Maybe.Just({elapsedTime: newElapsedTime,prevClockTime: _p4})}),
            $Effects.tick(AnimateClosing));
+         case "ExpandImage": return A2($Util._op["=>"],_U.update(model,{maybeExpandedImage: _p0._0}),$Effects.none);
          case "ExpandIssue": var _p6 = _p0._0;
            var _p5 = _p6;
            if (_p5.ctor === "Just") {
@@ -10948,9 +10959,11 @@ Elm.Update.make = function (_elm) {
          default: return A2($Util._op["=>"],model,$Effects.none);}
    });
    var HoverIssue = function (a) {    return {ctor: "HoverIssue",_0: a};};
+   var ExpandImage = function (a) {    return {ctor: "ExpandImage",_0: a};};
    var ExpandIssue = function (a) {    return {ctor: "ExpandIssue",_0: a};};
    return _elm.Update.values = {_op: _op
                                ,ExpandIssue: ExpandIssue
+                               ,ExpandImage: ExpandImage
                                ,HoverIssue: HoverIssue
                                ,Tick: Tick
                                ,AnimateClosing: AnimateClosing
@@ -11072,21 +11085,15 @@ Elm.View.make = function (_elm) {
    var viewIssueMenu = F2(function (address,model) {
       return A2($List._op["::"],A2(viewOtherwheresIssueItem,address,model),A2($List.map,A2(viewIssueMenuItem,address,model),model.issues));
    });
-   var closeButton = function (handler) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "float",_1: "right"}
-                                                  ,{ctor: "_Tuple2",_0: "padding-top",_1: "20px"}
-                                                  ,{ctor: "_Tuple2",_0: "padding-right",_1: "20px"}
-                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "24px"}
-                                                  ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
-      return A2($Html.span,_U.list([styles,handler]),_U.list([$Html.text("✗")]));
-   };
    var viewIssueContent = F3(function (address,closingAnimating,issueView) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
                                                   ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
                                                   ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
-      return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler(address)),issueView]));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("issue-content"),styles]),
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("close-button"),closeHandler(address)]),_U.list([])),issueView]));
    });
    var issueContentAttributes = function () {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
@@ -11096,31 +11103,60 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
       return _U.list([$Html$Attributes.$class("issue-content"),styles]);
    }();
-   var issueImageView = function (imageUrl) {    return A2($Html.span,_U.list([]),_U.list([]));};
-   var viewFromIssue = function (issue) {
+   var issueImageView = F2(function (_p4,handler) {
+      var _p5 = _p4;
+      var _p8 = _p5._2;
+      var _p7 = _p5._1;
+      var _p6 = _p5._0;
       return A2($Html.div,
+      _U.list([$Html$Attributes.$class("images")]),
+      _U.list([A2($Html.img,_U.list([$Html$Attributes.src(_p6),$Html$Attributes.$class("small"),handler($Maybe.Just(_p6))]),_U.list([]))
+              ,A2($Html.img,_U.list([$Html$Attributes.src(_p7),$Html$Attributes.$class("small"),handler($Maybe.Just(_p7))]),_U.list([]))
+              ,A2($Html.img,_U.list([$Html$Attributes.src(_p8),$Html$Attributes.$class("small"),handler($Maybe.Just(_p8))]),_U.list([]))]));
+   });
+   var viewFromIssue = F3(function (maybeSource,handler,issue) {
+      var expanded = function (source) {
+         return A2($Html.div,
+         _U.list([$Html$Attributes.$class(A2($Basics._op["++"],"issue-content-",issue.$class))]),
+         _U.list([A2($Html.img,_U.list([$Html$Attributes.$class("big-image"),handler($Maybe.Nothing),$Html$Attributes.src(source)]),_U.list([]))]));
+      };
+      var unexpanded = A2($Html.div,
       _U.list([$Html$Attributes.$class(A2($Basics._op["++"],"issue-content-",issue.$class))]),
       _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
               ,A2($Html.h3,
               _U.list([$Html$Attributes.$class("issue-number")]),
               _U.list([$Html.text(A2($Basics._op["++"],"VOLUME ",A2($Basics._op["++"],issue.symbol,":")))]))
               ,A2($Html.h3,_U.list([$Html$Attributes.$class("issue-tagline")]),_U.list([$Html.text(issue.tagline)]))
-              ,A2($Html.div,_U.list([$Html$Attributes.$class("images")]),A2($List.map,issueImageView,issue.images))
+              ,A2(issueImageView,issue.images,handler)
               ,A2($Html.div,_U.list([$Html$Attributes.$class("issue-quote")]),_U.list([$Html.text(issue.quote)]))
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
               _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
               ,A2($Html.button,_U.list([$Html$Attributes.$class("issue-content-action-button")]),_U.list([$Html.text(issue.actionButtonText)]))]));
-   };
+      var _p9 = maybeSource;
+      if (_p9.ctor === "Just") {
+            return expanded(_p9._0);
+         } else {
+            return unexpanded;
+         }
+   });
    var viewSelectedIssue = F2(function (address,model) {
-      var _p4 = model.expandedIssueId;
-      if (_p4.ctor === "Just") {
-            if (_p4._0 === 1) {
+      var _p10 = model.expandedIssueId;
+      if (_p10.ctor === "Just") {
+            if (_p10._0 === 1) {
                   return A3(viewIssueContent,address,model.closingAnimating,A2($Issues$About.view,address,model));
                } else {
-                  var _p5 = $Model.findSelectedIssue(model);
-                  if (_p5.ctor === "Just") {
-                        return A3(viewIssueContent,address,model.closingAnimating,viewFromIssue(_p5._0));
+                  var _p11 = $Model.findSelectedIssue(model);
+                  if (_p11.ctor === "Just") {
+                        return A3(viewIssueContent,
+                        address,
+                        model.closingAnimating,
+                        A3(viewFromIssue,
+                        model.maybeExpandedImage,
+                        function (maybeImgSource) {
+                           return A2($Html$Events.onClick,address,$Update.ExpandImage(maybeImgSource));
+                        },
+                        _p11._0));
                      } else {
                         return A2($Html.span,_U.list([]),_U.list([]));
                      }
@@ -11142,7 +11178,6 @@ Elm.View.make = function (_elm) {
                              ,issueImageView: issueImageView
                              ,issueContentAttributes: issueContentAttributes
                              ,viewIssueContent: viewIssueContent
-                             ,closeButton: closeButton
                              ,viewIssueMenu: viewIssueMenu
                              ,viewOtherwheresIssueItem: viewOtherwheresIssueItem
                              ,handlersDependingOnState: handlersDependingOnState

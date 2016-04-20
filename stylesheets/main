@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .issue-content {
   transition: all 500ms ease; }
 
@@ -49,6 +50,15 @@ h3 {
   font-size: 16px;
   letter-spacing: 3px; }
 
+.close-button {
+  padding-top: 24px;
+  padding-right: 24px;
+  cursor: pointer;
+  font-size: 42px;
+  float: right; }
+  .close-button:before {
+    content: "✗"; }
+
 .issue {
   transition: all 500ms ease;
   cursor: pointer; }
@@ -96,31 +106,54 @@ h3 {
   font-family: BrandonGrotesqueBlack;
   color: #9F2B22; }
 
+.issue-tagline {
+  color: #424242; }
+
 .issue-quote {
   margin: 0 auto;
-  width: 80%;
+  margin-bottom: 16px;
+  width: 90%;
+  color: #424242;
   text-align: left;
   font-family: BrandonGrotesqueMediumItalic; }
   .issue-quote:before {
-    content: '"';
+    content: "“";
     color: #9F2B22;
-    font-size: 68px;
+    font-size: 42px;
     position: relative;
-    left: -20px;
-    top: -10px;
-    float: left; }
+    float: left;
+    left: -3%;
+    top: -32px; }
   .issue-quote:after {
-    content: '"';
+    content: "”";
     color: #9F2B22;
-    font-size: 68px;
-    position: relative;
-    float: right;
-    left: 20px;
-    top: 10px;
-    /* , div [ class "issue-tagline" ] [ text issue.tagline ] */
-    /* , div [ class "images"] ( List.map issueImageView issue.images ) */
-    /* , div [ class "issue-quote" ] [ text issue.quote ] */
-    /* , div */
-    /*     [ class "issue-quote-credit" ] */
-    /*     [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ] */
-    /* , button [ class "issue-content-action-button" ] [ text issue.actionButtonText ] */ }
+    font-size: 42px;
+    position: absolute;
+    left: 95%; }
+
+.issue-quote-credit {
+  margin: 0 auto;
+  width: 90%;
+  text-align: right;
+  padding-right: 16px;
+  letter-spacing: 3.3px;
+  color: #424242; }
+  .issue-quote-credit:before {
+    content: "—"; }
+
+.images {
+  width: 100%;
+  padding: 40px 0px;
+  display: flex;
+  justify-content: space-around; }
+  .images .small {
+    width: 277px;
+    cursor: pointer;
+    height: 230px; }
+
+.big-image {
+  width: 98%;
+  position: absolute;
+  left: 1%;
+  cursor: pointer;
+  top: 28px; }

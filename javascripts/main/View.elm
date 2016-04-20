@@ -3,7 +3,7 @@ module View (..) where
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Model exposing (Model, Issue, isShowingMenu, findSelectedIssue)
+import Model exposing (Model, Issue, isShowingMenu, findSelectedIssue, Source)
 import Update exposing (Action(..))
 import Signal
 import Issues.About
@@ -31,13 +31,13 @@ viewSelectedIssue : Signal.Address Action -> Model -> Html
 viewSelectedIssue address model =
   case model.expandedIssueId of
     Just 1 ->
-      viewIssueContent address model.closingAnimating (Issues.About.view address model) 
+      viewIssueContent address model.closingAnimating (Issues.About.view address model)
 
     Just _ ->
       case findSelectedIssue model of
         Just issue ->
           issue
-            |> viewFromIssue
+            |> viewFromIssue model.maybeExpandedImage (\maybeImgSource -> onClick address (ExpandImage maybeImgSource) )
             |> viewIssueContent address model.closingAnimating
 
         Nothing ->
@@ -46,27 +46,47 @@ viewSelectedIssue address model =
     Nothing ->
       span [] []
 
-viewFromIssue : Issue -> Html
-viewFromIssue issue =
+
+viewFromIssue : Maybe Source -> (Maybe Source -> Html.Attribute) -> Issue -> Html
+viewFromIssue maybeSource handler issue =
+  let
+    unexpanded =
+      div
+        [ class ("issue-content-" ++ issue.class) ]
+          [ div [ class "red-logo" ] []
+          , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
+          , h3 [ class "issue-tagline" ] [ text issue.tagline ]
+          , (issueImageView issue.images handler)
+          , div
+              [ class "issue-quote" ]
+              [ text issue.quote ]
+          , div
+              [ class "issue-quote-credit" ]
+              [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
+          , button [ class "issue-content-action-button" ] [ text issue.actionButtonText ]
+          ]
+
+    expanded source =
+      div
+        [ class ("issue-content-" ++ issue.class) ]
+        [ img [ class "big-image", handler Nothing, src source ] [] ]
+
+  in
+    case maybeSource of
+      Just src ->
+        expanded src
+      Nothing ->
+        unexpanded
+
+
+issueImageView : Model.ImagePaths -> (Maybe Source -> Html.Attribute) -> Html
+issueImageView ( img1, img2, img3 ) handler =
   div
-    [ class ("issue-content-" ++ issue.class) ]
-    [ div [ class "red-logo" ] []
-    , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
-    , h3 [ class "issue-tagline" ] [ text issue.tagline ]
-    , div [ class "images" ] (List.map issueImageView issue.images)
-    , div
-        [ class "issue-quote" ]
-        [ text issue.quote ]
-    , div
-        [ class "issue-quote-credit" ]
-        [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
-    , button [ class "issue-content-action-button" ] [ text issue.actionButtonText ]
+    [class "images"]
+    [ img [ src img1, class "small", handler (Just img1) ] []
+    , img [ src img2, class "small", handler (Just img2) ] []
+    , img [ src img3, class "small", handler (Just img3) ] []
     ]
-
-
-issueImageView : String -> Html
-issueImageView imageUrl =
-  span [] []
 
 
 issueContentAttributes : List Html.Attribute
@@ -98,24 +118,9 @@ viewIssueContent address closingAnimating issueView =
   in
     div
       [ class "issue-content", styles ]
-      [ closeButton (closeHandler address)
+      [ div [ class "close-button", closeHandler address ] []
       , issueView
       ]
-
-
-closeButton : Html.Attribute -> Html
-closeButton handler =
-  let
-    styles =
-      style
-        [ ( "float", "right" )
-        , ( "padding-top", "20px" )
-        , ( "padding-right", "20px" )
-        , ( "font-size", "24px" )
-        , ( "color", "white" )
-        ]
-  in
-    span [ styles, handler ] [ text "✗" ]
 
 
 viewIssueMenu : Signal.Address Action -> Model -> List Html
