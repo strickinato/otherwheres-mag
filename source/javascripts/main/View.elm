@@ -31,7 +31,7 @@ viewSelectedIssue : Signal.Address Action -> Model -> Html
 viewSelectedIssue address model =
   case model.expandedIssueId of
     Just 1 ->
-      viewIssueContent address model.closingAnimating (Issues.About.view address model) 
+      viewIssueContent address model.closingAnimating (Issues.About.view address model)
 
     Just _ ->
       case findSelectedIssue model of
@@ -45,6 +45,7 @@ viewSelectedIssue address model =
 
     Nothing ->
       span [] []
+
 
 viewFromIssue : Issue -> Html
 viewFromIssue issue =
@@ -98,24 +99,9 @@ viewIssueContent address closingAnimating issueView =
   in
     div
       [ class "issue-content", styles ]
-      [ closeButton (closeHandler address)
+      [ div [ class "close-button", closeHandler address ] []
       , issueView
       ]
-
-
-closeButton : Html.Attribute -> Html
-closeButton handler =
-  let
-    styles =
-      style
-        [ ( "float", "right" )
-        , ( "padding-top", "20px" )
-        , ( "padding-right", "20px" )
-        , ( "font-size", "24px" )
-        , ( "color", "white" )
-        ]
-  in
-    span [ styles, handler ] [ text "✗" ]
 
 
 viewIssueMenu : Signal.Address Action -> Model -> List Html

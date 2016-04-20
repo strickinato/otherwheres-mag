@@ -10799,7 +10799,7 @@ Elm.Model.make = function (_elm) {
                 ,tagline: "Volume 1, an epic truth statement"
                 ,images: _U.list([])
                 ,quote: "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
-                ,quoteCredit: "Andrew Wilson"
+                ,quoteCredit: "Adam Wilson"
                 ,quoteStory: "Belgium"
                 ,actionButtonText: "Sold Out"};
    var truthOrFiction = {id: 5
@@ -10810,7 +10810,7 @@ Elm.Model.make = function (_elm) {
                         ,images: _U.list([])
                         ,quote: "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
                         ,quoteCredit: "Joseph Bien-Kahn"
-                        ,quoteStory: "FACES"
+                        ,quoteStory: "Faces"
                         ,actionButtonText: "Sold Out"};
    var allIssues = _U.list([disaster,comics,travel,truthOrFiction]);
    var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
@@ -11072,21 +11072,15 @@ Elm.View.make = function (_elm) {
    var viewIssueMenu = F2(function (address,model) {
       return A2($List._op["::"],A2(viewOtherwheresIssueItem,address,model),A2($List.map,A2(viewIssueMenuItem,address,model),model.issues));
    });
-   var closeButton = function (handler) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "float",_1: "right"}
-                                                  ,{ctor: "_Tuple2",_0: "padding-top",_1: "20px"}
-                                                  ,{ctor: "_Tuple2",_0: "padding-right",_1: "20px"}
-                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "24px"}
-                                                  ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
-      return A2($Html.span,_U.list([styles,handler]),_U.list([$Html.text("✗")]));
-   };
    var viewIssueContent = F3(function (address,closingAnimating,issueView) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
                                                   ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
                                                   ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
-      return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler(address)),issueView]));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("issue-content"),styles]),
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("close-button"),closeHandler(address)]),_U.list([])),issueView]));
    });
    var issueContentAttributes = function () {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
@@ -11142,7 +11136,6 @@ Elm.View.make = function (_elm) {
                              ,issueImageView: issueImageView
                              ,issueContentAttributes: issueContentAttributes
                              ,viewIssueContent: viewIssueContent
-                             ,closeButton: closeButton
                              ,viewIssueMenu: viewIssueMenu
                              ,viewOtherwheresIssueItem: viewOtherwheresIssueItem
                              ,handlersDependingOnState: handlersDependingOnState
