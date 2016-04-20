@@ -64,8 +64,7 @@ currentPhrase model =
 
 allIssues : List Issue
 allIssues =
-  [ Issue 1 "." "" "."
-  , Issue 2 "IV" "volume4" "Disasters"
+  [ Issue 2 "IV" "volume4" "Disasters"
   , Issue 3 "III" "volume3" "Comics"
   , Issue 4 "II" "volume2" "Travel"
   , Issue 5 "I" "volume1" "Truth or Fiction"

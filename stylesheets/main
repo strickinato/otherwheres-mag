@@ -19,11 +19,38 @@ h3 {
   font-style: italic;
   letter-spacing: 5px; }
 
+.menu-issue-title {
+  font-family: BrandonGrotesqueBlack;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); }
+
+.menu-issue-symbol {
+  font-family: BrandonGrotesqueBlackItalic, sans;
+  color: white; }
+
+.red-logo {
+  background-image: url("/assets/branding/red-logo.png");
+  background-position: center;
+  background-size: cover;
+  height: 114px;
+  width: 75px;
+  margin-bottom: 26px; }
+  .red-logo:before {
+    content: " "; }
+
+.logo-text {
+  font-family: BrandonGrotesqueBold;
+  letter-spacing: 4px;
+  font-size: 26px;
+  color: #9F2B22;
+  margin-bottom: 26px; }
+
+.tag-line-text {
+  font-size: 16px;
+  letter-spacing: 3px; }
+
 .issue {
   transition: all 500ms ease; }
-  .issue:before {
-    filter: blur(10px);
-    -webkit-filter: blur(10px); }
   .issue:before {
     height: 100%;
     width: inherit;
@@ -33,13 +60,16 @@ h3 {
     background-position: center;
     position: absolute;
     z-index: -1; }
-  .issue:hover:before {
-    filter: blur(0px);
-    -webkit-filter: blur(0px); }
 
-.selected-issue:before {
-  filter: blur(0px);
-  -webkit-filter: blur(0px); }
+.redified:after {
+  height: 100%;
+  width: inherit;
+  content: "";
+  top: 0;
+  position: absolute;
+  background-color: #9F2B22;
+  opacity: 0.2;
+  z-index: -1; }
 
 .volume1:before {
   background-image: url("/assets/menu/volume_1.jpg"); }

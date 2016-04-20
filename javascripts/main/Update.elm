@@ -48,7 +48,6 @@ update action model =
       { model | expandedIssueId = maybeIssueId } => Effects.none
 
     HoverIssue maybeIssueId ->
-      let _ = Debug.log "click" maybeIssueId in
       { model | hoveredIssueId = maybeIssueId } => Effects.none
 
     NoOp ->
