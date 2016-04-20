@@ -13,6 +13,8 @@ type alias Model =
   , phraseAnimationState : AnimationState
   , currentPhraseIndex : Int
   , phrases : Array String
+  , closingAnimating : Bool
+  , closingAnimationState : Maybe AnimationState
   }
 
 
@@ -38,6 +40,8 @@ init =
   , phraseAnimationState = initialAnimation
   , currentPhraseIndex = 0
   , phrases = otherwheresPhrases
+  , closingAnimating = False
+  , closingAnimationState = Nothing
   }
 
 

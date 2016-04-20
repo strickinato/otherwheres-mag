@@ -68,7 +68,9 @@ Elm.Model.make = function (_elm) {
               ,hoveredIssueId: $Maybe.Nothing
               ,phraseAnimationState: initialAnimation
               ,currentPhraseIndex: 0
-              ,phrases: otherwheresPhrases};
+              ,phrases: otherwheresPhrases
+              ,closingAnimating: false
+              ,closingAnimationState: $Maybe.Nothing};
    var Issue = function (a) {
       return function (b) {
          return function (c) {
@@ -90,8 +92,15 @@ Elm.Model.make = function (_elm) {
          };
       };
    };
-   var Model = F6(function (a,b,c,d,e,f) {
-      return {issues: a,expandedIssueId: b,hoveredIssueId: c,phraseAnimationState: d,currentPhraseIndex: e,phrases: f};
+   var Model = F8(function (a,b,c,d,e,f,g,h) {
+      return {issues: a
+             ,expandedIssueId: b
+             ,hoveredIssueId: c
+             ,phraseAnimationState: d
+             ,currentPhraseIndex: e
+             ,phrases: f
+             ,closingAnimating: g
+             ,closingAnimationState: h};
    });
    return _elm.Model.values = {_op: _op
                               ,Model: Model

@@ -10822,7 +10822,9 @@ Elm.Model.make = function (_elm) {
               ,hoveredIssueId: $Maybe.Nothing
               ,phraseAnimationState: initialAnimation
               ,currentPhraseIndex: 0
-              ,phrases: otherwheresPhrases};
+              ,phrases: otherwheresPhrases
+              ,closingAnimating: false
+              ,closingAnimationState: $Maybe.Nothing};
    var Issue = function (a) {
       return function (b) {
          return function (c) {
@@ -10844,8 +10846,15 @@ Elm.Model.make = function (_elm) {
          };
       };
    };
-   var Model = F6(function (a,b,c,d,e,f) {
-      return {issues: a,expandedIssueId: b,hoveredIssueId: c,phraseAnimationState: d,currentPhraseIndex: e,phrases: f};
+   var Model = F8(function (a,b,c,d,e,f,g,h) {
+      return {issues: a
+             ,expandedIssueId: b
+             ,hoveredIssueId: c
+             ,phraseAnimationState: d
+             ,currentPhraseIndex: e
+             ,phrases: f
+             ,closingAnimating: g
+             ,closingAnimationState: h};
    });
    return _elm.Model.values = {_op: _op
                               ,Model: Model
@@ -10887,6 +10896,7 @@ Elm.Update.make = function (_elm) {
       return A2($Basics._op["%"],newCurrentPhraseIndex,length);
    };
    var NoOp = {ctor: "NoOp"};
+   var AnimateClosing = function (a) {    return {ctor: "AnimateClosing",_0: a};};
    var Tick = function (a) {    return {ctor: "Tick",_0: a};};
    var update = F2(function (action,model) {
       var _p0 = action;
@@ -10900,7 +10910,33 @@ Elm.Update.make = function (_elm) {
            {currentPhraseIndex: nextCurrentPhraseIndex(model),phraseAnimationState: {elapsedTime: 0,prevClockTime: _p2}}) : _U.update(model,
            {phraseAnimationState: {elapsedTime: newElapsedTime,prevClockTime: _p2}});
            return A2($Util._op["=>"],newModel,$Effects.tick(Tick));
-         case "ExpandIssue": return A2($Util._op["=>"],_U.update(model,{expandedIssueId: _p0._0}),$Effects.none);
+         case "AnimateClosing": var _p6 = _p0._0;
+           var newElapsedTime = function () {
+              var _p3 = model.closingAnimationState;
+              if (_p3.ctor === "Nothing") {
+                    return 0;
+                 } else {
+                    return _p3._0.elapsedTime + (_p6 - _p3._0.prevClockTime);
+                 }
+           }();
+           if (_U.cmp(newElapsedTime,$Time.second / 2.0) > 0) {
+                 var _p4 = A2($Debug.log,"closing",newElapsedTime);
+                 return A2($Util._op["=>"],
+                 _U.update(model,{expandedIssueId: $Maybe.Nothing,closingAnimating: false,closingAnimationState: $Maybe.Nothing}),
+                 $Effects.none);
+              } else {
+                 var _p5 = A2($Debug.log,"animating",newElapsedTime);
+                 return A2($Util._op["=>"],
+                 _U.update(model,{closingAnimating: true,closingAnimationState: $Maybe.Just({elapsedTime: newElapsedTime,prevClockTime: _p6})}),
+                 $Effects.tick(AnimateClosing));
+              }
+         case "ExpandIssue": var _p8 = _p0._0;
+           var _p7 = _p8;
+           if (_p7.ctor === "Just") {
+                 return A2($Util._op["=>"],_U.update(model,{expandedIssueId: _p8}),$Effects.none);
+              } else {
+                 return A2($Util._op["=>"],model,$Effects.tick(AnimateClosing));
+              }
          case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssueId: _p0._0}),$Effects.none);
          default: return A2($Util._op["=>"],model,$Effects.none);}
    });
@@ -10910,6 +10946,7 @@ Elm.Update.make = function (_elm) {
                                ,ExpandIssue: ExpandIssue
                                ,HoverIssue: HoverIssue
                                ,Tick: Tick
+                               ,AnimateClosing: AnimateClosing
                                ,NoOp: NoOp
                                ,update: update
                                ,nextCurrentPhraseIndex: nextCurrentPhraseIndex};
@@ -10943,14 +10980,18 @@ Elm.View.make = function (_elm) {
    var closeHandler = function (address) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));};
    var makeExpandHandler = F2(function (address,id) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Just(id)));});
    var makeHoverHandler = F2(function (address,id) {    return A2($Html$Events.onMouseOver,address,$Update.HoverIssue($Maybe.Just(id)));});
-   var issueStyle = F3(function (issueState,issueClass,redify) {
+   var issueStyle = F4(function (issueState,issueClass,redify,closingAnimating) {
       var _p0 = function () {
          var _p1 = issueState;
          switch (_p1.ctor)
          {case "MenuItem": return {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "solid white 2px",_3: true};
             case "Hovered": return {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "solid white 2px",_3: false};
             case "Selected": return {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "none",_3: false};
-            default: return {ctor: "_Tuple4",_0: "hidden",_1: "0%",_2: "none",_3: false};}
+            default: return closingAnimating ? {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "solid white 2px",_3: true} : {ctor: "_Tuple4"
+                                                                                                                          ,_0: "hidden"
+                                                                                                                          ,_1: "0%"
+                                                                                                                          ,_2: "none"
+                                                                                                                          ,_3: false};}
       }();
       var visibility = _p0._0;
       var width = _p0._1;
@@ -11002,14 +11043,14 @@ Elm.View.make = function (_elm) {
    });
    var viewIssueMenuItem = F3(function (address,model,issue) {
       var issueState = A2(getIssueState,issue.id,model);
-      var attributes = A3(issueStyle,issueState,issue.$class,true);
+      var attributes = A4(issueStyle,issueState,issue.$class,true,model.closingAnimating);
       var handlers = A3(handlersDependingOnState,issueState,issue.id,address);
       return A2($Html.section,A2($List.append,handlers,attributes),_U.list([A2(viewMenuInner,model,issue)]));
    });
    var viewOtherwheresIssueItem = F2(function (address,model) {
       var issueId = 1;
       var issueState = A2(getIssueState,issueId,model);
-      var attributes = A3(issueStyle,issueState,"about",false);
+      var attributes = A4(issueStyle,issueState,"about",false,model.closingAnimating);
       var handlers = A3(handlersDependingOnState,issueState,issueId,address);
       return A2($Html.section,
       A2($List.append,handlers,attributes),
@@ -11032,7 +11073,7 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
       return A2($Html.span,_U.list([styles,handler]),_U.list([$Html.text("✗")]));
    };
-   var viewIssueContent = F2(function (address,issueView) {
+   var viewIssueContent = F3(function (address,closingAnimating,issueView) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
@@ -11068,11 +11109,11 @@ Elm.View.make = function (_elm) {
       var _p4 = model.expandedIssueId;
       if (_p4.ctor === "Just") {
             if (_p4._0 === 1) {
-                  return A2(viewIssueContent,address,A2($Issues$About.view,address,model));
+                  return A3(viewIssueContent,address,model.closingAnimating,A2($Issues$About.view,address,model));
                } else {
                   var _p5 = $Model.findSelectedIssue(model);
                   if (_p5.ctor === "Just") {
-                        return A2(viewIssueContent,address,viewFromIssue(_p5._0));
+                        return A3(viewIssueContent,address,model.closingAnimating,viewFromIssue(_p5._0));
                      } else {
                         return A2($Html.span,_U.list([]),_U.list([]));
                      }
