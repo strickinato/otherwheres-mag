@@ -115,6 +115,7 @@ viewIssueMenu address model =
     :: (List.map (viewIssueMenuItem address model) model.issues)
 
 
+
 viewOtherwheresIssueItem : Signal.Address Action -> Model -> Html
 viewOtherwheresIssueItem address model =
   let
@@ -129,21 +130,35 @@ viewOtherwheresIssueItem address model =
 
     handlers =
       handlersDependingOnState issueState issueId address
-  in
-    section
-      (List.append handlers attributes)
+
+    innerHtml =
       [ div
           [ innerStyle ]
           [ div [ class "red-logo" ] []
           , div [ class "logo-text" ] [ text "OTHERWHERES" ]
           , div
               [ class "tag-line-text" ]
-              [ text "{ mostly } true"
-              , br [] []
-              , text "stories"
+              [ p [] [ text "{ mostly } true" ]
+              , p [] [ text "stories" ]
               ]
           ]
       ]
+
+    inner =
+      case issueState of
+        MenuItem ->
+          innerHtml
+        Hovered ->
+          innerHtml
+        Selected ->
+          innerHtml
+        Hidden ->
+          innerHtml
+
+  in
+    section
+      (List.append handlers attributes)
+      inner
 
 
 handlersDependingOnState : IssueState -> Int -> Signal.Address Action -> List Html.Attribute
