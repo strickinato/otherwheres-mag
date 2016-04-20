@@ -33,14 +33,53 @@ viewSelectedIssue address model =
     Just 1 ->
       viewIssueContent address (Issues.About.view address model)
 
-    Just 2 ->
-      viewIssueContent address (text "HI!")
-
     Just _ ->
-      span [] []
+      case findSelectedIssue model of
+        Just issue ->
+          issue
+            |> viewFromIssue
+            |> viewIssueContent address
+
+        Nothing ->
+          span [] []
 
     Nothing ->
       span [] []
+
+viewFromIssue : Issue -> Html
+viewFromIssue issue =
+  div
+    [ class ("issue-content-" ++ issue.class ) ]
+    [ div [ class "red-logo" ] [] 
+    , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
+    , h3 [ class "issue-tagline" ] [ text issue.tagline ]
+    , div [ class "images"] ( List.map issueImageView issue.images )
+    , div
+        [ class "issue-quote" ]
+        [ text issue.quote ]
+    , div
+        [ class "issue-quote-credit" ]
+        [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
+    , button [ class "issue-content-action-button" ] [ text issue.actionButtonText ]
+    ]
+
+issueImageView : String -> Html
+issueImageView imageUrl =
+  span [] [] 
+
+issueContentAttributes : List Html.Attribute
+issueContentAttributes =
+  let
+    styles =
+      style
+        [ ( "width", "80%" )
+        , ( "height", "100%" )
+        , ( "position", "absolute" )
+        , ( "display", "inline-block" )
+        , ( "float", "right" )
+        ]
+  in
+    [ class "issue-content", styles ]
 
 
 viewIssueContent : Signal.Address Action -> Html -> Html

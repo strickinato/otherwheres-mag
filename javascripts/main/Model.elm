@@ -21,6 +21,12 @@ type alias Issue =
   , symbol : String
   , class : String
   , title : String
+  , tagline : String
+  , images : List String
+  , quote : String
+  , quoteCredit : String
+  , quoteStory : String
+  , actionButtonText : String
   }
 
 
@@ -64,12 +70,71 @@ currentPhrase model =
 
 allIssues : List Issue
 allIssues =
-  [ Issue 2 "IV" "volume4" "Disasters"
-  , Issue 3 "III" "volume3" "Comics"
-  , Issue 4 "II" "volume2" "Travel"
-  , Issue 5 "I" "volume1" "Truth or Fiction"
+  [ disaster
+  , comics
+  , travel
+  , truthOrFiction
   ]
 
+
+truthOrFiction : Issue
+truthOrFiction =
+  { id = 5
+  , symbol = "I"
+  , class = "volume1"
+  , title = "Truth or Fiction"
+  , tagline = "Volume 1, an epic truth statement"
+  , images = []
+  , quote = "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
+  , quoteCredit = "Joseph Bien-Kahn"
+  , quoteStory = "FACES"
+  , actionButtonText = "Sold Out"
+  }
+
+
+travel : Issue
+travel =
+  { id = 4
+  , symbol = "II"
+  , class = "volume2"
+  , title = "Travel"
+  , tagline = "Volume 1, an epic truth statement"
+  , images = []
+  , quote = "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
+  , quoteCredit = "Andrew Wilson"
+  , quoteStory = "Belgium"
+  , actionButtonText = "Sold Out"
+  }
+
+
+comics : Issue
+comics =
+  { id = 3
+  , symbol = "III"
+  , class = "volume3"
+  , title = "Comics"
+  , tagline = "Volume 1, an epic truth statement"
+  , images = []
+  , quote = "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
+  , quoteCredit = "Andrew \"Dirtman\" Hine"
+  , quoteStory = "On Comics"
+  , actionButtonText = "Sold Out"
+  }
+
+
+disaster : Issue
+disaster =
+  { id = 2
+  , symbol = "IV"
+  , class = "volume4"
+  , title = "Disaster"
+  , tagline = "6 STORIES OF PERSONAL DISASTERS"
+  , images = []
+  , quote = "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
+  , quoteCredit = "Katie Wheeler-Dubin"
+  , quoteStory = "Storm Season"
+  , actionButtonText = "Sold Out"
+  }
 
 findSelectedIssue : Model -> Maybe Issue
 findSelectedIssue model =

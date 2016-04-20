@@ -24,6 +24,9 @@ html, body {
 @font-face {
   font-family: BrandonGrotesqueLightItalic;
   src: url(../assets/branding/fonts/brandon_lite_it.otf); }
+@font-face {
+  font-family: BrandonGrotesqueMediumItalic;
+  src: url(../assets/branding/fonts/brandon_medium_italic.otf); }
 .issue-content {
   transition: all 500ms ease; }
 
@@ -109,3 +112,44 @@ h3 {
 
 .volume4:before {
   background-image: url("../assets/menu/volume_4.jpg"); }
+
+.issue-content {
+  text-align: center; }
+  .issue-content .red-logo {
+    padding-top: 36px;
+    margin: 0 auto;
+    margin-top: 32px; }
+
+.issue-number {
+  padding-top: 24px;
+  font-family: BrandonGrotesqueBlack;
+  color: #9F2B22; }
+
+.issue-quote {
+  margin: 0 auto;
+  width: 80%;
+  text-align: left;
+  font-family: BrandonGrotesqueMediumItalic; }
+  .issue-quote:before {
+    content: '"';
+    color: #9F2B22;
+    font-size: 66px;
+    position: relative;
+    left: -20px;
+    top: -10px;
+    float: left; }
+  .issue-quote:after {
+    content: '"';
+    color: #9F2B22;
+    font-size: 66px;
+    position: relative;
+    float: right;
+    left: 20px;
+    top: 10px;
+    /* , div [ class "issue-tagline" ] [ text issue.tagline ] */
+    /* , div [ class "images"] ( List.map issueImageView issue.images ) */
+    /* , div [ class "issue-quote" ] [ text issue.quote ] */
+    /* , div */
+    /*     [ class "issue-quote-credit" ] */
+    /*     [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ] */
+    /* , button [ class "issue-content-action-button" ] [ text issue.actionButtonText ] */ }

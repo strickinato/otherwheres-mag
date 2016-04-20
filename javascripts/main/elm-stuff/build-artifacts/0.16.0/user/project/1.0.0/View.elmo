@@ -124,13 +124,43 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
       return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler(address)),issueView]));
    });
+   var issueContentAttributes = function () {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
+                                                  ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
+                                                  ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
+                                                  ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
+      return _U.list([$Html$Attributes.$class("issue-content"),styles]);
+   }();
+   var issueImageView = function (imageUrl) {    return A2($Html.span,_U.list([]),_U.list([]));};
+   var viewFromIssue = function (issue) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class(A2($Basics._op["++"],"issue-content-",issue.$class))]),
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
+              ,A2($Html.h3,
+              _U.list([$Html$Attributes.$class("issue-number")]),
+              _U.list([$Html.text(A2($Basics._op["++"],"VOLUME ",A2($Basics._op["++"],issue.symbol,":")))]))
+              ,A2($Html.h3,_U.list([$Html$Attributes.$class("issue-tagline")]),_U.list([$Html.text(issue.tagline)]))
+              ,A2($Html.div,_U.list([$Html$Attributes.$class("images")]),A2($List.map,issueImageView,issue.images))
+              ,A2($Html.div,_U.list([$Html$Attributes.$class("issue-quote")]),_U.list([$Html.text(issue.quote)]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("issue-quote-credit")]),
+              _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
+              ,A2($Html.button,_U.list([$Html$Attributes.$class("issue-content-action-button")]),_U.list([$Html.text(issue.actionButtonText)]))]));
+   };
    var viewSelectedIssue = F2(function (address,model) {
       var _p4 = model.expandedIssueId;
       if (_p4.ctor === "Just") {
-            switch (_p4._0)
-            {case 1: return A2(viewIssueContent,address,A2($Issues$About.view,address,model));
-               case 2: return A2(viewIssueContent,address,$Html.text("HI!"));
-               default: return A2($Html.span,_U.list([]),_U.list([]));}
+            if (_p4._0 === 1) {
+                  return A2(viewIssueContent,address,A2($Issues$About.view,address,model));
+               } else {
+                  var _p5 = $Model.findSelectedIssue(model);
+                  if (_p5.ctor === "Just") {
+                        return A2(viewIssueContent,address,viewFromIssue(_p5._0));
+                     } else {
+                        return A2($Html.span,_U.list([]),_U.list([]));
+                     }
+               }
          } else {
             return A2($Html.span,_U.list([]),_U.list([]));
          }
@@ -144,6 +174,9 @@ Elm.View.make = function (_elm) {
    return _elm.View.values = {_op: _op
                              ,view: view
                              ,viewSelectedIssue: viewSelectedIssue
+                             ,viewFromIssue: viewFromIssue
+                             ,issueImageView: issueImageView
+                             ,issueContentAttributes: issueContentAttributes
                              ,viewIssueContent: viewIssueContent
                              ,closeButton: closeButton
                              ,viewIssueMenu: viewIssueMenu
