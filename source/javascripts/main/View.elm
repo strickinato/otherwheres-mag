@@ -82,7 +82,39 @@ closeButton handler =
 
 viewIssueMenu : Signal.Address Action -> Model -> List Html
 viewIssueMenu address model =
-  (List.map (viewIssueMenuItem address model) model.issues)
+  (viewOtherwheresIssueItem address model)
+    :: (List.map (viewIssueMenuItem address model) model.issues)
+
+
+viewOtherwheresIssueItem : Signal.Address Action -> Model -> Html
+viewOtherwheresIssueItem address model =
+  let
+    issueId =
+      1
+
+    attributes =
+      issueStyle (getIssueState issueId model) "about" False
+
+    hoverHandler =
+      makeHoverHandler address issueId
+
+    expandHandler =
+      makeExpandHandler address issueId
+  in
+    section
+      (hoverHandler :: expandHandler :: attributes)
+      [ div
+          [ innerStyle ]
+          [ div [ class "red-logo" ] []
+          , div [ class "logo-text" ] [ text "OTHERWHERES" ]
+          , div
+              [ class "tag-line-text" ]
+              [ text "{ mostly } true"
+              , br [] [] 
+              , text "stories"
+              ]
+          ]
+      ]
 
 
 isSelectedIssue : Int -> Maybe Int -> Bool
@@ -97,87 +129,117 @@ type IssueState
   | Hidden
 
 
-getIssueState : Issue -> Model -> IssueState
-getIssueState issue model =
+getIssueState : Int -> Model -> IssueState
+getIssueState id model =
   if isShowingMenu model then
-    if (isSelectedIssue issue.id model.hoveredIssueId) then
+    if (isSelectedIssue id model.hoveredIssueId) then
       Hovered
     else
       MenuItem
+  else if (isSelectedIssue id model.expandedIssueId) then
+    Selected
   else
-    if (isSelectedIssue issue.id model.expandedIssueId) then
-      Selected
-    else
-      Hidden
+    Hidden
 
 
-viewIssueMenuItem : Signal.Address Action -> Model -> Issue -> Html
-viewIssueMenuItem address model issue =
+issueStyle : IssueState -> String -> Bool -> List Html.Attribute
+issueStyle issueState issueClass redify =
   let
-    ( visibility, width, border, redified, blurred ) =
-      case getIssueState issue model of
+    ( visibility, width, border, redified ) =
+      case issueState of
         MenuItem ->
-          ( "visible", "20%", "solid white 2px", True, True )
+          ( "visible", "20%", "solid white 2px", True )
 
         Hovered ->
-          ( "visible", "20%", "solid white 2px", False, False )
+          ( "visible", "20%", "solid white 2px", False )
 
         Selected ->
-          ( "visible", "20%", "none", False, False )
+          ( "visible", "20%", "none", False )
 
         Hidden ->
-          ( "hidden", "0%", "none", False, False )
+          ( "hidden", "0%", "none", False )
 
     styles =
       style
         [ ( "width", width )
         , ( "visibility", visibility )
         , ( "height", "100%" )
+        , ( "float", "left" )
         , ( "display", "inline-block" )
         , ( "border-left", border )
         , ( "border-right", border )
         ]
 
-    hoverHandler =
-      Just issue.id
-        |> HoverIssue
-        |> onMouseOver address
-
-    expandHandler =
-      Just issue.id
-        |> ExpandIssue
-        |> onClick address
-
     classes =
       classList
         [ ( "issue", True )
-        , ( issue.class, True )
-        , ( "blurred", blurred )
-        , ( "redified", redified )
+        , ( issueClass, True )
+        , ( "redified", (redified && redify) )
         ]
   in
+    [ styles, classes ]
+
+
+makeHoverHandler : Signal.Address Action -> Int -> Html.Attribute
+makeHoverHandler address id =
+  Just id
+    |> HoverIssue
+    |> onMouseOver address
+
+
+makeExpandHandler : Signal.Address Action -> Int -> Html.Attribute
+makeExpandHandler address id =
+  Just id
+    |> ExpandIssue
+    |> onClick address
+
+
+viewIssueMenuItem : Signal.Address Action -> Model -> Issue -> Html
+viewIssueMenuItem address model issue =
+  let
+    attributes =
+      issueStyle (getIssueState issue.id model) issue.class True
+
+    hoverHandler =
+      makeHoverHandler address issue.id
+
+    expandHandler =
+      makeExpandHandler address issue.id
+  in
     section
-      [ classes, styles, expandHandler, hoverHandler ]
+      (hoverHandler :: expandHandler :: attributes)
       [ viewMenuInner model issue ]
+
+
+innerStyle : Html.Attribute
+innerStyle =
+  style
+    [ ( "display", "flex" )
+    , ( "flex-direction", "column" )
+    , ( "align-items", "center" )
+    , ( "justify-content", "center" )
+    , ( "height", "100%" )
+    , ( "text-align", "center" )
+    ]
 
 
 viewMenuInner : Model -> Issue -> Html
 viewMenuInner model issue =
   let
     issueDisplay =
-      case getIssueState issue model of
+      case getIssueState issue.id model of
         MenuItem ->
           h1
             [ class "menu-issue-symbol" ]
             [ text issue.symbol ]
-              
+
         Hovered ->
-          span
+          h3
             [ class "menu-issue-title" ]
             [ text (String.toUpper issue.title) ]
 
-        Selected -> 
-          span
+        Selected ->
+          h3
             [ class "menu-issue-title" ]
             [ text (String.toUpper issue.title) ]
 
@@ -185,14 +247,7 @@ viewMenuInner model issue =
           span [] []
 
     styles =
-      style
-        [ ( "display", "flex" )
-        , ( "flex-direction", "column" )
-        , ( "align-items", "center" )
-        , ( "justify-content", "center" )
-        , ( "height", "100%" )
-        , ( "text-align", "center" )
-        ]
+      innerStyle
   in
     div
       [ styles ]

@@ -1,5 +1,9 @@
-$blur-amount: 10px
 $animation-speed: 500ms
+$otherwheres-red: #9F2B22
+
+$large: 66px
+$medium: 26px
+$text: 16px
 
 .issue-content
   transition: all $animation-speed ease
@@ -8,12 +12,12 @@ $animation-speed: 500ms
   font-family: BrandonGrotesque
 
 h1
-  font-size: 66px
+  font-size: $large
   margin: 0px
   letter-spacing: 12.8px
 
 h3
-  font-size: 26px
+  font-size: $medium
   letter-spacing: 5px
   margin: 0px
 
@@ -22,12 +26,36 @@ h3
   font-style: italic
   letter-spacing: 5px
 
-
+.menu-issue-title
+  font-family: BrandonGrotesqueBlack
+  color: white
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5)
 
 .menu-issue-symbol
   font-family: BrandonGrotesqueBlackItalic, sans
   color: white
 
+.red-logo
+  background-image: url("/assets/branding/red-logo.png")
+  background-position: center
+  background-size: cover
+  height: 114px
+  width: 75px
+  margin-bottom: 26px
+
+  &:before
+    content: " "
+
+.logo-text
+  font-family: BrandonGrotesqueBold
+  letter-spacing: 4px
+  font-size: $medium
+  color: $otherwheres-red
+  margin-bottom: 26px
+
+.tag-line-text
+  font-size: $text
+  letter-spacing: 3px
 
 
 
@@ -35,16 +63,6 @@ h3
   &:before
     background-image: url($url)
 
-
-=blur
-  &:before
-    filter: blur($blur-amount)
-    -webkit-filter: blur($blur-amount)
-
-=no-blur
-  &:before
-    filter: blur(0px)
-    -webkit-filter: blur(0px)
 
 .issue
   transition: all $animation-speed ease
@@ -66,15 +84,9 @@ h3
     content: ''
     top: 0
     position: absolute
-    background-color: #9F2B22
+    background-color: $otherwheres-red
     opacity: 0.2
     z-index: -1
-
-.blurred
-  +blur
-
-.not-blurred
-  +no-blur
 
 .volume1
   +beforeBackgroundImage("/assets/menu/volume_1.jpg")
@@ -87,3 +99,4 @@ h3
 
 .volume4
   +beforeBackgroundImage("/assets/menu/volume_4.jpg")
+

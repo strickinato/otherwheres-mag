@@ -23,8 +23,7 @@ Elm.Model.make = function (_elm) {
    var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0.0};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
    var Issue = F4(function (a,b,c,d) {    return {id: a,symbol: b,$class: c,title: d};});
-   var allIssues = _U.list([A4(Issue,1,".","",".")
-                           ,A4(Issue,2,"IV","volume4","Disasters")
+   var allIssues = _U.list([A4(Issue,2,"IV","volume4","Disasters")
                            ,A4(Issue,3,"III","volume3","Comics")
                            ,A4(Issue,4,"II","volume2","Travel")
                            ,A4(Issue,5,"I","volume1","Truth or Fiction")]);

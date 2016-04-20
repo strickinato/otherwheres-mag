@@ -10777,8 +10777,7 @@ Elm.Model.make = function (_elm) {
    var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0.0};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
    var Issue = F4(function (a,b,c,d) {    return {id: a,symbol: b,$class: c,title: d};});
-   var allIssues = _U.list([A4(Issue,1,".","",".")
-                           ,A4(Issue,2,"IV","volume4","Disasters")
+   var allIssues = _U.list([A4(Issue,2,"IV","volume4","Disasters")
                            ,A4(Issue,3,"III","volume3","Comics")
                            ,A4(Issue,4,"II","volume2","Travel")
                            ,A4(Issue,5,"I","volume1","Truth or Fiction")]);
@@ -10874,62 +10873,85 @@ Elm.View.make = function (_elm) {
    $String = Elm.String.make(_elm),
    $Update = Elm.Update.make(_elm);
    var _op = {};
+   var innerStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "display",_1: "flex"}
+                                                   ,{ctor: "_Tuple2",_0: "flex-direction",_1: "column"}
+                                                   ,{ctor: "_Tuple2",_0: "align-items",_1: "center"}
+                                                   ,{ctor: "_Tuple2",_0: "justify-content",_1: "center"}
+                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
+                                                   ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}]));
+   var makeExpandHandler = F2(function (address,id) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Just(id)));});
+   var makeHoverHandler = F2(function (address,id) {    return A2($Html$Events.onMouseOver,address,$Update.HoverIssue($Maybe.Just(id)));});
+   var issueStyle = F3(function (issueState,issueClass,redify) {
+      var _p0 = function () {
+         var _p1 = issueState;
+         switch (_p1.ctor)
+         {case "MenuItem": return {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "solid white 2px",_3: true};
+            case "Hovered": return {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "solid white 2px",_3: false};
+            case "Selected": return {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "none",_3: false};
+            default: return {ctor: "_Tuple4",_0: "hidden",_1: "0%",_2: "none",_3: false};}
+      }();
+      var visibility = _p0._0;
+      var width = _p0._1;
+      var border = _p0._2;
+      var redified = _p0._3;
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: width}
+                                                  ,{ctor: "_Tuple2",_0: "visibility",_1: visibility}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
+                                                  ,{ctor: "_Tuple2",_0: "float",_1: "left"}
+                                                  ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
+                                                  ,{ctor: "_Tuple2",_0: "border-left",_1: border}
+                                                  ,{ctor: "_Tuple2",_0: "border-right",_1: border}]));
+      var classes = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "issue",_1: true}
+                                                       ,{ctor: "_Tuple2",_0: issueClass,_1: true}
+                                                       ,{ctor: "_Tuple2",_0: "redified",_1: redified && redify}]));
+      return _U.list([styles,classes]);
+   });
    var Hidden = {ctor: "Hidden"};
    var Selected = {ctor: "Selected"};
    var Hovered = {ctor: "Hovered"};
    var MenuItem = {ctor: "MenuItem"};
    var isSelectedIssue = F2(function (issueId,maybeSelectedId) {    return _U.eq(A2($Maybe.withDefault,0,maybeSelectedId),issueId);});
-   var getIssueState = F2(function (issue,model) {
-      return $Model.isShowingMenu(model) ? A2(isSelectedIssue,issue.id,model.hoveredIssueId) ? Hovered : MenuItem : A2(isSelectedIssue,
-      issue.id,
+   var getIssueState = F2(function (id,model) {
+      return $Model.isShowingMenu(model) ? A2(isSelectedIssue,id,model.hoveredIssueId) ? Hovered : MenuItem : A2(isSelectedIssue,
+      id,
       model.expandedIssueId) ? Selected : Hidden;
    });
    var viewMenuInner = F2(function (model,issue) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "display",_1: "flex"}
-                                                  ,{ctor: "_Tuple2",_0: "flex-direction",_1: "column"}
-                                                  ,{ctor: "_Tuple2",_0: "align-items",_1: "center"}
-                                                  ,{ctor: "_Tuple2",_0: "justify-content",_1: "center"}
-                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
-                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}]));
+      var styles = innerStyle;
       var issueDisplay = function () {
-         var _p0 = A2(getIssueState,issue,model);
-         switch (_p0.ctor)
+         var _p2 = A2(getIssueState,issue.id,model);
+         switch (_p2.ctor)
          {case "MenuItem": return A2($Html.h1,_U.list([$Html$Attributes.$class("menu-issue-symbol")]),_U.list([$Html.text(issue.symbol)]));
-            case "Hovered": return A2($Html.span,_U.list([$Html$Attributes.$class("menu-issue-title")]),_U.list([$Html.text($String.toUpper(issue.title))]));
-            case "Selected": return A2($Html.span,_U.list([$Html$Attributes.$class("menu-issue-title")]),_U.list([$Html.text($String.toUpper(issue.title))]));
+            case "Hovered": return A2($Html.h3,_U.list([$Html$Attributes.$class("menu-issue-title")]),_U.list([$Html.text($String.toUpper(issue.title))]));
+            case "Selected": return A2($Html.h3,_U.list([$Html$Attributes.$class("menu-issue-title")]),_U.list([$Html.text($String.toUpper(issue.title))]));
             default: return A2($Html.span,_U.list([]),_U.list([]));}
       }();
       return A2($Html.div,_U.list([styles]),_U.list([issueDisplay]));
    });
    var viewIssueMenuItem = F3(function (address,model,issue) {
-      var expandHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Just(issue.id)));
-      var hoverHandler = A2($Html$Events.onMouseOver,address,$Update.HoverIssue($Maybe.Just(issue.id)));
-      var _p1 = function () {
-         var _p2 = A2(getIssueState,issue,model);
-         switch (_p2.ctor)
-         {case "MenuItem": return {ctor: "_Tuple5",_0: "visible",_1: "20%",_2: "solid white 2px",_3: true,_4: true};
-            case "Hovered": return {ctor: "_Tuple5",_0: "visible",_1: "20%",_2: "solid white 2px",_3: false,_4: false};
-            case "Selected": return {ctor: "_Tuple5",_0: "visible",_1: "20%",_2: "none",_3: false,_4: false};
-            default: return {ctor: "_Tuple5",_0: "hidden",_1: "0%",_2: "none",_3: false,_4: false};}
-      }();
-      var visibility = _p1._0;
-      var width = _p1._1;
-      var border = _p1._2;
-      var redified = _p1._3;
-      var blurred = _p1._4;
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: width}
-                                                  ,{ctor: "_Tuple2",_0: "visibility",_1: visibility}
-                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
-                                                  ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
-                                                  ,{ctor: "_Tuple2",_0: "border-left",_1: border}
-                                                  ,{ctor: "_Tuple2",_0: "border-right",_1: border}]));
-      var classes = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "issue",_1: true}
-                                                       ,{ctor: "_Tuple2",_0: issue.$class,_1: true}
-                                                       ,{ctor: "_Tuple2",_0: "blurred",_1: blurred}
-                                                       ,{ctor: "_Tuple2",_0: "redified",_1: redified}]));
-      return A2($Html.section,_U.list([classes,styles,expandHandler,hoverHandler]),_U.list([A2(viewMenuInner,model,issue)]));
+      var expandHandler = A2(makeExpandHandler,address,issue.id);
+      var hoverHandler = A2(makeHoverHandler,address,issue.id);
+      var attributes = A3(issueStyle,A2(getIssueState,issue.id,model),issue.$class,true);
+      return A2($Html.section,A2($List._op["::"],hoverHandler,A2($List._op["::"],expandHandler,attributes)),_U.list([A2(viewMenuInner,model,issue)]));
    });
-   var viewIssueMenu = F2(function (address,model) {    return A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);});
+   var viewOtherwheresIssueItem = F2(function (address,model) {
+      var issueId = 1;
+      var attributes = A3(issueStyle,A2(getIssueState,issueId,model),"about",false);
+      var hoverHandler = A2(makeHoverHandler,address,issueId);
+      var expandHandler = A2(makeExpandHandler,address,issueId);
+      return A2($Html.section,
+      A2($List._op["::"],hoverHandler,A2($List._op["::"],expandHandler,attributes)),
+      _U.list([A2($Html.div,
+      _U.list([innerStyle]),
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
+              ,A2($Html.div,_U.list([$Html$Attributes.$class("logo-text")]),_U.list([$Html.text("OTHERWHERES")]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("tag-line-text")]),
+              _U.list([$Html.text("{ mostly } true"),A2($Html.br,_U.list([]),_U.list([])),$Html.text("stories")]))]))]));
+   });
+   var viewIssueMenu = F2(function (address,model) {
+      return A2($List._op["::"],A2(viewOtherwheresIssueItem,address,model),A2($List.map,A2(viewIssueMenuItem,address,model),model.issues));
+   });
    var closeButton = function (handler) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "float",_1: "right"}
                                                   ,{ctor: "_Tuple2",_0: "padding-top",_1: "20px"}
@@ -10970,13 +10992,18 @@ Elm.View.make = function (_elm) {
                              ,viewIssueContent: viewIssueContent
                              ,closeButton: closeButton
                              ,viewIssueMenu: viewIssueMenu
+                             ,viewOtherwheresIssueItem: viewOtherwheresIssueItem
                              ,isSelectedIssue: isSelectedIssue
                              ,MenuItem: MenuItem
                              ,Hovered: Hovered
                              ,Selected: Selected
                              ,Hidden: Hidden
                              ,getIssueState: getIssueState
+                             ,issueStyle: issueStyle
+                             ,makeHoverHandler: makeHoverHandler
+                             ,makeExpandHandler: makeExpandHandler
                              ,viewIssueMenuItem: viewIssueMenuItem
+                             ,innerStyle: innerStyle
                              ,viewMenuInner: viewMenuInner};
 };
 Elm.Main = Elm.Main || {};
