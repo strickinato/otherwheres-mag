@@ -10772,21 +10772,78 @@ Elm.Model.make = function (_elm) {
    var findSelectedIssue = function (model) {
       return $List.head(A2($List.filter,function (issue) {    return A2($Util._op["?=="],issue.id,model.expandedIssueId);},model.issues));
    };
+   var disaster = {id: 2
+                  ,symbol: "IV"
+                  ,$class: "volume4"
+                  ,title: "Disaster"
+                  ,tagline: "6 STORIES OF PERSONAL DISASTERS"
+                  ,images: _U.list([])
+                  ,quote: "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
+                  ,quoteCredit: "Katie Wheeler-Dubin"
+                  ,quoteStory: "Storm Season"
+                  ,actionButtonText: "Sold Out"};
+   var comics = {id: 3
+                ,symbol: "III"
+                ,$class: "volume3"
+                ,title: "Comics"
+                ,tagline: "Volume 1, an epic truth statement"
+                ,images: _U.list([])
+                ,quote: "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
+                ,quoteCredit: "Andrew \"Dirtman\" Hine"
+                ,quoteStory: "On Comics"
+                ,actionButtonText: "Sold Out"};
+   var travel = {id: 4
+                ,symbol: "II"
+                ,$class: "volume2"
+                ,title: "Travel"
+                ,tagline: "Volume 1, an epic truth statement"
+                ,images: _U.list([])
+                ,quote: "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
+                ,quoteCredit: "Andrew Wilson"
+                ,quoteStory: "Belgium"
+                ,actionButtonText: "Sold Out"};
+   var truthOrFiction = {id: 5
+                        ,symbol: "I"
+                        ,$class: "volume1"
+                        ,title: "Truth or Fiction"
+                        ,tagline: "Volume 1, an epic truth statement"
+                        ,images: _U.list([])
+                        ,quote: "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
+                        ,quoteCredit: "Joseph Bien-Kahn"
+                        ,quoteStory: "FACES"
+                        ,actionButtonText: "Sold Out"};
+   var allIssues = _U.list([disaster,comics,travel,truthOrFiction]);
    var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
    var otherwheresPhrases = $Array.fromList(_U.list(["artsy fartsy","ready to pop","Toby\'s worst nightmare","an OK zine"]));
    var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0.0};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
-   var Issue = F4(function (a,b,c,d) {    return {id: a,symbol: b,$class: c,title: d};});
-   var allIssues = _U.list([A4(Issue,2,"IV","volume4","Disasters")
-                           ,A4(Issue,3,"III","volume3","Comics")
-                           ,A4(Issue,4,"II","volume2","Travel")
-                           ,A4(Issue,5,"I","volume1","Truth or Fiction")]);
    var init = {issues: allIssues
               ,expandedIssueId: $Maybe.Nothing
               ,hoveredIssueId: $Maybe.Nothing
               ,phraseAnimationState: initialAnimation
               ,currentPhraseIndex: 0
               ,phrases: otherwheresPhrases};
+   var Issue = function (a) {
+      return function (b) {
+         return function (c) {
+            return function (d) {
+               return function (e) {
+                  return function (f) {
+                     return function (g) {
+                        return function (h) {
+                           return function (i) {
+                              return function (j) {
+                                 return {id: a,symbol: b,$class: c,title: d,tagline: e,images: f,quote: g,quoteCredit: h,quoteStory: i,actionButtonText: j};
+                              };
+                           };
+                        };
+                     };
+                  };
+               };
+            };
+         };
+      };
+   };
    var Model = F6(function (a,b,c,d,e,f) {
       return {issues: a,expandedIssueId: b,hoveredIssueId: c,phraseAnimationState: d,currentPhraseIndex: e,phrases: f};
    });
@@ -10799,6 +10856,10 @@ Elm.Model.make = function (_elm) {
                               ,otherwheresPhrases: otherwheresPhrases
                               ,currentPhrase: currentPhrase
                               ,allIssues: allIssues
+                              ,truthOrFiction: truthOrFiction
+                              ,travel: travel
+                              ,comics: comics
+                              ,disaster: disaster
                               ,findSelectedIssue: findSelectedIssue
                               ,isShowingMenu: isShowingMenu};
 };
@@ -10979,13 +11040,43 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
       return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler(address)),issueView]));
    });
+   var issueContentAttributes = function () {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
+                                                  ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
+                                                  ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
+                                                  ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
+      return _U.list([$Html$Attributes.$class("issue-content"),styles]);
+   }();
+   var issueImageView = function (imageUrl) {    return A2($Html.span,_U.list([]),_U.list([]));};
+   var viewFromIssue = function (issue) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class(A2($Basics._op["++"],"issue-content-",issue.$class))]),
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
+              ,A2($Html.h3,
+              _U.list([$Html$Attributes.$class("issue-number")]),
+              _U.list([$Html.text(A2($Basics._op["++"],"VOLUME ",A2($Basics._op["++"],issue.symbol,":")))]))
+              ,A2($Html.h3,_U.list([$Html$Attributes.$class("issue-tagline")]),_U.list([$Html.text(issue.tagline)]))
+              ,A2($Html.div,_U.list([$Html$Attributes.$class("images")]),A2($List.map,issueImageView,issue.images))
+              ,A2($Html.div,_U.list([$Html$Attributes.$class("issue-quote")]),_U.list([$Html.text(issue.quote)]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("issue-quote-credit")]),
+              _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
+              ,A2($Html.button,_U.list([$Html$Attributes.$class("issue-content-action-button")]),_U.list([$Html.text(issue.actionButtonText)]))]));
+   };
    var viewSelectedIssue = F2(function (address,model) {
       var _p4 = model.expandedIssueId;
       if (_p4.ctor === "Just") {
-            switch (_p4._0)
-            {case 1: return A2(viewIssueContent,address,A2($Issues$About.view,address,model));
-               case 2: return A2(viewIssueContent,address,$Html.text("HI!"));
-               default: return A2($Html.span,_U.list([]),_U.list([]));}
+            if (_p4._0 === 1) {
+                  return A2(viewIssueContent,address,A2($Issues$About.view,address,model));
+               } else {
+                  var _p5 = $Model.findSelectedIssue(model);
+                  if (_p5.ctor === "Just") {
+                        return A2(viewIssueContent,address,viewFromIssue(_p5._0));
+                     } else {
+                        return A2($Html.span,_U.list([]),_U.list([]));
+                     }
+               }
          } else {
             return A2($Html.span,_U.list([]),_U.list([]));
          }
@@ -10999,6 +11090,9 @@ Elm.View.make = function (_elm) {
    return _elm.View.values = {_op: _op
                              ,view: view
                              ,viewSelectedIssue: viewSelectedIssue
+                             ,viewFromIssue: viewFromIssue
+                             ,issueImageView: issueImageView
+                             ,issueContentAttributes: issueContentAttributes
                              ,viewIssueContent: viewIssueContent
                              ,closeButton: closeButton
                              ,viewIssueMenu: viewIssueMenu

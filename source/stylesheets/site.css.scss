@@ -38,4 +38,9 @@ html,body {
   src: url(/assets/branding/fonts/brandon_lite_it.otf);   
 };
 
+@font-face {
+  font-family: BrandonGrotesqueMediumItalic;
+  src: url(/assets/branding/fonts/brandon_medium_italic.otf);   
+};
+
 @import "main";
