@@ -90,6 +90,12 @@ h3 {
     position: absolute;
     z-index: -1; }
 
+.about {
+  overflow: hidden;
+  white-space: nowrap; }
+  .about p {
+    margin: 0px; }
+
 .redified:after {
   height: 100%;
   width: inherit;
