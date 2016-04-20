@@ -18,46 +18,53 @@ Elm.Model.make = function (_elm) {
    var findSelectedIssue = function (model) {
       return $List.head(A2($List.filter,function (issue) {    return A2($Util._op["?=="],issue.id,model.expandedIssueId);},model.issues));
    };
-   var disaster = {id: 2
-                  ,symbol: "IV"
-                  ,$class: "volume4"
-                  ,title: "Disaster"
-                  ,tagline: "6 STORIES OF PERSONAL DISASTERS"
-                  ,images: _U.list([])
-                  ,quote: "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
-                  ,quoteCredit: "Katie Wheeler-Dubin"
-                  ,quoteStory: "Storm Season"
-                  ,actionButtonText: "Sold Out"};
-   var comics = {id: 3
-                ,symbol: "III"
-                ,$class: "volume3"
-                ,title: "Comics"
-                ,tagline: "Volume 1, an epic truth statement"
-                ,images: _U.list([])
-                ,quote: "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
-                ,quoteCredit: "Andrew \"Dirtman\" Hine"
-                ,quoteStory: "On Comics"
-                ,actionButtonText: "Sold Out"};
-   var travel = {id: 4
-                ,symbol: "II"
-                ,$class: "volume2"
-                ,title: "Travel"
-                ,tagline: "Volume 1, an epic truth statement"
-                ,images: _U.list([])
-                ,quote: "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
-                ,quoteCredit: "Adam Wilson"
-                ,quoteStory: "Belgium"
-                ,actionButtonText: "Sold Out"};
+   var imagePaths = function (issueFolder) {
+      var imagePath = A2($Basics._op["++"],"/assets/issues/",A2($Basics._op["++"],issueFolder,"/"));
+      return {ctor: "_Tuple3"
+             ,_0: A2($Basics._op["++"],imagePath,"img1.png")
+             ,_1: A2($Basics._op["++"],imagePath,"img2.png")
+             ,_2: A2($Basics._op["++"],imagePath,"img3.png")};
+   };
    var truthOrFiction = {id: 5
                         ,symbol: "I"
                         ,$class: "volume1"
                         ,title: "Truth or Fiction"
                         ,tagline: "Volume 1, an epic truth statement"
-                        ,images: _U.list([])
+                        ,images: imagePaths("truth_or_fiction")
                         ,quote: "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
                         ,quoteCredit: "Joseph Bien-Kahn"
                         ,quoteStory: "Faces"
                         ,actionButtonText: "Sold Out"};
+   var travel = {id: 4
+                ,symbol: "II"
+                ,$class: "volume2"
+                ,title: "Travel"
+                ,tagline: "Volume 1, an epic truth statement"
+                ,images: imagePaths("travel")
+                ,quote: "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
+                ,quoteCredit: "Adam Wilson"
+                ,quoteStory: "Belgium"
+                ,actionButtonText: "Sold Out"};
+   var comics = {id: 3
+                ,symbol: "III"
+                ,$class: "volume3"
+                ,title: "Comics"
+                ,tagline: "Volume 1, an epic truth statement"
+                ,images: imagePaths("comics")
+                ,quote: "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
+                ,quoteCredit: "Andrew \"Dirtman\" Hine"
+                ,quoteStory: "On Comics"
+                ,actionButtonText: "Sold Out"};
+   var disaster = {id: 2
+                  ,symbol: "IV"
+                  ,$class: "volume4"
+                  ,title: "Disaster"
+                  ,tagline: "6 STORIES OF PERSONAL DISASTERS"
+                  ,images: imagePaths("disaster")
+                  ,quote: "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
+                  ,quoteCredit: "Katie Wheeler-Dubin"
+                  ,quoteStory: "Storm Season"
+                  ,actionButtonText: "Sold Out"};
    var allIssues = _U.list([disaster,comics,travel,truthOrFiction]);
    var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
    var otherwheresPhrases = $Array.fromList(_U.list(["mostly true"
@@ -80,7 +87,8 @@ Elm.Model.make = function (_elm) {
               ,currentPhraseIndex: 0
               ,phrases: otherwheresPhrases
               ,closingAnimating: false
-              ,closingAnimationState: $Maybe.Nothing};
+              ,closingAnimationState: $Maybe.Nothing
+              ,maybeExpandedImage: $Maybe.Nothing};
    var Issue = function (a) {
       return function (b) {
          return function (c) {
@@ -102,7 +110,7 @@ Elm.Model.make = function (_elm) {
          };
       };
    };
-   var Model = F8(function (a,b,c,d,e,f,g,h) {
+   var Model = F9(function (a,b,c,d,e,f,g,h,i) {
       return {issues: a
              ,expandedIssueId: b
              ,hoveredIssueId: c
@@ -110,7 +118,8 @@ Elm.Model.make = function (_elm) {
              ,currentPhraseIndex: e
              ,phrases: f
              ,closingAnimating: g
-             ,closingAnimationState: h};
+             ,closingAnimationState: h
+             ,maybeExpandedImage: i};
    });
    return _elm.Model.values = {_op: _op
                               ,Model: Model
@@ -122,6 +131,7 @@ Elm.Model.make = function (_elm) {
                               ,otherwheresPhrases: otherwheresPhrases
                               ,currentPhrase: currentPhrase
                               ,allIssues: allIssues
+                              ,imagePaths: imagePaths
                               ,truthOrFiction: truthOrFiction
                               ,travel: travel
                               ,comics: comics

@@ -1,7 +1,7 @@
 module Update (..) where
 
 import Effects exposing (Effects, tick)
-import Model exposing (Model, Issue, initialAnimation, resetTime)
+import Model exposing (Model, Issue, initialAnimation, resetTime, Source)
 import Util exposing ((=>))
 import Time exposing (Time, second)
 import Array
@@ -9,6 +9,7 @@ import Array
 
 type Action
   = ExpandIssue (Maybe Int)
+  | ExpandImage (Maybe Source)
   | HoverIssue (Maybe Int)
   | Tick Time
   | AnimateClosing Time
@@ -73,6 +74,9 @@ update action model =
           }
             => Effects.tick AnimateClosing
 
+    ExpandImage maybeSource ->
+      { model | maybeExpandedImage = maybeSource } => Effects.none
+
     ExpandIssue maybeIssueId ->
       case maybeIssueId of
         Just id ->
@@ -80,7 +84,8 @@ update action model =
             | expandedIssueId = maybeIssueId
             , currentPhraseIndex = 0
             , phraseAnimationState = resetTime model.phraseAnimationState
-          } => Effects.none
+          }
+            => Effects.none
 
         Nothing ->
           model => Effects.tick AnimateClosing
