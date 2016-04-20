@@ -53,19 +53,24 @@ type alias AnimationState =
 
 initialAnimation =
   { prevClockTime = 0.0
-  , elapsedTime = 0.0
+  , elapsedTime = (0 - 0.5)
   }
 
 
 otherwheresPhrases : Array String
 otherwheresPhrases =
   fromList
-    [ "artsy fartsy"
-    , "ready to pop"
-    , "Toby's worst nightmare"
-    , "an OK zine"
+    [ "mostly true"
+    , "hella literary"
+    , "awkward for your mom to read"
+    , "delightfully tacky yet unrefined"
+    , "memories unraveling at the seams"
+    , "artsy fartsy"
+    , "Capri-Sun and orange slices after the game"
+    , "impressive coffee table material"
+    , "a place to write the things we sometimes cannot say"
+    , "a zine you can believe in"
     ]
-
 
 currentPhrase : Model -> String
 currentPhrase model =
