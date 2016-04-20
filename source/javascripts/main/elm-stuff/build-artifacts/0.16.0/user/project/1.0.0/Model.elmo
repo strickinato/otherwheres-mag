@@ -60,8 +60,17 @@ Elm.Model.make = function (_elm) {
                         ,actionButtonText: "Sold Out"};
    var allIssues = _U.list([disaster,comics,travel,truthOrFiction]);
    var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
-   var otherwheresPhrases = $Array.fromList(_U.list(["artsy fartsy","ready to pop","Toby\'s worst nightmare","an OK zine"]));
-   var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0.0};
+   var otherwheresPhrases = $Array.fromList(_U.list(["mostly true"
+                                                    ,"hella literary"
+                                                    ,"awkward for your mom to read"
+                                                    ,"delightfully tacky yet unrefined"
+                                                    ,"memories unraveling at the seams"
+                                                    ,"artsy fartsy"
+                                                    ,"Capri-Sun and orange slices after the game"
+                                                    ,"impressive coffee table material"
+                                                    ,"a place to write the things we sometimes cannot say"
+                                                    ,"a zine you can believe in"]));
+   var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0 - 0.5};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
    var init = {issues: allIssues
               ,expandedIssueId: $Maybe.Nothing

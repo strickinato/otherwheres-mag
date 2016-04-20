@@ -27,7 +27,7 @@ update action model =
           elapsedTime + (clockTime - prevClockTime)
 
         newModel =
-          if newElapsedTime > second then
+          if newElapsedTime > (2 * second) then
             { model
               | currentPhraseIndex = nextCurrentPhraseIndex model
               , phraseAnimationState =
@@ -54,34 +54,36 @@ update action model =
 
             Just { elapsedTime, prevClockTime } ->
               elapsedTime + (clockTime - prevClockTime)
-
       in
-        if newElapsedTime > ( second / 2.0 ) then
-          let _ = Debug.log "closing" newElapsedTime in
+        if newElapsedTime > (second / 2.0) then
           { model
             | expandedIssueId = Nothing
             , closingAnimating = False
             , closingAnimationState = Nothing
-          } => Effects.none
+          }
+            => Effects.none
         else
-          let _ = Debug.log "animating" newElapsedTime in
           { model
             | closingAnimating = True
             , closingAnimationState =
-              Just
-                { elapsedTime = newElapsedTime
-                , prevClockTime = clockTime
-                }
-          } => Effects.tick AnimateClosing
+                Just
+                  { elapsedTime = newElapsedTime
+                  , prevClockTime = clockTime
+                  }
+          }
+            => Effects.tick AnimateClosing
 
     ExpandIssue maybeIssueId ->
       case maybeIssueId of
         Just id ->
-          { model | expandedIssueId = maybeIssueId } => Effects.none
+          { model
+            | expandedIssueId = maybeIssueId
+            , currentPhraseIndex = 0
+          } => Effects.none
 
         Nothing ->
-          model => Effects.tick AnimateClosing
-      
+          { model | phraseAnimationState = initialAnimation }
+            => Effects.tick AnimateClosing
 
     HoverIssue maybeIssueId ->
       { model | hoveredIssueId = maybeIssueId } => Effects.none

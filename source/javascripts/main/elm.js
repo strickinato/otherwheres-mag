@@ -10814,8 +10814,17 @@ Elm.Model.make = function (_elm) {
                         ,actionButtonText: "Sold Out"};
    var allIssues = _U.list([disaster,comics,travel,truthOrFiction]);
    var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
-   var otherwheresPhrases = $Array.fromList(_U.list(["artsy fartsy","ready to pop","Toby\'s worst nightmare","an OK zine"]));
-   var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0.0};
+   var otherwheresPhrases = $Array.fromList(_U.list(["mostly true"
+                                                    ,"hella literary"
+                                                    ,"awkward for your mom to read"
+                                                    ,"delightfully tacky yet unrefined"
+                                                    ,"memories unraveling at the seams"
+                                                    ,"artsy fartsy"
+                                                    ,"Capri-Sun and orange slices after the game"
+                                                    ,"impressive coffee table material"
+                                                    ,"a place to write the things we sometimes cannot say"
+                                                    ,"a zine you can believe in"]));
+   var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0 - 0.5};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
    var init = {issues: allIssues
               ,expandedIssueId: $Maybe.Nothing
@@ -10906,36 +10915,30 @@ Elm.Update.make = function (_elm) {
            var elapsedTime = _p1.elapsedTime;
            var prevClockTime = _p1.prevClockTime;
            var newElapsedTime = elapsedTime + (_p2 - prevClockTime);
-           var newModel = _U.cmp(newElapsedTime,$Time.second) > 0 ? _U.update(model,
+           var newModel = _U.cmp(newElapsedTime,2 * $Time.second) > 0 ? _U.update(model,
            {currentPhraseIndex: nextCurrentPhraseIndex(model),phraseAnimationState: {elapsedTime: 0,prevClockTime: _p2}}) : _U.update(model,
            {phraseAnimationState: {elapsedTime: newElapsedTime,prevClockTime: _p2}});
            return A2($Util._op["=>"],newModel,$Effects.tick(Tick));
-         case "AnimateClosing": var _p6 = _p0._0;
+         case "AnimateClosing": var _p4 = _p0._0;
            var newElapsedTime = function () {
               var _p3 = model.closingAnimationState;
               if (_p3.ctor === "Nothing") {
                     return 0;
                  } else {
-                    return _p3._0.elapsedTime + (_p6 - _p3._0.prevClockTime);
+                    return _p3._0.elapsedTime + (_p4 - _p3._0.prevClockTime);
                  }
            }();
-           if (_U.cmp(newElapsedTime,$Time.second / 2.0) > 0) {
-                 var _p4 = A2($Debug.log,"closing",newElapsedTime);
-                 return A2($Util._op["=>"],
-                 _U.update(model,{expandedIssueId: $Maybe.Nothing,closingAnimating: false,closingAnimationState: $Maybe.Nothing}),
-                 $Effects.none);
+           return _U.cmp(newElapsedTime,$Time.second / 2.0) > 0 ? A2($Util._op["=>"],
+           _U.update(model,{expandedIssueId: $Maybe.Nothing,closingAnimating: false,closingAnimationState: $Maybe.Nothing}),
+           $Effects.none) : A2($Util._op["=>"],
+           _U.update(model,{closingAnimating: true,closingAnimationState: $Maybe.Just({elapsedTime: newElapsedTime,prevClockTime: _p4})}),
+           $Effects.tick(AnimateClosing));
+         case "ExpandIssue": var _p6 = _p0._0;
+           var _p5 = _p6;
+           if (_p5.ctor === "Just") {
+                 return A2($Util._op["=>"],_U.update(model,{expandedIssueId: _p6,currentPhraseIndex: 0}),$Effects.none);
               } else {
-                 var _p5 = A2($Debug.log,"animating",newElapsedTime);
-                 return A2($Util._op["=>"],
-                 _U.update(model,{closingAnimating: true,closingAnimationState: $Maybe.Just({elapsedTime: newElapsedTime,prevClockTime: _p6})}),
-                 $Effects.tick(AnimateClosing));
-              }
-         case "ExpandIssue": var _p8 = _p0._0;
-           var _p7 = _p8;
-           if (_p7.ctor === "Just") {
-                 return A2($Util._op["=>"],_U.update(model,{expandedIssueId: _p8}),$Effects.none);
-              } else {
-                 return A2($Util._op["=>"],model,$Effects.tick(AnimateClosing));
+                 return A2($Util._op["=>"],_U.update(model,{phraseAnimationState: $Model.initialAnimation}),$Effects.tick(AnimateClosing));
               }
          case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssueId: _p0._0}),$Effects.none);
          default: return A2($Util._op["=>"],model,$Effects.none);}
