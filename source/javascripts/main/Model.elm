@@ -101,7 +101,7 @@ truthOrFiction =
   , images = []
   , quote = "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
   , quoteCredit = "Joseph Bien-Kahn"
-  , quoteStory = "FACES"
+  , quoteStory = "Faces"
   , actionButtonText = "Sold Out"
   }
 
@@ -115,7 +115,7 @@ travel =
   , tagline = "Volume 1, an epic truth statement"
   , images = []
   , quote = "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
-  , quoteCredit = "Andrew Wilson"
+  , quoteCredit = "Adam Wilson"
   , quoteStory = "Belgium"
   , actionButtonText = "Sold Out"
   }
