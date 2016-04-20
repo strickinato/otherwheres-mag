@@ -5,7 +5,7 @@
   font-family: BrandonGrotesque; }
 
 h1 {
-  font-size: 66px;
+  font-size: 68px;
   margin: 0px;
   letter-spacing: 12.8px; }
 
@@ -104,7 +104,7 @@ h3 {
   .issue-quote:before {
     content: '"';
     color: #9F2B22;
-    font-size: 66px;
+    font-size: 68px;
     position: relative;
     left: -20px;
     top: -10px;
@@ -112,7 +112,7 @@ h3 {
   .issue-quote:after {
     content: '"';
     color: #9F2B22;
-    font-size: 66px;
+    font-size: 68px;
     position: relative;
     float: right;
     left: 20px;
