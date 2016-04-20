@@ -1,7 +1,7 @@
 module Update (..) where
 
 import Effects exposing (Effects, tick)
-import Model exposing (Model, Issue, initialAnimation)
+import Model exposing (Model, Issue, initialAnimation, resetTime)
 import Util exposing ((=>))
 import Time exposing (Time, second)
 import Array
@@ -27,7 +27,7 @@ update action model =
           elapsedTime + (clockTime - prevClockTime)
 
         newModel =
-          if newElapsedTime > (2 * second) then
+          if newElapsedTime > (1.5 * second) then
             { model
               | currentPhraseIndex = nextCurrentPhraseIndex model
               , phraseAnimationState =
@@ -79,11 +79,11 @@ update action model =
           { model
             | expandedIssueId = maybeIssueId
             , currentPhraseIndex = 0
+            , phraseAnimationState = resetTime model.phraseAnimationState
           } => Effects.none
 
         Nothing ->
-          { model | phraseAnimationState = initialAnimation }
-            => Effects.tick AnimateClosing
+          model => Effects.tick AnimateClosing
 
     HoverIssue maybeIssueId ->
       { model | hoveredIssueId = maybeIssueId } => Effects.none

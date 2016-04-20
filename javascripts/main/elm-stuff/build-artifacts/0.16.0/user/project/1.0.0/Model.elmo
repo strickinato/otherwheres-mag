@@ -70,7 +70,8 @@ Elm.Model.make = function (_elm) {
                                                     ,"impressive coffee table material"
                                                     ,"a place to write the things we sometimes cannot say"
                                                     ,"a zine you can believe in"]));
-   var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0 - 0.5};
+   var resetTime = function (currentAnimationState) {    return {prevClockTime: currentAnimationState.prevClockTime,elapsedTime: 0 - 2.0};};
+   var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0 - 2.0};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
    var init = {issues: allIssues
               ,expandedIssueId: $Maybe.Nothing
@@ -117,6 +118,7 @@ Elm.Model.make = function (_elm) {
                               ,init: init
                               ,AnimationState: AnimationState
                               ,initialAnimation: initialAnimation
+                              ,resetTime: resetTime
                               ,otherwheresPhrases: otherwheresPhrases
                               ,currentPhrase: currentPhrase
                               ,allIssues: allIssues

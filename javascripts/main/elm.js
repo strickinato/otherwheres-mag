@@ -10824,7 +10824,8 @@ Elm.Model.make = function (_elm) {
                                                     ,"impressive coffee table material"
                                                     ,"a place to write the things we sometimes cannot say"
                                                     ,"a zine you can believe in"]));
-   var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0 - 0.5};
+   var resetTime = function (currentAnimationState) {    return {prevClockTime: currentAnimationState.prevClockTime,elapsedTime: 0 - 2.0};};
+   var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0 - 2.0};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
    var init = {issues: allIssues
               ,expandedIssueId: $Maybe.Nothing
@@ -10871,6 +10872,7 @@ Elm.Model.make = function (_elm) {
                               ,init: init
                               ,AnimationState: AnimationState
                               ,initialAnimation: initialAnimation
+                              ,resetTime: resetTime
                               ,otherwheresPhrases: otherwheresPhrases
                               ,currentPhrase: currentPhrase
                               ,allIssues: allIssues
@@ -10915,7 +10917,7 @@ Elm.Update.make = function (_elm) {
            var elapsedTime = _p1.elapsedTime;
            var prevClockTime = _p1.prevClockTime;
            var newElapsedTime = elapsedTime + (_p2 - prevClockTime);
-           var newModel = _U.cmp(newElapsedTime,2 * $Time.second) > 0 ? _U.update(model,
+           var newModel = _U.cmp(newElapsedTime,1.5 * $Time.second) > 0 ? _U.update(model,
            {currentPhraseIndex: nextCurrentPhraseIndex(model),phraseAnimationState: {elapsedTime: 0,prevClockTime: _p2}}) : _U.update(model,
            {phraseAnimationState: {elapsedTime: newElapsedTime,prevClockTime: _p2}});
            return A2($Util._op["=>"],newModel,$Effects.tick(Tick));
@@ -10936,9 +10938,11 @@ Elm.Update.make = function (_elm) {
          case "ExpandIssue": var _p6 = _p0._0;
            var _p5 = _p6;
            if (_p5.ctor === "Just") {
-                 return A2($Util._op["=>"],_U.update(model,{expandedIssueId: _p6,currentPhraseIndex: 0}),$Effects.none);
+                 return A2($Util._op["=>"],
+                 _U.update(model,{expandedIssueId: _p6,currentPhraseIndex: 0,phraseAnimationState: $Model.resetTime(model.phraseAnimationState)}),
+                 $Effects.none);
               } else {
-                 return A2($Util._op["=>"],_U.update(model,{phraseAnimationState: $Model.initialAnimation}),$Effects.tick(AnimateClosing));
+                 return A2($Util._op["=>"],model,$Effects.tick(AnimateClosing));
               }
          case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssueId: _p0._0}),$Effects.none);
          default: return A2($Util._op["=>"],model,$Effects.none);}
