@@ -53,9 +53,14 @@ type alias AnimationState =
 
 initialAnimation =
   { prevClockTime = 0.0
-  , elapsedTime = (0 - 0.5)
+  , elapsedTime = (0 - 2.0)
   }
 
+resetTime : AnimationState -> AnimationState
+resetTime currentAnimationState =
+  { prevClockTime = currentAnimationState.prevClockTime
+  , elapsedTime = (0 - 2.0)
+  }
 
 otherwheresPhrases : Array String
 otherwheresPhrases =
