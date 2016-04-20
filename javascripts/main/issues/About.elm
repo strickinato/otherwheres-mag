@@ -20,11 +20,14 @@ view address model =
         ]
   in
     div
-      [ styles ]
-      [ viewHeader
-      , viewLiteIs
-      , viewChangingText currentPhrase
-      , viewLine
+      [ class "issue-content"]
+      [ div
+        [ styles ]
+        [ viewHeader
+        , viewLiteIs
+        , viewChangingText currentPhrase
+        , viewLine
+        ]
       ]
 
 

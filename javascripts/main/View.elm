@@ -31,14 +31,16 @@ viewSelectedIssue : Signal.Address Action -> Model -> Html
 viewSelectedIssue address model =
   case model.expandedIssueId of
     Just 1 ->
-      viewIssueContent address model.closingAnimating (Issues.About.view address model)
+      Issues.About.view address model
 
     Just _ ->
       case findSelectedIssue model of
         Just issue ->
-          issue
-            |> viewFromIssue model.maybeExpandedImage (\maybeImgSource -> onClick address (ExpandImage maybeImgSource) )
-            |> viewIssueContent address model.closingAnimating
+          viewFromIssue
+            model.maybeExpandedImage
+            (\maybeImgSource -> onClick address (ExpandImage maybeImgSource))
+            (closeHandler address)
+            issue
 
         Nothing ->
           span [] []
@@ -47,34 +49,37 @@ viewSelectedIssue address model =
       span [] []
 
 
-viewFromIssue : Maybe Source -> (Maybe Source -> Html.Attribute) -> Issue -> Html
-viewFromIssue maybeSource handler issue =
+viewFromIssue : Maybe Source -> (Maybe Source -> Html.Attribute) -> Html.Attribute -> Issue -> Html
+viewFromIssue maybeSource imgHandler closeHandler issue =
   let
     unexpanded =
       div
-        [ class ("issue-content-" ++ issue.class) ]
-          [ div [ class "red-logo" ] []
-          , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
-          , h3 [ class "issue-tagline" ] [ text issue.tagline ]
-          , (issueImageView issue.images handler)
-          , div
-              [ class "issue-quote" ]
-              [ text issue.quote ]
-          , div
-              [ class "issue-quote-credit" ]
-              [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
-          , button [ class "issue-content-action-button" ] [ text issue.actionButtonText ]
-          ]
+        [ class ("issue-content") ]
+        [ div [ class "close-button", closeHandler ] []
+        , div [ class "red-logo" ] []
+        , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
+        , h3 [ class "issue-tagline" ] [ text issue.tagline ]
+        , (issueImageView issue.images imgHandler)
+        , div
+            [ class "issue-quote" ]
+            [ text issue.quote ]
+        , div
+            [ class "issue-quote-credit" ]
+            [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
+        , button [ class "issue-content-action-button" ] [ text issue.actionButtonText ]
+        ]
 
     expanded source =
       div
-        [ class ("issue-content-" ++ issue.class) ]
-        [ img [ class "big-image", handler Nothing, src source ] [] ]
-
+        [ class ("issue-content") ]
+        [ div [ class "minimize-button", imgHandler Nothing ] []
+        , img [ class "big-image", imgHandler Nothing, src source ] []
+        ]
   in
     case maybeSource of
       Just src ->
         expanded src
+
       Nothing ->
         unexpanded
 
@@ -82,7 +87,7 @@ viewFromIssue maybeSource handler issue =
 issueImageView : Model.ImagePaths -> (Maybe Source -> Html.Attribute) -> Html
 issueImageView ( img1, img2, img3 ) handler =
   div
-    [class "images"]
+    [ class "images" ]
     [ img [ src img1, class "small", handler (Just img1) ] []
     , img [ src img2, class "small", handler (Just img2) ] []
     , img [ src img3, class "small", handler (Just img3) ] []
@@ -102,25 +107,6 @@ issueContentAttributes =
         ]
   in
     [ class "issue-content", styles ]
-
-
-viewIssueContent : Signal.Address Action -> Bool -> Html -> Html
-viewIssueContent address closingAnimating issueView =
-  let
-    styles =
-      style
-        [ ( "width", "80%" )
-        , ( "height", "100%" )
-        , ( "position", "absolute" )
-        , ( "display", "inline-block" )
-        , ( "float", "right" )
-        ]
-  in
-    div
-      [ class "issue-content", styles ]
-      [ div [ class "close-button", closeHandler address ] []
-      , issueView
-      ]
 
 
 viewIssueMenu : Signal.Address Action -> Model -> List Html

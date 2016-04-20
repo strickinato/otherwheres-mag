@@ -1,6 +1,11 @@
 @charset "UTF-8";
 .issue-content {
-  transition: all 500ms ease; }
+  transition: all 500ms ease;
+  width: 80%;
+  height: 100%;
+  position: absolute;
+  display: inline-block;
+  float: right; }
 
 #elm-main-mount {
   font-family: BrandonGrotesque; }
@@ -58,6 +63,19 @@ h3 {
   float: right; }
   .close-button:before {
     content: "✗"; }
+
+.minimize-button {
+  padding-top: 24px;
+  padding-right: 24px;
+  cursor: pointer;
+  font-size: 42px;
+  float: right;
+  margin-top: 24px;
+  -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
+  color: #9F2B22; }
+  .minimize-button:before {
+    content: "➡"; }
 
 .issue {
   transition: all 500ms ease;
@@ -152,7 +170,7 @@ h3 {
     height: 230px; }
 
 .big-image {
-  width: 98%;
+  max-width: 98%;
   position: absolute;
   left: 1%;
   cursor: pointer;
