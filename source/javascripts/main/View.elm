@@ -46,9 +46,6 @@ viewSelectedIssue address model =
 viewIssueContent : Signal.Address Action -> Html -> Html
 viewIssueContent address issueView =
   let
-    closeHandler =
-      onClick address (ExpandIssue Nothing)
-
     styles =
       style
         [ ( "width", "80%" )
@@ -60,7 +57,7 @@ viewIssueContent address issueView =
   in
     div
       [ class "issue-content", styles ]
-      [ closeButton closeHandler
+      [ closeButton (closeHandler address)
       , issueView
       ]
 
@@ -92,17 +89,17 @@ viewOtherwheresIssueItem address model =
     issueId =
       1
 
+    issueState =
+      getIssueState issueId model
+
     attributes =
-      issueStyle (getIssueState issueId model) "about" False
+      issueStyle issueState "about" False
 
-    hoverHandler =
-      makeHoverHandler address issueId
-
-    expandHandler =
-      makeExpandHandler address issueId
+    handlers =
+      handlersDependingOnState issueState issueId address
   in
     section
-      (hoverHandler :: expandHandler :: attributes)
+      (List.append handlers attributes)
       [ div
           [ innerStyle ]
           [ div [ class "red-logo" ] []
@@ -110,11 +107,36 @@ viewOtherwheresIssueItem address model =
           , div
               [ class "tag-line-text" ]
               [ text "{ mostly } true"
-              , br [] [] 
+              , br [] []
               , text "stories"
               ]
           ]
       ]
+
+
+handlersDependingOnState : IssueState -> Int -> Signal.Address Action -> List Html.Attribute
+handlersDependingOnState state id address =
+  let
+    whenMenuHandlers =
+      [ makeHoverHandler address id
+      , makeExpandHandler address id
+      ]
+
+    whenOpenHandlers =
+      [ closeHandler address ]
+  in
+    case state of
+      MenuItem ->
+        whenMenuHandlers
+
+      Hovered ->
+        whenMenuHandlers
+
+      Selected ->
+        whenOpenHandlers
+
+      Hidden ->
+        []
 
 
 isSelectedIssue : Int -> Maybe Int -> Bool
@@ -194,20 +216,25 @@ makeExpandHandler address id =
     |> onClick address
 
 
+closeHandler : Signal.Address Action -> Html.Attribute
+closeHandler address =
+  onClick address (ExpandIssue Nothing)
+
+
 viewIssueMenuItem : Signal.Address Action -> Model -> Issue -> Html
 viewIssueMenuItem address model issue =
   let
+    issueState =
+      getIssueState issue.id model
+
     attributes =
-      issueStyle (getIssueState issue.id model) issue.class True
+      issueStyle issueState issue.class True
 
-    hoverHandler =
-      makeHoverHandler address issue.id
-
-    expandHandler =
-      makeExpandHandler address issue.id
+    handlers =
+      handlersDependingOnState issueState issue.id address
   in
     section
-      (hoverHandler :: expandHandler :: attributes)
+      (List.append handlers attributes)
       [ viewMenuInner model issue ]
 
 

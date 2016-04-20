@@ -10879,6 +10879,7 @@ Elm.View.make = function (_elm) {
                                                    ,{ctor: "_Tuple2",_0: "justify-content",_1: "center"}
                                                    ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                    ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}]));
+   var closeHandler = function (address) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));};
    var makeExpandHandler = F2(function (address,id) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Just(id)));});
    var makeHoverHandler = F2(function (address,id) {    return A2($Html$Events.onMouseOver,address,$Update.HoverIssue($Maybe.Just(id)));});
    var issueStyle = F3(function (issueState,issueClass,redify) {
@@ -10928,19 +10929,29 @@ Elm.View.make = function (_elm) {
       }();
       return A2($Html.div,_U.list([styles]),_U.list([issueDisplay]));
    });
+   var handlersDependingOnState = F3(function (state,id,address) {
+      var whenOpenHandlers = _U.list([closeHandler(address)]);
+      var whenMenuHandlers = _U.list([A2(makeHoverHandler,address,id),A2(makeExpandHandler,address,id)]);
+      var _p3 = state;
+      switch (_p3.ctor)
+      {case "MenuItem": return whenMenuHandlers;
+         case "Hovered": return whenMenuHandlers;
+         case "Selected": return whenOpenHandlers;
+         default: return _U.list([]);}
+   });
    var viewIssueMenuItem = F3(function (address,model,issue) {
-      var expandHandler = A2(makeExpandHandler,address,issue.id);
-      var hoverHandler = A2(makeHoverHandler,address,issue.id);
-      var attributes = A3(issueStyle,A2(getIssueState,issue.id,model),issue.$class,true);
-      return A2($Html.section,A2($List._op["::"],hoverHandler,A2($List._op["::"],expandHandler,attributes)),_U.list([A2(viewMenuInner,model,issue)]));
+      var issueState = A2(getIssueState,issue.id,model);
+      var attributes = A3(issueStyle,issueState,issue.$class,true);
+      var handlers = A3(handlersDependingOnState,issueState,issue.id,address);
+      return A2($Html.section,A2($List.append,handlers,attributes),_U.list([A2(viewMenuInner,model,issue)]));
    });
    var viewOtherwheresIssueItem = F2(function (address,model) {
       var issueId = 1;
-      var attributes = A3(issueStyle,A2(getIssueState,issueId,model),"about",false);
-      var hoverHandler = A2(makeHoverHandler,address,issueId);
-      var expandHandler = A2(makeExpandHandler,address,issueId);
+      var issueState = A2(getIssueState,issueId,model);
+      var attributes = A3(issueStyle,issueState,"about",false);
+      var handlers = A3(handlersDependingOnState,issueState,issueId,address);
       return A2($Html.section,
-      A2($List._op["::"],hoverHandler,A2($List._op["::"],expandHandler,attributes)),
+      A2($List.append,handlers,attributes),
       _U.list([A2($Html.div,
       _U.list([innerStyle]),
       _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
@@ -10966,13 +10977,12 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
                                                   ,{ctor: "_Tuple2",_0: "display",_1: "inline-block"}
                                                   ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
-      var closeHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));
-      return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler),issueView]));
+      return A2($Html.div,_U.list([$Html$Attributes.$class("issue-content"),styles]),_U.list([closeButton(closeHandler(address)),issueView]));
    });
    var viewSelectedIssue = F2(function (address,model) {
-      var _p3 = model.expandedIssueId;
-      if (_p3.ctor === "Just") {
-            switch (_p3._0)
+      var _p4 = model.expandedIssueId;
+      if (_p4.ctor === "Just") {
+            switch (_p4._0)
             {case 1: return A2(viewIssueContent,address,A2($Issues$About.view,address,model));
                case 2: return A2(viewIssueContent,address,$Html.text("HI!"));
                default: return A2($Html.span,_U.list([]),_U.list([]));}
@@ -10993,6 +11003,7 @@ Elm.View.make = function (_elm) {
                              ,closeButton: closeButton
                              ,viewIssueMenu: viewIssueMenu
                              ,viewOtherwheresIssueItem: viewOtherwheresIssueItem
+                             ,handlersDependingOnState: handlersDependingOnState
                              ,isSelectedIssue: isSelectedIssue
                              ,MenuItem: MenuItem
                              ,Hovered: Hovered
@@ -11002,6 +11013,7 @@ Elm.View.make = function (_elm) {
                              ,issueStyle: issueStyle
                              ,makeHoverHandler: makeHoverHandler
                              ,makeExpandHandler: makeExpandHandler
+                             ,closeHandler: closeHandler
                              ,viewIssueMenuItem: viewIssueMenuItem
                              ,innerStyle: innerStyle
                              ,viewMenuInner: viewMenuInner};
