@@ -31,14 +31,14 @@ viewSelectedIssue : Signal.Address Action -> Model -> Html
 viewSelectedIssue address model =
   case model.expandedIssueId of
     Just 1 ->
-      viewIssueContent address (Issues.About.view address model)
+      viewIssueContent address model.closingAnimating (Issues.About.view address model) 
 
     Just _ ->
       case findSelectedIssue model of
         Just issue ->
           issue
             |> viewFromIssue
-            |> viewIssueContent address
+            |> viewIssueContent address model.closingAnimating
 
         Nothing ->
           span [] []
@@ -49,11 +49,11 @@ viewSelectedIssue address model =
 viewFromIssue : Issue -> Html
 viewFromIssue issue =
   div
-    [ class ("issue-content-" ++ issue.class ) ]
-    [ div [ class "red-logo" ] [] 
+    [ class ("issue-content-" ++ issue.class) ]
+    [ div [ class "red-logo" ] []
     , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
     , h3 [ class "issue-tagline" ] [ text issue.tagline ]
-    , div [ class "images"] ( List.map issueImageView issue.images )
+    , div [ class "images" ] (List.map issueImageView issue.images)
     , div
         [ class "issue-quote" ]
         [ text issue.quote ]
@@ -63,9 +63,11 @@ viewFromIssue issue =
     , button [ class "issue-content-action-button" ] [ text issue.actionButtonText ]
     ]
 
+
 issueImageView : String -> Html
 issueImageView imageUrl =
-  span [] [] 
+  span [] []
+
 
 issueContentAttributes : List Html.Attribute
 issueContentAttributes =
@@ -82,8 +84,8 @@ issueContentAttributes =
     [ class "issue-content", styles ]
 
 
-viewIssueContent : Signal.Address Action -> Html -> Html
-viewIssueContent address issueView =
+viewIssueContent : Signal.Address Action -> Bool -> Html -> Html
+viewIssueContent address closingAnimating issueView =
   let
     styles =
       style
@@ -132,7 +134,7 @@ viewOtherwheresIssueItem address model =
       getIssueState issueId model
 
     attributes =
-      issueStyle issueState "about" False
+      issueStyle issueState "about" False model.closingAnimating
 
     handlers =
       handlersDependingOnState issueState issueId address
@@ -203,8 +205,8 @@ getIssueState id model =
     Hidden
 
 
-issueStyle : IssueState -> String -> Bool -> List Html.Attribute
-issueStyle issueState issueClass redify =
+issueStyle : IssueState -> String -> Bool -> Bool -> List Html.Attribute
+issueStyle issueState issueClass redify closingAnimating =
   let
     ( visibility, width, border, redified ) =
       case issueState of
@@ -218,7 +220,10 @@ issueStyle issueState issueClass redify =
           ( "visible", "20%", "none", False )
 
         Hidden ->
-          ( "hidden", "0%", "none", False )
+          if closingAnimating then
+            ( "visible", "20%", "solid white 2px", True )
+          else
+            ( "hidden", "0%", "none", False )
 
     styles =
       style
@@ -267,7 +272,7 @@ viewIssueMenuItem address model issue =
       getIssueState issue.id model
 
     attributes =
-      issueStyle issueState issue.class True
+      issueStyle issueState issue.class True model.closingAnimating
 
     handlers =
       handlersDependingOnState issueState issue.id address

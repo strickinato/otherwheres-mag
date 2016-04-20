@@ -11,6 +11,7 @@ type Action
   = ExpandIssue (Maybe Int)
   | HoverIssue (Maybe Int)
   | Tick Time
+  | AnimateClosing Time
   | NoOp
 
 
@@ -44,8 +45,43 @@ update action model =
       in
         newModel => Effects.tick Tick
 
+    AnimateClosing clockTime ->
+      let
+        newElapsedTime =
+          case model.closingAnimationState of
+            Nothing ->
+              0
+
+            Just { elapsedTime, prevClockTime } ->
+              elapsedTime + (clockTime - prevClockTime)
+
+      in
+        if newElapsedTime > ( second / 2.0 ) then
+          let _ = Debug.log "closing" newElapsedTime in
+          { model
+            | expandedIssueId = Nothing
+            , closingAnimating = False
+            , closingAnimationState = Nothing
+          } => Effects.none
+        else
+          let _ = Debug.log "animating" newElapsedTime in
+          { model
+            | closingAnimating = True
+            , closingAnimationState =
+              Just
+                { elapsedTime = newElapsedTime
+                , prevClockTime = clockTime
+                }
+          } => Effects.tick AnimateClosing
+
     ExpandIssue maybeIssueId ->
-      { model | expandedIssueId = maybeIssueId } => Effects.none
+      case maybeIssueId of
+        Just id ->
+          { model | expandedIssueId = maybeIssueId } => Effects.none
+
+        Nothing ->
+          model => Effects.tick AnimateClosing
+      
 
     HoverIssue maybeIssueId ->
       { model | hoveredIssueId = maybeIssueId } => Effects.none

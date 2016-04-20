@@ -27,14 +27,18 @@ Elm.View.make = function (_elm) {
    var closeHandler = function (address) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));};
    var makeExpandHandler = F2(function (address,id) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Just(id)));});
    var makeHoverHandler = F2(function (address,id) {    return A2($Html$Events.onMouseOver,address,$Update.HoverIssue($Maybe.Just(id)));});
-   var issueStyle = F3(function (issueState,issueClass,redify) {
+   var issueStyle = F4(function (issueState,issueClass,redify,closingAnimating) {
       var _p0 = function () {
          var _p1 = issueState;
          switch (_p1.ctor)
          {case "MenuItem": return {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "solid white 2px",_3: true};
             case "Hovered": return {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "solid white 2px",_3: false};
             case "Selected": return {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "none",_3: false};
-            default: return {ctor: "_Tuple4",_0: "hidden",_1: "0%",_2: "none",_3: false};}
+            default: return closingAnimating ? {ctor: "_Tuple4",_0: "visible",_1: "20%",_2: "solid white 2px",_3: true} : {ctor: "_Tuple4"
+                                                                                                                          ,_0: "hidden"
+                                                                                                                          ,_1: "0%"
+                                                                                                                          ,_2: "none"
+                                                                                                                          ,_3: false};}
       }();
       var visibility = _p0._0;
       var width = _p0._1;
@@ -86,14 +90,14 @@ Elm.View.make = function (_elm) {
    });
    var viewIssueMenuItem = F3(function (address,model,issue) {
       var issueState = A2(getIssueState,issue.id,model);
-      var attributes = A3(issueStyle,issueState,issue.$class,true);
+      var attributes = A4(issueStyle,issueState,issue.$class,true,model.closingAnimating);
       var handlers = A3(handlersDependingOnState,issueState,issue.id,address);
       return A2($Html.section,A2($List.append,handlers,attributes),_U.list([A2(viewMenuInner,model,issue)]));
    });
    var viewOtherwheresIssueItem = F2(function (address,model) {
       var issueId = 1;
       var issueState = A2(getIssueState,issueId,model);
-      var attributes = A3(issueStyle,issueState,"about",false);
+      var attributes = A4(issueStyle,issueState,"about",false,model.closingAnimating);
       var handlers = A3(handlersDependingOnState,issueState,issueId,address);
       return A2($Html.section,
       A2($List.append,handlers,attributes),
@@ -116,7 +120,7 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
       return A2($Html.span,_U.list([styles,handler]),_U.list([$Html.text("✗")]));
    };
-   var viewIssueContent = F2(function (address,issueView) {
+   var viewIssueContent = F3(function (address,closingAnimating,issueView) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "position",_1: "absolute"}
@@ -152,11 +156,11 @@ Elm.View.make = function (_elm) {
       var _p4 = model.expandedIssueId;
       if (_p4.ctor === "Just") {
             if (_p4._0 === 1) {
-                  return A2(viewIssueContent,address,A2($Issues$About.view,address,model));
+                  return A3(viewIssueContent,address,model.closingAnimating,A2($Issues$About.view,address,model));
                } else {
                   var _p5 = $Model.findSelectedIssue(model);
                   if (_p5.ctor === "Just") {
-                        return A2(viewIssueContent,address,viewFromIssue(_p5._0));
+                        return A3(viewIssueContent,address,model.closingAnimating,viewFromIssue(_p5._0));
                      } else {
                         return A2($Html.span,_U.list([]),_U.list([]));
                      }
