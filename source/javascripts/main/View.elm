@@ -7,7 +7,7 @@ import Model exposing (Model, Issue, isShowingMenu, findSelectedIssue)
 import Update exposing (Action(..))
 import Signal
 import Issues.About
-import Css exposing (..)
+import String
 
 
 view : Signal.Address Action -> Model -> Html
@@ -90,24 +90,43 @@ isSelectedIssue issueId maybeSelectedId =
   (Maybe.withDefault 0 maybeSelectedId) == issueId
 
 
+type IssueState
+  = MenuItem
+  | Hovered
+  | Selected
+  | Hidden
+
+
+getIssueState : Issue -> Model -> IssueState
+getIssueState issue model =
+  if isShowingMenu model then
+    if (isSelectedIssue issue.id model.hoveredIssueId) then
+      Hovered
+    else
+      MenuItem
+  else
+    if (isSelectedIssue issue.id model.expandedIssueId) then
+      Selected
+    else
+      Hidden
+
+
 viewIssueMenuItem : Signal.Address Action -> Model -> Issue -> Html
 viewIssueMenuItem address model issue =
   let
-    isExpanded =
-      (||)
-        (isShowingMenu model)
-        (isSelectedIssue issue.id model.expandedIssueId)
+    ( visibility, width, border, redified, blurred ) =
+      case getIssueState issue model of
+        MenuItem ->
+          ( "visible", "20%", "solid white 2px", True, True )
 
-    showTitle =
-      (||)
-        (not (isShowingMenu model))
-        (isSelectedIssue issue.id model.hoveredIssueId)
+        Hovered ->
+          ( "visible", "20%", "solid white 2px", False, False )
 
-    ( visibility, width ) =
-      if isExpanded then
-        ( "visible", "20%" )
-      else
-        ( "hidden", "0%" )
+        Selected ->
+          ( "visible", "20%", "none", False, False )
+
+        Hidden ->
+          ( "hidden", "0%", "none", False, False )
 
     styles =
       style
@@ -115,44 +134,66 @@ viewIssueMenuItem address model issue =
         , ( "visibility", visibility )
         , ( "height", "100%" )
         , ( "display", "inline-block" )
+        , ( "border-left", border )
+        , ( "border-right", border )
         ]
 
     hoverHandler =
       Just issue.id
         |> HoverIssue
         |> onMouseOver address
-        
+
     expandHandler =
       Just issue.id
         |> ExpandIssue
         |> onClick address
 
-    issueDisplay =
-      if showTitle then
-        issue.title
-      else
-        issue.symbol
-
     classes =
       classList
-        [ ("issue", True)
-        , (issue.class, True)
-        , ("selected-issue", isSelectedIssue issue.id model.expandedIssueId)
+        [ ( "issue", True )
+        , ( issue.class, True )
+        , ( "blurred", blurred )
+        , ( "redified", redified )
         ]
-
   in
     section
       [ classes, styles, expandHandler, hoverHandler ]
-      [ h3 [] [ text issueDisplay ] ]
+      [ viewMenuInner model issue ]
 
 
-viewSymbol : String -> Html
-viewSymbol symbol =
+viewMenuInner : Model -> Issue -> Html
+viewMenuInner model issue =
   let
+    issueDisplay =
+      case getIssueState issue model of
+        MenuItem ->
+          h1
+            [ class "menu-issue-symbol" ]
+            [ text issue.symbol ]
+              
+        Hovered ->
+          span
+            [ class "menu-issue-title" ]
+            [ text (String.toUpper issue.title) ]
+
+        Selected -> 
+          span
+            [ class "menu-issue-title" ]
+            [ text (String.toUpper issue.title) ]
+
+        Hidden ->
+          span [] []
+
     styles =
       style
-        [ ( "float", "right" )
-        , ( "position", "relative" )
+        [ ( "display", "flex" )
+        , ( "flex-direction", "column" )
+        , ( "align-items", "center" )
+        , ( "justify-content", "center" )
+        , ( "height", "100%" )
+        , ( "text-align", "center" )
         ]
   in
-    span [ styles, class "numeral" ] [ h1 [] [ text symbol ] ]
+    div
+      [ styles ]
+      [ issueDisplay ]
