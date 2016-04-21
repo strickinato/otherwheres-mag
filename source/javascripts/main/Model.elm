@@ -18,8 +18,10 @@ type alias Model =
   , maybeExpandedImage : Maybe Source
   }
 
-type alias Source = String
-  
+
+type alias Source =
+  String
+
 
 type alias Issue =
   { id : Int
@@ -33,6 +35,13 @@ type alias Issue =
   , quoteStory : String
   , actionButtonText : String
   }
+
+
+type IssueState
+  = MenuItem
+  | Hovered
+  | Selected
+  | Hidden
 
 
 init : Model
@@ -166,7 +175,7 @@ disaster =
   , class = "volume4"
   , title = "Disaster"
   , tagline = "6 STORIES OF PERSONAL DISASTERS"
-  , images = imagePaths "disaster" 
+  , images = imagePaths "disaster"
   , quote = "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
   , quoteCredit = "Katie Wheeler-Dubin"
   , quoteStory = "Storm Season"

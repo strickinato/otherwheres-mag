@@ -10847,6 +10847,10 @@ Elm.Model.make = function (_elm) {
               ,closingAnimating: false
               ,closingAnimationState: $Maybe.Nothing
               ,maybeExpandedImage: $Maybe.Nothing};
+   var Hidden = {ctor: "Hidden"};
+   var Selected = {ctor: "Selected"};
+   var Hovered = {ctor: "Hovered"};
+   var MenuItem = {ctor: "MenuItem"};
    var Issue = function (a) {
       return function (b) {
          return function (c) {
@@ -10882,6 +10886,10 @@ Elm.Model.make = function (_elm) {
    return _elm.Model.values = {_op: _op
                               ,Model: Model
                               ,Issue: Issue
+                              ,MenuItem: MenuItem
+                              ,Hovered: Hovered
+                              ,Selected: Selected
+                              ,Hidden: Hidden
                               ,init: init
                               ,AnimationState: AnimationState
                               ,initialAnimation: initialAnimation
@@ -11033,15 +11041,11 @@ Elm.View.make = function (_elm) {
                                                        ,{ctor: "_Tuple2",_0: "redified",_1: redified && redify}]));
       return _U.list([styles,classes]);
    });
-   var Hidden = {ctor: "Hidden"};
-   var Selected = {ctor: "Selected"};
-   var Hovered = {ctor: "Hovered"};
-   var MenuItem = {ctor: "MenuItem"};
    var isSelectedIssue = F2(function (issueId,maybeSelectedId) {    return _U.eq(A2($Maybe.withDefault,0,maybeSelectedId),issueId);});
    var getIssueState = F2(function (id,model) {
-      return $Model.isShowingMenu(model) ? A2(isSelectedIssue,id,model.hoveredIssueId) ? Hovered : MenuItem : A2(isSelectedIssue,
+      return $Model.isShowingMenu(model) ? A2(isSelectedIssue,id,model.hoveredIssueId) ? $Model.Hovered : $Model.MenuItem : A2(isSelectedIssue,
       id,
-      model.expandedIssueId) ? Selected : Hidden;
+      model.expandedIssueId) ? $Model.Selected : $Model.Hidden;
    });
    var viewMenuInner = F2(function (model,issue) {
       var styles = innerStyle;
@@ -11056,14 +11060,11 @@ Elm.View.make = function (_elm) {
       return A2($Html.div,_U.list([styles]),_U.list([issueDisplay]));
    });
    var handlersDependingOnState = F3(function (state,id,address) {
-      var whenOpenHandlers = _U.list([closeHandler(address)]);
-      var whenMenuHandlers = _U.list([A2(makeHoverHandler,address,id),A2(makeExpandHandler,address,id)]);
       var _p3 = state;
       switch (_p3.ctor)
-      {case "MenuItem": return whenMenuHandlers;
-         case "Hovered": return whenMenuHandlers;
-         case "Selected": return whenOpenHandlers;
-         default: return _U.list([]);}
+      {case "Hidden": return _U.list([]);
+         case "Selected": return _U.list([closeHandler(address)]);
+         default: return _U.list([A2(makeHoverHandler,address,id),A2(makeExpandHandler,address,id)]);}
    });
    var viewIssueMenuItem = F3(function (address,model,issue) {
       var issueState = A2(getIssueState,issue.id,model);
@@ -11071,7 +11072,7 @@ Elm.View.make = function (_elm) {
       var handlers = A3(handlersDependingOnState,issueState,issue.id,address);
       return A2($Html.section,A2($List.append,handlers,attributes),_U.list([A2(viewMenuInner,model,issue)]));
    });
-   var viewOtherwheresIssueItem = F2(function (address,model) {
+   var viewAboutMenuItem = F2(function (address,model) {
       var logoAttributes = F2(function (name,link) {
          return _U.list([$Html$Attributes.$class(name),$Html$Attributes.href(link),$Html$Attributes.target("_blank")]);
       });
@@ -11109,9 +11110,6 @@ Elm.View.make = function (_elm) {
       _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([logos]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("logo-text")]),_U.list([$Html.text("OTHERWHERES")]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("tag-line-text")]),subText)]))]));
-   });
-   var viewIssueMenu = F2(function (address,model) {
-      return A2($List._op["::"],A2(viewOtherwheresIssueItem,address,model),A2($List.map,A2(viewIssueMenuItem,address,model),model.issues));
    });
    var issueContentAttributes = function () {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
@@ -11183,26 +11181,24 @@ Elm.View.make = function (_elm) {
             return A2($Html.span,_U.list([]),_U.list([]));
          }
    });
+   var viewMenu = F2(function (address,model) {
+      var issueMenuItems = A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);
+      var aboutMenu = A2(viewAboutMenuItem,address,model);
+      return A2($List._op["::"],aboutMenu,issueMenuItems);
+   });
    var view = F2(function (address,model) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"},{ctor: "_Tuple2",_0: "height",_1: "100%"}]));
-      return A2($Html.div,
-      _U.list([$Html$Attributes.id("wrapper"),styles]),
-      A2($List.append,A2(viewIssueMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
+      return A2($Html.div,_U.list([$Html$Attributes.id("wrapper")]),A2($List.append,A2(viewMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
    });
    return _elm.View.values = {_op: _op
                              ,view: view
+                             ,viewMenu: viewMenu
                              ,viewSelectedIssue: viewSelectedIssue
                              ,viewFromIssue: viewFromIssue
                              ,issueImageView: issueImageView
                              ,issueContentAttributes: issueContentAttributes
-                             ,viewIssueMenu: viewIssueMenu
-                             ,viewOtherwheresIssueItem: viewOtherwheresIssueItem
+                             ,viewAboutMenuItem: viewAboutMenuItem
                              ,handlersDependingOnState: handlersDependingOnState
                              ,isSelectedIssue: isSelectedIssue
-                             ,MenuItem: MenuItem
-                             ,Hovered: Hovered
-                             ,Selected: Selected
-                             ,Hidden: Hidden
                              ,getIssueState: getIssueState
                              ,issueStyle: issueStyle
                              ,makeHoverHandler: makeHoverHandler

@@ -3,7 +3,7 @@ module View (..) where
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Model exposing (Model, Issue, isShowingMenu, findSelectedIssue, Source)
+import Model exposing (Model, Issue, isShowingMenu, findSelectedIssue, Source, IssueState(..))
 import Update exposing (Action(..))
 import Signal
 import Issues.About
@@ -12,19 +12,24 @@ import String
 
 view : Signal.Address Action -> Model -> Html
 view address model =
+  div
+    [ id "wrapper" ]
+    (List.append
+      (viewMenu address model)
+      [ viewSelectedIssue address model ]
+    )
+
+
+viewMenu : Signal.Address Action -> Model -> List Html
+viewMenu address model =
   let
-    styles =
-      style
-        [ ( "width", "100%" )
-        , ( "height", "100%" )
-        ]
+    aboutMenu =
+      (viewAboutMenuItem address model)
+
+    issueMenuItems =
+      (List.map (viewIssueMenuItem address model) model.issues)
   in
-    div
-      [ id "wrapper", styles ]
-      (List.append
-        (viewIssueMenu address model)
-        [ viewSelectedIssue address model ]
-      )
+    aboutMenu :: issueMenuItems
 
 
 viewSelectedIssue : Signal.Address Action -> Model -> Html
@@ -43,11 +48,11 @@ viewSelectedIssue address model =
             issue
 
         Nothing ->
+          {- We should never be in this state! -}
           span [] []
 
     Nothing ->
       span [] []
-
 
 viewFromIssue : Maybe Source -> (Maybe Source -> Html.Attribute) -> Html.Attribute -> Issue -> Html
 viewFromIssue maybeSource imgHandler closeHandler issue =
@@ -109,14 +114,8 @@ issueContentAttributes =
     [ class "issue-content", styles ]
 
 
-viewIssueMenu : Signal.Address Action -> Model -> List Html
-viewIssueMenu address model =
-  (viewOtherwheresIssueItem address model)
-    :: (List.map (viewIssueMenuItem address model) model.issues)
-
-
-viewOtherwheresIssueItem : Signal.Address Action -> Model -> Html
-viewOtherwheresIssueItem address model =
+viewAboutMenuItem : Signal.Address Action -> Model -> Html
+viewAboutMenuItem address model =
   let
     issueId =
       1
@@ -192,39 +191,22 @@ viewOtherwheresIssueItem address model =
 
 handlersDependingOnState : IssueState -> Int -> Signal.Address Action -> List Html.Attribute
 handlersDependingOnState state id address =
-  let
-    whenMenuHandlers =
+  case state of
+    Hidden ->
+      []
+
+    Selected ->
+      [ closeHandler address ]
+
+    _ ->
       [ makeHoverHandler address id
       , makeExpandHandler address id
       ]
-
-    whenOpenHandlers =
-      [ closeHandler address ]
-  in
-    case state of
-      MenuItem ->
-        whenMenuHandlers
-
-      Hovered ->
-        whenMenuHandlers
-
-      Selected ->
-        whenOpenHandlers
-
-      Hidden ->
-        []
 
 
 isSelectedIssue : Int -> Maybe Int -> Bool
 isSelectedIssue issueId maybeSelectedId =
   (Maybe.withDefault 0 maybeSelectedId) == issueId
-
-
-type IssueState
-  = MenuItem
-  | Hovered
-  | Selected
-  | Hidden
 
 
 getIssueState : Int -> Model -> IssueState

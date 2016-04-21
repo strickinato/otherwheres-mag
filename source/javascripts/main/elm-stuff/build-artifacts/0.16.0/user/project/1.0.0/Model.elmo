@@ -89,6 +89,10 @@ Elm.Model.make = function (_elm) {
               ,closingAnimating: false
               ,closingAnimationState: $Maybe.Nothing
               ,maybeExpandedImage: $Maybe.Nothing};
+   var Hidden = {ctor: "Hidden"};
+   var Selected = {ctor: "Selected"};
+   var Hovered = {ctor: "Hovered"};
+   var MenuItem = {ctor: "MenuItem"};
    var Issue = function (a) {
       return function (b) {
          return function (c) {
@@ -124,6 +128,10 @@ Elm.Model.make = function (_elm) {
    return _elm.Model.values = {_op: _op
                               ,Model: Model
                               ,Issue: Issue
+                              ,MenuItem: MenuItem
+                              ,Hovered: Hovered
+                              ,Selected: Selected
+                              ,Hidden: Hidden
                               ,init: init
                               ,AnimationState: AnimationState
                               ,initialAnimation: initialAnimation
