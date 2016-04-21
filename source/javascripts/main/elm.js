@@ -10721,6 +10721,8 @@ Elm.Issues.About.make = function (_elm) {
    }();
    var view = F2(function (address,model) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-image",_1: "url(assets/issues/about/bg.png)"}
+                                                  ,{ctor: "_Tuple2",_0: "background-size",_1: "cover"}
+                                                  ,{ctor: "_Tuple2",_0: "background-position",_1: "bottom"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
                                                   ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
@@ -11070,26 +11072,43 @@ Elm.View.make = function (_elm) {
       return A2($Html.section,A2($List.append,handlers,attributes),_U.list([A2(viewMenuInner,model,issue)]));
    });
    var viewOtherwheresIssueItem = F2(function (address,model) {
-      var innerHtml = _U.list([A2($Html.div,
-      _U.list([innerStyle]),
-      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
-              ,A2($Html.div,_U.list([$Html$Attributes.$class("logo-text")]),_U.list([$Html.text("OTHERWHERES")]))
-              ,A2($Html.div,
-              _U.list([$Html$Attributes.$class("tag-line-text")]),
-              _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("{ mostly } true")])),A2($Html.p,_U.list([]),_U.list([$Html.text("stories")]))]))]))]);
+      var logoAttributes = F2(function (name,link) {
+         return _U.list([$Html$Attributes.$class(name),$Html$Attributes.href(link),$Html$Attributes.target("_blank")]);
+      });
       var issueId = 1;
       var issueState = A2(getIssueState,issueId,model);
       var attributes = A4(issueStyle,issueState,"about",false,model.closingAnimating);
-      var inner = function () {
+      var logoSpaceVisibility = function () {
          var _p4 = issueState;
-         switch (_p4.ctor)
-         {case "MenuItem": return innerHtml;
-            case "Hovered": return innerHtml;
-            case "Selected": return innerHtml;
-            default: return innerHtml;}
+         if (_p4.ctor === "Selected") {
+               return model.closingAnimating ? "0" : "1";
+            } else {
+               return "0";
+            }
+      }();
+      var logos = A2($Html.div,
+      _U.list([$Html$Attributes.$class("logo-space"),$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "opacity",_1: logoSpaceVisibility}]))]),
+      _U.list([A2($Html.a,A2(logoAttributes,"facebook","https://www.facebook.com/otherwheres"),_U.list([]))
+              ,A2($Html.a,A2(logoAttributes,"twitter","https://twitter.com/otherwheresmag"),_U.list([]))
+              ,A2($Html.a,A2(logoAttributes,"instagram","https://instagram.com/"),_U.list([]))]));
+      var subText = function () {
+         var _p5 = issueState;
+         switch (_p5.ctor)
+         {case "MenuItem": return _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("{ mostly } true")]))
+                                          ,A2($Html.p,_U.list([]),_U.list([$Html.text("stories")]))]);
+            case "Hovered": return _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("who are we")]))]);
+            case "Selected": return _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("who are we")]))]);
+            default: return _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("{ mostly } true")]))
+                                    ,A2($Html.p,_U.list([]),_U.list([$Html.text("stories")]))]);}
       }();
       var handlers = A3(handlersDependingOnState,issueState,issueId,address);
-      return A2($Html.section,A2($List.append,handlers,attributes),inner);
+      return A2($Html.section,
+      A2($List.append,handlers,attributes),
+      _U.list([A2($Html.div,
+      _U.list([innerStyle]),
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([logos]))
+              ,A2($Html.div,_U.list([$Html$Attributes.$class("logo-text")]),_U.list([$Html.text("OTHERWHERES")]))
+              ,A2($Html.div,_U.list([$Html$Attributes.$class("tag-line-text")]),subText)]))]));
    });
    var viewIssueMenu = F2(function (address,model) {
       return A2($List._op["::"],A2(viewOtherwheresIssueItem,address,model),A2($List.map,A2(viewIssueMenuItem,address,model),model.issues));
@@ -11102,16 +11121,16 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
       return _U.list([$Html$Attributes.$class("issue-content"),styles]);
    }();
-   var issueImageView = F2(function (_p5,handler) {
-      var _p6 = _p5;
-      var _p9 = _p6._2;
-      var _p8 = _p6._1;
-      var _p7 = _p6._0;
+   var issueImageView = F2(function (_p6,handler) {
+      var _p7 = _p6;
+      var _p10 = _p7._2;
+      var _p9 = _p7._1;
+      var _p8 = _p7._0;
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("images")]),
-      _U.list([A2($Html.img,_U.list([$Html$Attributes.src(_p7),$Html$Attributes.$class("small"),handler($Maybe.Just(_p7))]),_U.list([]))
-              ,A2($Html.img,_U.list([$Html$Attributes.src(_p8),$Html$Attributes.$class("small"),handler($Maybe.Just(_p8))]),_U.list([]))
-              ,A2($Html.img,_U.list([$Html$Attributes.src(_p9),$Html$Attributes.$class("small"),handler($Maybe.Just(_p9))]),_U.list([]))]));
+      _U.list([A2($Html.img,_U.list([$Html$Attributes.src(_p8),$Html$Attributes.$class("small"),handler($Maybe.Just(_p8))]),_U.list([]))
+              ,A2($Html.img,_U.list([$Html$Attributes.src(_p9),$Html$Attributes.$class("small"),handler($Maybe.Just(_p9))]),_U.list([]))
+              ,A2($Html.img,_U.list([$Html$Attributes.src(_p10),$Html$Attributes.$class("small"),handler($Maybe.Just(_p10))]),_U.list([]))]));
    });
    var viewFromIssue = F4(function (maybeSource,imgHandler,closeHandler,issue) {
       var expanded = function (source) {
@@ -11134,28 +11153,28 @@ Elm.View.make = function (_elm) {
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
               _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
               ,A2($Html.button,_U.list([$Html$Attributes.$class("issue-content-action-button")]),_U.list([$Html.text(issue.actionButtonText)]))]));
-      var _p10 = maybeSource;
-      if (_p10.ctor === "Just") {
-            return expanded(_p10._0);
+      var _p11 = maybeSource;
+      if (_p11.ctor === "Just") {
+            return expanded(_p11._0);
          } else {
             return unexpanded;
          }
    });
    var viewSelectedIssue = F2(function (address,model) {
-      var _p11 = model.expandedIssueId;
-      if (_p11.ctor === "Just") {
-            if (_p11._0 === 1) {
+      var _p12 = model.expandedIssueId;
+      if (_p12.ctor === "Just") {
+            if (_p12._0 === 1) {
                   return A2($Issues$About.view,address,model);
                } else {
-                  var _p12 = $Model.findSelectedIssue(model);
-                  if (_p12.ctor === "Just") {
+                  var _p13 = $Model.findSelectedIssue(model);
+                  if (_p13.ctor === "Just") {
                         return A4(viewFromIssue,
                         model.maybeExpandedImage,
                         function (maybeImgSource) {
                            return A2($Html$Events.onClick,address,$Update.ExpandImage(maybeImgSource));
                         },
                         closeHandler(address),
-                        _p12._0);
+                        _p13._0);
                      } else {
                         return A2($Html.span,_U.list([]),_U.list([]));
                      }

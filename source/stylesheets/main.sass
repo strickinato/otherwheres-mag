@@ -52,6 +52,36 @@ h3
   &:before
     content: " "
 
+=logo($top, $left, $logo)
+  $icon-size: 25px
+  height: $icon-size
+  width: $icon-size
+  border-radius: 50%
+  border: 1px solid $otherwheres-red
+  position: relative
+  top: $top
+  left: $left
+  padding: 5px
+  content: url("/assets/branding/vendor/" + $logo + "-red.svg")
+
+  &:hover
+    content: url("/assets/branding/vendor/" + $logo + "-white.svg")
+    background-color: $otherwheres-red
+
+.logo-space
+  text-align: center
+  transition: all $animation-speed ease
+
+.facebook
+  +logo($top: -64px, $left: -25px, $logo:"facebook" )
+  padding: 0px
+
+.twitter
+  +logo($top: -72px, $left: 0px, $logo:"twitter" )
+
+.instagram
+  +logo($top: -64px, $left: 25px, $logo:"instagram" )
+
 .logo-text
   font-family: BrandonGrotesqueBold
   letter-spacing: 4px
@@ -60,6 +90,7 @@ h3
   margin-bottom: 26px
 
 .tag-line-text
+  height: 32px
   font-size: $text
   letter-spacing: 3px
 
