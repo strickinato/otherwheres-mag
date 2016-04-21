@@ -3,7 +3,7 @@ module View (..) where
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Model exposing (Model, Issue, isShowingMenu, findSelectedIssue, Source, IssueState(..))
+import Model exposing (Model, Issue, isShowingMenu, Source, SpecificIssue(..), issueFromIssueType, IssueState(..))
 import Update exposing (Action(..))
 import Signal
 import Issues.About
@@ -34,25 +34,20 @@ viewMenu address model =
 
 viewSelectedIssue : Signal.Address Action -> Model -> Html
 viewSelectedIssue address model =
-  case model.expandedIssueId of
-    Just 1 ->
+  case model.expandedIssue of
+    About ->
       Issues.About.view address model
 
-    Just _ ->
-      case findSelectedIssue model of
-        Just issue ->
-          viewFromIssue
-            model.maybeExpandedImage
-            (\maybeImgSource -> onClick address (ExpandImage maybeImgSource))
-            (closeHandler address)
-            issue
-
-        Nothing ->
-          {- We should never be in this state! -}
-          span [] []
-
-    Nothing ->
+    None ->
       span [] []
+
+    expandedIssue ->
+      viewFromIssue
+        model.maybeExpandedImage
+        (\maybeImgSource -> onClick address (ExpandImage maybeImgSource))
+        (closeHandler address)
+        (issueFromIssueType expandedIssue)
+
 
 viewFromIssue : Maybe Source -> (Maybe Source -> Html.Attribute) -> Html.Attribute -> Issue -> Html
 viewFromIssue maybeSource imgHandler closeHandler issue =
@@ -117,17 +112,14 @@ issueContentAttributes =
 viewAboutMenuItem : Signal.Address Action -> Model -> Html
 viewAboutMenuItem address model =
   let
-    issueId =
-      1
-
     issueState =
-      getIssueState issueId model
+      getIssueState About model
 
     attributes =
       issueStyle issueState "about" False model.closingAnimating
 
     handlers =
-      handlersDependingOnState issueState issueId address
+      handlersDependingOnState issueState About address
 
     logoAttributes name link =
       [ class name
@@ -189,8 +181,8 @@ viewAboutMenuItem address model =
       ]
 
 
-handlersDependingOnState : IssueState -> Int -> Signal.Address Action -> List Html.Attribute
-handlersDependingOnState state id address =
+handlersDependingOnState : IssueState -> SpecificIssue -> Signal.Address Action -> List Html.Attribute
+handlersDependingOnState state issueType address =
   case state of
     Hidden ->
       []
@@ -199,24 +191,19 @@ handlersDependingOnState state id address =
       [ closeHandler address ]
 
     _ ->
-      [ makeHoverHandler address id
-      , makeExpandHandler address id
+      [ makeHoverHandler address issueType
+      , makeExpandHandler address issueType
       ]
 
 
-isSelectedIssue : Int -> Maybe Int -> Bool
-isSelectedIssue issueId maybeSelectedId =
-  (Maybe.withDefault 0 maybeSelectedId) == issueId
-
-
-getIssueState : Int -> Model -> IssueState
-getIssueState id model =
+getIssueState : SpecificIssue -> Model -> IssueState
+getIssueState specificIssue model =
   if isShowingMenu model then
-    if (isSelectedIssue id model.hoveredIssueId) then
+    if (specificIssue == model.hoveredIssue) then
       Hovered
     else
       MenuItem
-  else if (isSelectedIssue id model.expandedIssueId) then
+  else if (specificIssue == model.expandedIssue) then
     Selected
   else
     Hidden
@@ -263,36 +250,36 @@ issueStyle issueState issueClass redify closingAnimating =
     [ styles, classes ]
 
 
-makeHoverHandler : Signal.Address Action -> Int -> Html.Attribute
-makeHoverHandler address id =
-  Just id
+makeHoverHandler : Signal.Address Action -> SpecificIssue -> Html.Attribute
+makeHoverHandler address issueType =
+  issueType
     |> HoverIssue
     |> onMouseOver address
 
 
-makeExpandHandler : Signal.Address Action -> Int -> Html.Attribute
-makeExpandHandler address id =
-  Just id
+makeExpandHandler : Signal.Address Action -> SpecificIssue -> Html.Attribute
+makeExpandHandler address issueType =
+  issueType
     |> ExpandIssue
     |> onClick address
 
 
 closeHandler : Signal.Address Action -> Html.Attribute
 closeHandler address =
-  onClick address (ExpandIssue Nothing)
+  onClick address (ExpandIssue None)
 
 
 viewIssueMenuItem : Signal.Address Action -> Model -> Issue -> Html
 viewIssueMenuItem address model issue =
   let
     issueState =
-      getIssueState issue.id model
+      getIssueState issue.issueType model
 
     attributes =
       issueStyle issueState issue.class True model.closingAnimating
 
     handlers =
-      handlersDependingOnState issueState issue.id address
+      handlersDependingOnState issueState issue.issueType address
   in
     section
       (List.append handlers attributes)
@@ -315,7 +302,7 @@ viewMenuInner : Model -> Issue -> Html
 viewMenuInner model issue =
   let
     issueDisplay =
-      case getIssueState issue.id model of
+      case getIssueState issue.issueType model of
         MenuItem ->
           h1
             [ class "menu-issue-symbol" ]
