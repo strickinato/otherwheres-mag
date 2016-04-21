@@ -8,8 +8,8 @@ import Html exposing (..)
 
 type alias Model =
   { issues : List Issue
-  , expandedIssueId : Maybe Int
-  , hoveredIssueId : Maybe Int
+  , expandedIssue : SpecificIssue
+  , hoveredIssue : SpecificIssue
   , phraseAnimationState : AnimationState
   , currentPhraseIndex : Int
   , phrases : Array String
@@ -18,11 +18,14 @@ type alias Model =
   , maybeExpandedImage : Maybe Source
   }
 
-type alias Source = String
-  
+
+type alias Source =
+  String
+
 
 type alias Issue =
   { id : Int
+  , issueType : SpecificIssue
   , symbol : String
   , class : String
   , title : String
@@ -35,11 +38,18 @@ type alias Issue =
   }
 
 
+type IssueState
+  = MenuItem
+  | Hovered
+  | Selected
+  | Hidden
+
+
 init : Model
 init =
   { issues = allIssues
-  , expandedIssueId = Nothing
-  , hoveredIssueId = Nothing
+  , expandedIssue = None
+  , hoveredIssue = None
   , phraseAnimationState = initialAnimation
   , currentPhraseIndex = 0
   , phrases = otherwheresPhrases
@@ -98,6 +108,39 @@ allIssues =
   ]
 
 
+type SpecificIssue
+  = Disaster
+  | Comics
+  | Travel
+  | TruthOrFiction
+  | About
+  | None
+
+
+issueFromIssueType : SpecificIssue -> Issue
+issueFromIssueType issueType =
+  case issueType of
+    Disaster ->
+      disaster
+
+    Comics ->
+      comics
+
+    Travel ->
+      travel
+
+    TruthOrFiction ->
+      truthOrFiction
+
+      
+    _ ->
+      {- TODO Make default bad issue -}
+      disaster
+
+
+
+
+
 type alias ImagePaths =
   ( String, String, String )
 
@@ -117,6 +160,7 @@ imagePaths issueFolder =
 truthOrFiction : Issue
 truthOrFiction =
   { id = 5
+  , issueType = TruthOrFiction
   , symbol = "I"
   , class = "volume1"
   , title = "Truth or Fiction"
@@ -132,6 +176,7 @@ truthOrFiction =
 travel : Issue
 travel =
   { id = 4
+  , issueType = Travel
   , symbol = "II"
   , class = "volume2"
   , title = "Travel"
@@ -147,6 +192,7 @@ travel =
 comics : Issue
 comics =
   { id = 3
+  , issueType = Comics
   , symbol = "III"
   , class = "volume3"
   , title = "Comics"
@@ -162,11 +208,12 @@ comics =
 disaster : Issue
 disaster =
   { id = 2
+  , issueType = Disaster
   , symbol = "IV"
   , class = "volume4"
   , title = "Disaster"
   , tagline = "6 STORIES OF PERSONAL DISASTERS"
-  , images = imagePaths "disaster" 
+  , images = imagePaths "disaster"
   , quote = "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
   , quoteCredit = "Katie Wheeler-Dubin"
   , quoteStory = "Storm Season"
@@ -174,18 +221,11 @@ disaster =
   }
 
 
-findSelectedIssue : Model -> Maybe Issue
-findSelectedIssue model =
-  model.issues
-    |> List.filter (\issue -> issue.id ?== model.expandedIssueId)
-    |> List.head
-
-
 isShowingMenu : Model -> Bool
 isShowingMenu model =
-  case model.expandedIssueId of
-    Just _ ->
-      False
-
-    Nothing ->
+  case model.expandedIssue of
+    None ->
       True
+
+    _ ->
+      False

@@ -1,4 +1,9 @@
 @charset "UTF-8";
+#wrapper {
+  height: 100%;
+  width: 100%;
+  font-family: BrandonGrotesque; }
+
 .issue-content {
   transition: all 500ms ease;
   width: 80%;
@@ -6,9 +11,6 @@
   position: absolute;
   display: inline-block;
   float: right; }
-
-#elm-main-mount {
-  font-family: BrandonGrotesque; }
 
 h1 {
   font-size: 108px;

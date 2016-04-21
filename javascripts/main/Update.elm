@@ -1,16 +1,16 @@
 module Update (..) where
 
 import Effects exposing (Effects, tick)
-import Model exposing (Model, Issue, initialAnimation, resetTime, Source)
+import Model exposing (Model, Issue, initialAnimation, resetTime, Source, SpecificIssue(..))
 import Util exposing ((=>))
 import Time exposing (Time, second)
 import Array
 
 
 type Action
-  = ExpandIssue (Maybe Int)
+  = ExpandIssue SpecificIssue
+  | HoverIssue SpecificIssue
   | ExpandImage (Maybe Source)
-  | HoverIssue (Maybe Int)
   | Tick Time
   | AnimateClosing Time
   | NoOp
@@ -58,7 +58,7 @@ update action model =
       in
         if newElapsedTime > (second / 2.0) then
           { model
-            | expandedIssueId = Nothing
+            | expandedIssue = None
             , closingAnimating = False
             , closingAnimationState = Nothing
           }
@@ -77,21 +77,21 @@ update action model =
     ExpandImage maybeSource ->
       { model | maybeExpandedImage = maybeSource } => Effects.none
 
-    ExpandIssue maybeIssueId ->
-      case maybeIssueId of
-        Just id ->
+    ExpandIssue expandedIssue ->
+      case expandedIssue of
+        None ->
+          model => Effects.tick AnimateClosing
+
+        specificIssue ->
           { model
-            | expandedIssueId = maybeIssueId
+            | expandedIssue = specificIssue
             , currentPhraseIndex = 0
             , phraseAnimationState = resetTime model.phraseAnimationState
           }
             => Effects.none
 
-        Nothing ->
-          model => Effects.tick AnimateClosing
-
-    HoverIssue maybeIssueId ->
-      { model | hoveredIssueId = maybeIssueId } => Effects.none
+    HoverIssue hoveredIssue ->
+      { model | hoveredIssue = hoveredIssue } => Effects.none
 
     NoOp ->
       model => Effects.none

@@ -10769,13 +10769,9 @@ Elm.Model.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $Time = Elm.Time.make(_elm),
-   $Util = Elm.Util.make(_elm);
+   $Time = Elm.Time.make(_elm);
    var _op = {};
-   var isShowingMenu = function (model) {    var _p0 = model.expandedIssueId;if (_p0.ctor === "Just") {    return false;} else {    return true;}};
-   var findSelectedIssue = function (model) {
-      return $List.head(A2($List.filter,function (issue) {    return A2($Util._op["?=="],issue.id,model.expandedIssueId);},model.issues));
-   };
+   var isShowingMenu = function (model) {    var _p0 = model.expandedIssue;if (_p0.ctor === "None") {    return true;} else {    return false;}};
    var imagePaths = function (issueFolder) {
       var imagePath = A2($Basics._op["++"],"/assets/issues/",A2($Basics._op["++"],issueFolder,"/"));
       return {ctor: "_Tuple3"
@@ -10783,7 +10779,11 @@ Elm.Model.make = function (_elm) {
              ,_1: A2($Basics._op["++"],imagePath,"img2.png")
              ,_2: A2($Basics._op["++"],imagePath,"img3.png")};
    };
+   var None = {ctor: "None"};
+   var About = {ctor: "About"};
+   var TruthOrFiction = {ctor: "TruthOrFiction"};
    var truthOrFiction = {id: 5
+                        ,issueType: TruthOrFiction
                         ,symbol: "I"
                         ,$class: "volume1"
                         ,title: "Truth or Fiction"
@@ -10793,7 +10793,9 @@ Elm.Model.make = function (_elm) {
                         ,quoteCredit: "Joseph Bien-Kahn"
                         ,quoteStory: "Faces"
                         ,actionButtonText: "Sold Out"};
+   var Travel = {ctor: "Travel"};
    var travel = {id: 4
+                ,issueType: Travel
                 ,symbol: "II"
                 ,$class: "volume2"
                 ,title: "Travel"
@@ -10803,7 +10805,9 @@ Elm.Model.make = function (_elm) {
                 ,quoteCredit: "Adam Wilson"
                 ,quoteStory: "Belgium"
                 ,actionButtonText: "Sold Out"};
+   var Comics = {ctor: "Comics"};
    var comics = {id: 3
+                ,issueType: Comics
                 ,symbol: "III"
                 ,$class: "volume3"
                 ,title: "Comics"
@@ -10813,7 +10817,9 @@ Elm.Model.make = function (_elm) {
                 ,quoteCredit: "Andrew \"Dirtman\" Hine"
                 ,quoteStory: "On Comics"
                 ,actionButtonText: "Sold Out"};
+   var Disaster = {ctor: "Disaster"};
    var disaster = {id: 2
+                  ,issueType: Disaster
                   ,symbol: "IV"
                   ,$class: "volume4"
                   ,title: "Disaster"
@@ -10823,6 +10829,15 @@ Elm.Model.make = function (_elm) {
                   ,quoteCredit: "Katie Wheeler-Dubin"
                   ,quoteStory: "Storm Season"
                   ,actionButtonText: "Sold Out"};
+   var issueFromIssueType = function (issueType) {
+      var _p1 = issueType;
+      switch (_p1.ctor)
+      {case "Disaster": return disaster;
+         case "Comics": return comics;
+         case "Travel": return travel;
+         case "TruthOrFiction": return truthOrFiction;
+         default: return disaster;}
+   };
    var allIssues = _U.list([disaster,comics,travel,truthOrFiction]);
    var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
    var otherwheresPhrases = $Array.fromList(_U.list(["mostly true"
@@ -10839,14 +10854,18 @@ Elm.Model.make = function (_elm) {
    var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0 - 2.0};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
    var init = {issues: allIssues
-              ,expandedIssueId: $Maybe.Nothing
-              ,hoveredIssueId: $Maybe.Nothing
+              ,expandedIssue: None
+              ,hoveredIssue: None
               ,phraseAnimationState: initialAnimation
               ,currentPhraseIndex: 0
               ,phrases: otherwheresPhrases
               ,closingAnimating: false
               ,closingAnimationState: $Maybe.Nothing
               ,maybeExpandedImage: $Maybe.Nothing};
+   var Hidden = {ctor: "Hidden"};
+   var Selected = {ctor: "Selected"};
+   var Hovered = {ctor: "Hovered"};
+   var MenuItem = {ctor: "MenuItem"};
    var Issue = function (a) {
       return function (b) {
          return function (c) {
@@ -10857,7 +10876,19 @@ Elm.Model.make = function (_elm) {
                         return function (h) {
                            return function (i) {
                               return function (j) {
-                                 return {id: a,symbol: b,$class: c,title: d,tagline: e,images: f,quote: g,quoteCredit: h,quoteStory: i,actionButtonText: j};
+                                 return function (k) {
+                                    return {id: a
+                                           ,issueType: b
+                                           ,symbol: c
+                                           ,$class: d
+                                           ,title: e
+                                           ,tagline: f
+                                           ,images: g
+                                           ,quote: h
+                                           ,quoteCredit: i
+                                           ,quoteStory: j
+                                           ,actionButtonText: k};
+                                 };
                               };
                            };
                         };
@@ -10870,8 +10901,8 @@ Elm.Model.make = function (_elm) {
    };
    var Model = F9(function (a,b,c,d,e,f,g,h,i) {
       return {issues: a
-             ,expandedIssueId: b
-             ,hoveredIssueId: c
+             ,expandedIssue: b
+             ,hoveredIssue: c
              ,phraseAnimationState: d
              ,currentPhraseIndex: e
              ,phrases: f
@@ -10882,6 +10913,10 @@ Elm.Model.make = function (_elm) {
    return _elm.Model.values = {_op: _op
                               ,Model: Model
                               ,Issue: Issue
+                              ,MenuItem: MenuItem
+                              ,Hovered: Hovered
+                              ,Selected: Selected
+                              ,Hidden: Hidden
                               ,init: init
                               ,AnimationState: AnimationState
                               ,initialAnimation: initialAnimation
@@ -10889,12 +10924,18 @@ Elm.Model.make = function (_elm) {
                               ,otherwheresPhrases: otherwheresPhrases
                               ,currentPhrase: currentPhrase
                               ,allIssues: allIssues
+                              ,Disaster: Disaster
+                              ,Comics: Comics
+                              ,Travel: Travel
+                              ,TruthOrFiction: TruthOrFiction
+                              ,About: About
+                              ,None: None
+                              ,issueFromIssueType: issueFromIssueType
                               ,imagePaths: imagePaths
                               ,truthOrFiction: truthOrFiction
                               ,travel: travel
                               ,comics: comics
                               ,disaster: disaster
-                              ,findSelectedIssue: findSelectedIssue
                               ,isShowingMenu: isShowingMenu};
 };
 Elm.Update = Elm.Update || {};
@@ -10945,30 +10986,29 @@ Elm.Update.make = function (_elm) {
                  }
            }();
            return _U.cmp(newElapsedTime,$Time.second / 2.0) > 0 ? A2($Util._op["=>"],
-           _U.update(model,{expandedIssueId: $Maybe.Nothing,closingAnimating: false,closingAnimationState: $Maybe.Nothing}),
+           _U.update(model,{expandedIssue: $Model.None,closingAnimating: false,closingAnimationState: $Maybe.Nothing}),
            $Effects.none) : A2($Util._op["=>"],
            _U.update(model,{closingAnimating: true,closingAnimationState: $Maybe.Just({elapsedTime: newElapsedTime,prevClockTime: _p4})}),
            $Effects.tick(AnimateClosing));
          case "ExpandImage": return A2($Util._op["=>"],_U.update(model,{maybeExpandedImage: _p0._0}),$Effects.none);
-         case "ExpandIssue": var _p6 = _p0._0;
-           var _p5 = _p6;
-           if (_p5.ctor === "Just") {
-                 return A2($Util._op["=>"],
-                 _U.update(model,{expandedIssueId: _p6,currentPhraseIndex: 0,phraseAnimationState: $Model.resetTime(model.phraseAnimationState)}),
-                 $Effects.none);
-              } else {
+         case "ExpandIssue": var _p5 = _p0._0;
+           if (_p5.ctor === "None") {
                  return A2($Util._op["=>"],model,$Effects.tick(AnimateClosing));
+              } else {
+                 return A2($Util._op["=>"],
+                 _U.update(model,{expandedIssue: _p5,currentPhraseIndex: 0,phraseAnimationState: $Model.resetTime(model.phraseAnimationState)}),
+                 $Effects.none);
               }
-         case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssueId: _p0._0}),$Effects.none);
+         case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssue: _p0._0}),$Effects.none);
          default: return A2($Util._op["=>"],model,$Effects.none);}
    });
-   var HoverIssue = function (a) {    return {ctor: "HoverIssue",_0: a};};
    var ExpandImage = function (a) {    return {ctor: "ExpandImage",_0: a};};
+   var HoverIssue = function (a) {    return {ctor: "HoverIssue",_0: a};};
    var ExpandIssue = function (a) {    return {ctor: "ExpandIssue",_0: a};};
    return _elm.Update.values = {_op: _op
                                ,ExpandIssue: ExpandIssue
-                               ,ExpandImage: ExpandImage
                                ,HoverIssue: HoverIssue
+                               ,ExpandImage: ExpandImage
                                ,Tick: Tick
                                ,AnimateClosing: AnimateClosing
                                ,NoOp: NoOp
@@ -11001,9 +11041,9 @@ Elm.View.make = function (_elm) {
                                                    ,{ctor: "_Tuple2",_0: "justify-content",_1: "center"}
                                                    ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                    ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}]));
-   var closeHandler = function (address) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Nothing));};
-   var makeExpandHandler = F2(function (address,id) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Maybe.Just(id)));});
-   var makeHoverHandler = F2(function (address,id) {    return A2($Html$Events.onMouseOver,address,$Update.HoverIssue($Maybe.Just(id)));});
+   var closeHandler = function (address) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue($Model.None));};
+   var makeExpandHandler = F2(function (address,issueType) {    return A2($Html$Events.onClick,address,$Update.ExpandIssue(issueType));});
+   var makeHoverHandler = F2(function (address,issueType) {    return A2($Html$Events.onMouseOver,address,$Update.HoverIssue(issueType));});
    var issueStyle = F4(function (issueState,issueClass,redify,closingAnimating) {
       var _p0 = function () {
          var _p1 = issueState;
@@ -11033,20 +11073,14 @@ Elm.View.make = function (_elm) {
                                                        ,{ctor: "_Tuple2",_0: "redified",_1: redified && redify}]));
       return _U.list([styles,classes]);
    });
-   var Hidden = {ctor: "Hidden"};
-   var Selected = {ctor: "Selected"};
-   var Hovered = {ctor: "Hovered"};
-   var MenuItem = {ctor: "MenuItem"};
-   var isSelectedIssue = F2(function (issueId,maybeSelectedId) {    return _U.eq(A2($Maybe.withDefault,0,maybeSelectedId),issueId);});
-   var getIssueState = F2(function (id,model) {
-      return $Model.isShowingMenu(model) ? A2(isSelectedIssue,id,model.hoveredIssueId) ? Hovered : MenuItem : A2(isSelectedIssue,
-      id,
-      model.expandedIssueId) ? Selected : Hidden;
+   var getIssueState = F2(function (specificIssue,model) {
+      return $Model.isShowingMenu(model) ? _U.eq(specificIssue,model.hoveredIssue) ? $Model.Hovered : $Model.MenuItem : _U.eq(specificIssue,
+      model.expandedIssue) ? $Model.Selected : $Model.Hidden;
    });
    var viewMenuInner = F2(function (model,issue) {
       var styles = innerStyle;
       var issueDisplay = function () {
-         var _p2 = A2(getIssueState,issue.id,model);
+         var _p2 = A2(getIssueState,issue.issueType,model);
          switch (_p2.ctor)
          {case "MenuItem": return A2($Html.h1,_U.list([$Html$Attributes.$class("menu-issue-symbol")]),_U.list([$Html.text(issue.symbol)]));
             case "Hovered": return A2($Html.h3,_U.list([$Html$Attributes.$class("menu-issue-title")]),_U.list([$Html.text($String.toUpper(issue.title))]));
@@ -11055,29 +11089,26 @@ Elm.View.make = function (_elm) {
       }();
       return A2($Html.div,_U.list([styles]),_U.list([issueDisplay]));
    });
-   var handlersDependingOnState = F3(function (state,id,address) {
-      var whenOpenHandlers = _U.list([closeHandler(address)]);
-      var whenMenuHandlers = _U.list([A2(makeHoverHandler,address,id),A2(makeExpandHandler,address,id)]);
+   var handlersDependingOnState = F3(function (state,issueType,address) {
       var _p3 = state;
       switch (_p3.ctor)
-      {case "MenuItem": return whenMenuHandlers;
-         case "Hovered": return whenMenuHandlers;
-         case "Selected": return whenOpenHandlers;
-         default: return _U.list([]);}
+      {case "Hidden": return _U.list([]);
+         case "Selected": return _U.list([closeHandler(address)]);
+         default: return _U.list([A2(makeHoverHandler,address,issueType),A2(makeExpandHandler,address,issueType)]);}
    });
    var viewIssueMenuItem = F3(function (address,model,issue) {
-      var issueState = A2(getIssueState,issue.id,model);
+      var issueState = A2(getIssueState,issue.issueType,model);
       var attributes = A4(issueStyle,issueState,issue.$class,true,model.closingAnimating);
-      var handlers = A3(handlersDependingOnState,issueState,issue.id,address);
+      var handlers = A3(handlersDependingOnState,issueState,issue.issueType,address);
       return A2($Html.section,A2($List.append,handlers,attributes),_U.list([A2(viewMenuInner,model,issue)]));
    });
-   var viewOtherwheresIssueItem = F2(function (address,model) {
+   var viewAboutMenuItem = F2(function (address,model) {
       var logoAttributes = F2(function (name,link) {
          return _U.list([$Html$Attributes.$class(name),$Html$Attributes.href(link),$Html$Attributes.target("_blank")]);
       });
-      var issueId = 1;
-      var issueState = A2(getIssueState,issueId,model);
+      var issueState = A2(getIssueState,$Model.About,model);
       var attributes = A4(issueStyle,issueState,"about",false,model.closingAnimating);
+      var handlers = A3(handlersDependingOnState,issueState,$Model.About,address);
       var logoSpaceVisibility = function () {
          var _p4 = issueState;
          if (_p4.ctor === "Selected") {
@@ -11101,7 +11132,6 @@ Elm.View.make = function (_elm) {
             default: return _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("{ mostly } true")]))
                                     ,A2($Html.p,_U.list([]),_U.list([$Html.text("stories")]))]);}
       }();
-      var handlers = A3(handlersDependingOnState,issueState,issueId,address);
       return A2($Html.section,
       A2($List.append,handlers,attributes),
       _U.list([A2($Html.div,
@@ -11109,9 +11139,6 @@ Elm.View.make = function (_elm) {
       _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([logos]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("logo-text")]),_U.list([$Html.text("OTHERWHERES")]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("tag-line-text")]),subText)]))]));
-   });
-   var viewIssueMenu = F2(function (address,model) {
-      return A2($List._op["::"],A2(viewOtherwheresIssueItem,address,model),A2($List.map,A2(viewIssueMenuItem,address,model),model.issues));
    });
    var issueContentAttributes = function () {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "80%"}
@@ -11161,48 +11188,35 @@ Elm.View.make = function (_elm) {
          }
    });
    var viewSelectedIssue = F2(function (address,model) {
-      var _p12 = model.expandedIssueId;
-      if (_p12.ctor === "Just") {
-            if (_p12._0 === 1) {
-                  return A2($Issues$About.view,address,model);
-               } else {
-                  var _p13 = $Model.findSelectedIssue(model);
-                  if (_p13.ctor === "Just") {
-                        return A4(viewFromIssue,
-                        model.maybeExpandedImage,
-                        function (maybeImgSource) {
-                           return A2($Html$Events.onClick,address,$Update.ExpandImage(maybeImgSource));
-                        },
-                        closeHandler(address),
-                        _p13._0);
-                     } else {
-                        return A2($Html.span,_U.list([]),_U.list([]));
-                     }
-               }
-         } else {
-            return A2($Html.span,_U.list([]),_U.list([]));
-         }
+      var _p12 = model.expandedIssue;
+      switch (_p12.ctor)
+      {case "About": return A2($Issues$About.view,address,model);
+         case "None": return A2($Html.span,_U.list([]),_U.list([]));
+         default: return A4(viewFromIssue,
+           model.maybeExpandedImage,
+           function (maybeImgSource) {
+              return A2($Html$Events.onClick,address,$Update.ExpandImage(maybeImgSource));
+           },
+           closeHandler(address),
+           $Model.issueFromIssueType(_p12));}
+   });
+   var viewMenu = F2(function (address,model) {
+      var issueMenuItems = A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);
+      var aboutMenu = A2(viewAboutMenuItem,address,model);
+      return A2($List._op["::"],aboutMenu,issueMenuItems);
    });
    var view = F2(function (address,model) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"},{ctor: "_Tuple2",_0: "height",_1: "100%"}]));
-      return A2($Html.div,
-      _U.list([$Html$Attributes.id("wrapper"),styles]),
-      A2($List.append,A2(viewIssueMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
+      return A2($Html.div,_U.list([$Html$Attributes.id("wrapper")]),A2($List.append,A2(viewMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
    });
    return _elm.View.values = {_op: _op
                              ,view: view
+                             ,viewMenu: viewMenu
                              ,viewSelectedIssue: viewSelectedIssue
                              ,viewFromIssue: viewFromIssue
                              ,issueImageView: issueImageView
                              ,issueContentAttributes: issueContentAttributes
-                             ,viewIssueMenu: viewIssueMenu
-                             ,viewOtherwheresIssueItem: viewOtherwheresIssueItem
+                             ,viewAboutMenuItem: viewAboutMenuItem
                              ,handlersDependingOnState: handlersDependingOnState
-                             ,isSelectedIssue: isSelectedIssue
-                             ,MenuItem: MenuItem
-                             ,Hovered: Hovered
-                             ,Selected: Selected
-                             ,Hidden: Hidden
                              ,getIssueState: getIssueState
                              ,issueStyle: issueStyle
                              ,makeHoverHandler: makeHoverHandler

@@ -28,6 +28,11 @@ html, body {
 @font-face {
   font-family: BrandonGrotesqueMediumItalic;
   src: url(../assets/branding/fonts/brandon_medium_italic.otf); }
+#wrapper {
+  height: 100%;
+  width: 100%;
+  font-family: BrandonGrotesque; }
+
 .issue-content {
   transition: all 500ms ease;
   width: 80%;
@@ -35,9 +40,6 @@ html, body {
   position: absolute;
   display: inline-block;
   float: right; }
-
-#elm-main-mount {
-  font-family: BrandonGrotesque; }
 
 h1 {
   font-size: 108px;
