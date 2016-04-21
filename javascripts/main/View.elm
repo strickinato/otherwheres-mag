@@ -115,7 +115,6 @@ viewIssueMenu address model =
     :: (List.map (viewIssueMenuItem address model) model.issues)
 
 
-
 viewOtherwheresIssueItem : Signal.Address Action -> Model -> Html
 viewOtherwheresIssueItem address model =
   let
@@ -131,34 +130,64 @@ viewOtherwheresIssueItem address model =
     handlers =
       handlersDependingOnState issueState issueId address
 
-    innerHtml =
-      [ div
-          [ innerStyle ]
-          [ div [ class "red-logo" ] []
-          , div [ class "logo-text" ] [ text "OTHERWHERES" ]
-          , div
-              [ class "tag-line-text" ]
-              [ p [] [ text "{ mostly } true" ]
-              , p [] [ text "stories" ]
-              ]
-          ]
+    logoAttributes name link =
+      [ class name
+      , href link
+      , target "_blank"
       ]
 
-    inner =
+    logos =
+      div
+        [ class "logo-space"
+        , style [ ( "opacity", logoSpaceVisibility ) ]
+        ]
+        [ a (logoAttributes "facebook" "https://www.facebook.com/otherwheres") []
+        , a (logoAttributes "twitter" "https://twitter.com/otherwheresmag") []
+        , a (logoAttributes "instagram" "https://instagram.com/") []
+        ]
+
+    logoSpaceVisibility =
+      case issueState of
+        Selected ->
+          if model.closingAnimating then
+            "0"
+          else
+            "1"
+
+        _ ->
+          "0"
+
+    subText =
       case issueState of
         MenuItem ->
-          innerHtml
-        Hovered ->
-          innerHtml
-        Selected ->
-          innerHtml
-        Hidden ->
-          innerHtml
+          [ p [] [ text "{ mostly } true" ]
+          , p [] [ text "stories" ]
+          ]
 
+        Hovered ->
+          [ p [] [ text "who are we" ] ]
+
+        Selected ->
+          [ p [] [ text "who are we" ] ]
+
+        Hidden ->
+          [ p [] [ text "{ mostly } true" ]
+          , p [] [ text "stories" ]
+          ]
   in
     section
       (List.append handlers attributes)
-      inner
+      [ div
+          [ innerStyle ]
+          [ div
+              [ class "red-logo" ]
+              [ logos ]
+          , div [ class "logo-text" ] [ text "OTHERWHERES" ]
+          , div
+              [ class "tag-line-text" ]
+              subText
+          ]
+      ]
 
 
 handlersDependingOnState : IssueState -> Int -> Signal.Address Action -> List Html.Attribute

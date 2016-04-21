@@ -14,6 +14,8 @@ view address model =
     styles =
       style
         [ ( "background-image", "url(assets/issues/about/bg.png)" )
+        , ( "background-size", "cover")
+        , ( "background-position", "bottom")
         , ( "height", "100%" )
         , ( "text-align", "center" )
         , ( "color", "white" )
