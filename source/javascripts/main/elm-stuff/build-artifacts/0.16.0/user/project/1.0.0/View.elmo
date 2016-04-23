@@ -166,7 +166,7 @@ Elm.View.make = function (_elm) {
               ,A2($Html.h3,
               _U.list([$Html$Attributes.$class("issue-number")]),
               _U.list([$Html.text(A2($Basics._op["++"],"VOLUME ",A2($Basics._op["++"],issue.symbol,":")))]))
-              ,A2($Html.h3,_U.list([$Html$Attributes.$class("issue-tagline")]),_U.list([$Html.text(issue.tagline)]))
+              ,A2($Html.h3,_U.list([$Html$Attributes.$class("issue-tagline")]),_U.list([$Html.text($String.toUpper(issue.tagline))]))
               ,A3(issueImageView,issue.images,displayImage,imgHandler)
               ,A2($Html.div,_U.list([$Html$Attributes.$class("issue-quote")]),_U.list([$Html.text(issue.quote)]))
               ,A2($Html.div,

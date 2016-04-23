@@ -1,7 +1,7 @@
 module Update (..) where
 
 import Effects exposing (Effects, tick)
-import Model exposing (Model, Issue, initialAnimation, resetTime, Source, SpecificIssue(..), DisplayImage(..))
+import Model exposing (Model, Issue, initialAnimation, resetTime, SpecificIssue(..), DisplayImage(..))
 import Util exposing ((=>))
 import Time exposing (Time, second)
 import Array
