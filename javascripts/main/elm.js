@@ -8285,6 +8285,86 @@ Elm.Json.Decode.make = function (_elm) {
                                     ,value: value
                                     ,customDecoder: customDecoder};
 };
+Elm.Native = Elm.Native || {};
+Elm.Native.Window = {};
+Elm.Native.Window.make = function make(localRuntime) {
+	localRuntime.Native = localRuntime.Native || {};
+	localRuntime.Native.Window = localRuntime.Native.Window || {};
+	if (localRuntime.Native.Window.values)
+	{
+		return localRuntime.Native.Window.values;
+	}
+
+	var NS = Elm.Native.Signal.make(localRuntime);
+	var Tuple2 = Elm.Native.Utils.make(localRuntime).Tuple2;
+
+
+	function getWidth()
+	{
+		return localRuntime.node.clientWidth;
+	}
+
+
+	function getHeight()
+	{
+		if (localRuntime.isFullscreen())
+		{
+			return window.innerHeight;
+		}
+		return localRuntime.node.clientHeight;
+	}
+
+
+	var dimensions = NS.input('Window.dimensions', Tuple2(getWidth(), getHeight()));
+
+
+	function resizeIfNeeded()
+	{
+		// Do not trigger event if the dimensions have not changed.
+		// This should be most of the time.
+		var w = getWidth();
+		var h = getHeight();
+		if (dimensions.value._0 === w && dimensions.value._1 === h)
+		{
+			return;
+		}
+
+		setTimeout(function() {
+			// Check again to see if the dimensions have changed.
+			// It is conceivable that the dimensions have changed
+			// again while some other event was being processed.
+			w = getWidth();
+			h = getHeight();
+			if (dimensions.value._0 === w && dimensions.value._1 === h)
+			{
+				return;
+			}
+			localRuntime.notify(dimensions.id, Tuple2(w, h));
+		}, 0);
+	}
+
+
+	localRuntime.addListener([dimensions.id], window, 'resize', resizeIfNeeded);
+
+
+	return localRuntime.Native.Window.values = {
+		dimensions: dimensions,
+		resizeIfNeeded: resizeIfNeeded
+	};
+};
+
+Elm.Window = Elm.Window || {};
+Elm.Window.make = function (_elm) {
+   "use strict";
+   _elm.Window = _elm.Window || {};
+   if (_elm.Window.values) return _elm.Window.values;
+   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm),$Native$Window = Elm.Native.Window.make(_elm),$Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var dimensions = $Native$Window.dimensions;
+   var width = A2($Signal.map,$Basics.fst,dimensions);
+   var height = A2($Signal.map,$Basics.snd,dimensions);
+   return _elm.Window.values = {_op: _op,dimensions: dimensions,width: width,height: height};
+};
 Elm.Native.Effects = {};
 Elm.Native.Effects.make = function(localRuntime) {
 
@@ -10767,6 +10847,45 @@ Elm.Util.make = function (_elm) {
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    return _elm.Util.values = {_op: _op};
 };
+// adapted from
+// https://github.com/coreytrampe/elm-signal-primer
+
+Elm.Native.Primer = Elm.Native.Primer || {};
+Elm.Native.Primer.make = function(elm) {
+    elm.Native = elm.Native || {};
+    elm.Native.Primer = elm.Native.Primer || {};
+    if (elm.Native.Primer.values) return elm.Native.Primer.values;
+
+    var NS = Elm.Native.Signal.make(elm);
+
+    return elm.Native.Primer.values = {
+        prime: function(sig){
+            setTimeout(function(){
+                elm.notify(sig.id, sig.value)
+            }, 1);
+
+            return sig;
+        }
+    };
+};
+
+Elm.Primer = Elm.Primer || {};
+Elm.Primer.make = function (_elm) {
+   "use strict";
+   _elm.Primer = _elm.Primer || {};
+   if (_elm.Primer.values) return _elm.Primer.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Native$Primer = Elm.Native.Primer.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var prime = $Native$Primer.prime;
+   return _elm.Primer.values = {_op: _op,prime: prime};
+};
 Elm.Model = Elm.Model || {};
 Elm.Model.make = function (_elm) {
    "use strict";
@@ -10872,7 +10991,8 @@ Elm.Model.make = function (_elm) {
               ,phrases: otherwheresPhrases
               ,closingAnimating: false
               ,closingAnimationState: $Maybe.Nothing
-              ,displayImage: All};
+              ,displayImage: All
+              ,tooSmall: false};
    var Hidden = {ctor: "Hidden"};
    var Selected = {ctor: "Selected"};
    var Hovered = {ctor: "Hovered"};
@@ -10907,17 +11027,36 @@ Elm.Model.make = function (_elm) {
          };
       };
    };
-   var Model = F9(function (a,b,c,d,e,f,g,h,i) {
-      return {issues: a
-             ,expandedIssue: b
-             ,hoveredIssue: c
-             ,phraseAnimationState: d
-             ,currentPhraseIndex: e
-             ,phrases: f
-             ,closingAnimating: g
-             ,closingAnimationState: h
-             ,displayImage: i};
-   });
+   var Model = function (a) {
+      return function (b) {
+         return function (c) {
+            return function (d) {
+               return function (e) {
+                  return function (f) {
+                     return function (g) {
+                        return function (h) {
+                           return function (i) {
+                              return function (j) {
+                                 return {issues: a
+                                        ,expandedIssue: b
+                                        ,hoveredIssue: c
+                                        ,phraseAnimationState: d
+                                        ,currentPhraseIndex: e
+                                        ,phrases: f
+                                        ,closingAnimating: g
+                                        ,closingAnimationState: h
+                                        ,displayImage: i
+                                        ,tooSmall: j};
+                              };
+                           };
+                        };
+                     };
+                  };
+               };
+            };
+         };
+      };
+   };
    return _elm.Model.values = {_op: _op
                               ,Model: Model
                               ,Issue: Issue
@@ -11013,8 +11152,10 @@ Elm.Update.make = function (_elm) {
                  $Effects.none);
               }
          case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssue: _p0._0}),$Effects.none);
+         case "Viewport": return A2($Util._op["=>"],_U.update(model,{tooSmall: _U.cmp(_p0._0._0,1215) < 0 || _U.cmp(_p0._0._1,645) < 0}),$Effects.none);
          default: return A2($Util._op["=>"],model,$Effects.none);}
    });
+   var Viewport = function (a) {    return {ctor: "Viewport",_0: a};};
    var ExpandImage = function (a) {    return {ctor: "ExpandImage",_0: a};};
    var HoverIssue = function (a) {    return {ctor: "HoverIssue",_0: a};};
    var ExpandIssue = function (a) {    return {ctor: "ExpandIssue",_0: a};};
@@ -11022,11 +11163,31 @@ Elm.Update.make = function (_elm) {
                                ,ExpandIssue: ExpandIssue
                                ,HoverIssue: HoverIssue
                                ,ExpandImage: ExpandImage
+                               ,Viewport: Viewport
                                ,Tick: Tick
                                ,AnimateClosing: AnimateClosing
                                ,NoOp: NoOp
                                ,update: update
                                ,nextCurrentPhraseIndex: nextCurrentPhraseIndex};
+};
+Elm.Mobile = Elm.Mobile || {};
+Elm.Mobile.View = Elm.Mobile.View || {};
+Elm.Mobile.View.make = function (_elm) {
+   "use strict";
+   _elm.Mobile = _elm.Mobile || {};
+   _elm.Mobile.View = _elm.Mobile.View || {};
+   if (_elm.Mobile.View.values) return _elm.Mobile.View.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var view = A2($Html.span,_U.list([]),_U.list([]));
+   return _elm.Mobile.View.values = {_op: _op,view: view};
 };
 Elm.View = Elm.View || {};
 Elm.View.make = function (_elm) {
@@ -11042,6 +11203,7 @@ Elm.View.make = function (_elm) {
    $Issues$About = Elm.Issues.About.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
+   $Mobile$View = Elm.Mobile.View.make(_elm),
    $Model = Elm.Model.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
@@ -11225,7 +11387,9 @@ Elm.View.make = function (_elm) {
       return A2($List._op["::"],aboutMenu,issueMenuItems);
    });
    var view = F2(function (address,model) {
-      return A2($Html.div,_U.list([$Html$Attributes.id("wrapper")]),A2($List.append,A2(viewMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
+      return model.tooSmall ? $Mobile$View.view : A2($Html.div,
+      _U.list([$Html$Attributes.id("wrapper")]),
+      A2($List.append,A2(viewMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
    });
    return _elm.View.values = {_op: _op
                              ,view: view
@@ -11258,16 +11422,22 @@ Elm.Main.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Model = Elm.Model.make(_elm),
+   $Primer = Elm.Primer.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $StartApp = Elm.StartApp.make(_elm),
    $Task = Elm.Task.make(_elm),
    $Update = Elm.Update.make(_elm),
    $Util = Elm.Util.make(_elm),
-   $View = Elm.View.make(_elm);
+   $View = Elm.View.make(_elm),
+   $Window = Elm.Window.make(_elm);
    var _op = {};
-   var app = $StartApp.start({init: A2($Util._op["=>"],$Model.init,$Effects.tick($Update.Tick)),update: $Update.update,view: $View.view,inputs: _U.list([])});
+   var viewport = A2($Signal.map,$Update.Viewport,$Primer.prime($Window.dimensions));
+   var app = $StartApp.start({init: A2($Util._op["=>"],$Model.init,$Effects.tick($Update.Tick))
+                             ,update: $Update.update
+                             ,view: $View.view
+                             ,inputs: _U.list([viewport])});
    var main = app.html;
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
-   return _elm.Main.values = {_op: _op,app: app,main: main};
+   return _elm.Main.values = {_op: _op,app: app,main: main,viewport: viewport};
 };

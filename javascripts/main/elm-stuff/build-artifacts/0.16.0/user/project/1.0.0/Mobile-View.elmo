@@ -1,0 +1,19 @@
+Elm.Mobile = Elm.Mobile || {};
+Elm.Mobile.View = Elm.Mobile.View || {};
+Elm.Mobile.View.make = function (_elm) {
+   "use strict";
+   _elm.Mobile = _elm.Mobile || {};
+   _elm.Mobile.View = _elm.Mobile.View || {};
+   if (_elm.Mobile.View.values) return _elm.Mobile.View.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var view = A2($Html.span,_U.list([]),_U.list([]));
+   return _elm.Mobile.View.values = {_op: _op,view: view};
+};

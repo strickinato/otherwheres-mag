@@ -5,6 +5,7 @@ import Html.Events exposing (..)
 import Html.Attributes exposing (..)
 import Model exposing (Model, Issue, isShowingMenu, SpecificIssue(..), issueFromIssueType, IssueState(..), DisplayImage(..))
 import Update exposing (Action(..))
+import Mobile.View
 import Signal
 import Issues.About
 import String
@@ -12,12 +13,15 @@ import String
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-  div
-    [ id "wrapper" ]
-    (List.append
-      (viewMenu address model)
-      [ viewSelectedIssue address model ]
-    )
+  if model.tooSmall then
+    Mobile.View.view
+  else
+    div
+      [ id "wrapper" ]
+      (List.append
+        (viewMenu address model)
+        [ viewSelectedIssue address model ]
+      )
 
 
 viewMenu : Signal.Address Action -> Model -> List Html
