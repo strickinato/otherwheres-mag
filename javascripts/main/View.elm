@@ -3,7 +3,7 @@ module View (..) where
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Model exposing (Model, Issue, isShowingMenu, Source, SpecificIssue(..), issueFromIssueType, IssueState(..), DisplayImage(..))
+import Model exposing (Model, Issue, isShowingMenu, SpecificIssue(..), issueFromIssueType, IssueState(..), DisplayImage(..))
 import Update exposing (Action(..))
 import Signal
 import Issues.About
@@ -65,7 +65,7 @@ viewFromIssue displayImage imgHandler closeHandler issue =
       [ closeButton
       , div [ class "red-logo" ] []
       , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
-      , h3 [ class "issue-tagline" ] [ text issue.tagline ]
+      , h3 [ class "issue-tagline" ] [ text (String.toUpper issue.tagline) ]
       , (issueImageView issue.images displayImage imgHandler)
       , div
           [ class "issue-quote" ]

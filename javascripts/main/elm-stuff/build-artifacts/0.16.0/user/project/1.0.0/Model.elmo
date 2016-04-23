@@ -28,48 +28,44 @@ Elm.Model.make = function (_elm) {
    var None = {ctor: "None"};
    var About = {ctor: "About"};
    var TruthOrFiction = {ctor: "TruthOrFiction"};
-   var truthOrFiction = {id: 5
-                        ,issueType: TruthOrFiction
+   var truthOrFiction = {issueType: TruthOrFiction
                         ,symbol: "I"
                         ,$class: "volume1"
                         ,title: "Truth or Fiction"
-                        ,tagline: "Volume 1, an epic truth statement"
+                        ,tagline: "5 Mostly True Stories"
                         ,images: imagePaths("truth_or_fiction")
                         ,quote: "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
                         ,quoteCredit: "Joseph Bien-Kahn"
                         ,quoteStory: "Faces"
                         ,actionButtonText: "Sold Out"};
    var Travel = {ctor: "Travel"};
-   var travel = {id: 4
-                ,issueType: Travel
+   var travel = {issueType: Travel
                 ,symbol: "II"
                 ,$class: "volume2"
                 ,title: "Travel"
-                ,tagline: "Volume 1, an epic truth statement"
+                ,tagline: "7 Tales of Travel"
                 ,images: imagePaths("travel")
                 ,quote: "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
                 ,quoteCredit: "Adam Wilson"
                 ,quoteStory: "Belgium"
                 ,actionButtonText: "Sold Out"};
    var Comics = {ctor: "Comics"};
-   var comics = {id: 3
-                ,issueType: Comics
+   var comics = {issueType: Comics
                 ,symbol: "III"
                 ,$class: "volume3"
                 ,title: "Comics"
-                ,tagline: "Volume 1, an epic truth statement"
+                ,tagline: "5 Takes on the Comic"
                 ,images: imagePaths("comics")
                 ,quote: "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
                 ,quoteCredit: "Andrew \"Dirtman\" Hine"
                 ,quoteStory: "On Comics"
                 ,actionButtonText: "Sold Out"};
    var Disaster = {ctor: "Disaster"};
-   var disaster = {id: 2
-                  ,issueType: Disaster
+   var disaster = {issueType: Disaster
                   ,symbol: "IV"
                   ,$class: "volume4"
                   ,title: "Disaster"
-                  ,tagline: "6 STORIES OF PERSONAL DISASTERS"
+                  ,tagline: "6 Stories of Personal Disaster"
                   ,images: imagePaths("disaster")
                   ,quote: "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
                   ,quoteCredit: "Katie Wheeler-Dubin"
@@ -122,19 +118,16 @@ Elm.Model.make = function (_elm) {
                         return function (h) {
                            return function (i) {
                               return function (j) {
-                                 return function (k) {
-                                    return {id: a
-                                           ,issueType: b
-                                           ,symbol: c
-                                           ,$class: d
-                                           ,title: e
-                                           ,tagline: f
-                                           ,images: g
-                                           ,quote: h
-                                           ,quoteCredit: i
-                                           ,quoteStory: j
-                                           ,actionButtonText: k};
-                                 };
+                                 return {issueType: a
+                                        ,symbol: b
+                                        ,$class: c
+                                        ,title: d
+                                        ,tagline: e
+                                        ,images: f
+                                        ,quote: g
+                                        ,quoteCredit: h
+                                        ,quoteStory: i
+                                        ,actionButtonText: j};
                               };
                            };
                         };
