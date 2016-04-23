@@ -11164,7 +11164,7 @@ Elm.View.make = function (_elm) {
       var bigImageConstructor = function (source) {
          return A2($Html.div,
          _U.list([$Html$Attributes.$class("big-image-center-helper redified")]),
-         _U.list([A2($Html.img,_U.list([$Html$Attributes.src(source),$Html$Attributes.$class("big-image"),handler(displayImage)]),_U.list([]))]));
+         _U.list([A2($Html.img,_U.list([$Html$Attributes.src(source),$Html$Attributes.$class("big-image"),handler($Model.All)]),_U.list([]))]));
       };
       var allImages = function () {
          var _p6 = displayImage;

@@ -83,7 +83,7 @@ issueImageView images displayImage handler =
     bigImageConstructor source =
       div
         [ class "big-image-center-helper redified" ]
-        [ img [src source, class "big-image", handler displayImage ] [] ]
+        [ img [src source, class "big-image", handler All ] [] ]
             
     imageList =
       [ img [ src images.left, class "small", (handler Left) ] []
