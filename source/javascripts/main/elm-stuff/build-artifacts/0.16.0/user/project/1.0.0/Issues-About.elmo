@@ -18,7 +18,9 @@ Elm.Issues.About.make = function (_elm) {
    $String = Elm.String.make(_elm);
    var _op = {};
    var grey = "#979797";
-   var viewContactButton = A2($Html.button,_U.list([$Html$Attributes.$class("about-contact-button")]),_U.list([$Html.text("HIT US UP")]));
+   var viewContactButton = A2($Html.a,
+   _U.list([$Html$Attributes.$class("about-contact-link-button"),$Html$Attributes.href("mailto:jbienkhan@gmail.com")]),
+   _U.list([$Html.text("HIT US UP")]));
    var viewNextIssueInfo = A2($Html.div,
    _U.list([$Html$Attributes.$class("next-issue")]),
    _U.list([A2($Html.h3,_U.list([]),_U.list([$Html.text("UNDERTOW")]))
