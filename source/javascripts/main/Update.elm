@@ -1,7 +1,7 @@
 module Update (..) where
 
 import Effects exposing (Effects, tick)
-import Model exposing (Model, Issue, initialAnimation, resetTime, Source, SpecificIssue(..))
+import Model exposing (Model, Issue, initialAnimation, resetTime, Source, SpecificIssue(..), DisplayImage(..))
 import Util exposing ((=>))
 import Time exposing (Time, second)
 import Array
@@ -10,7 +10,7 @@ import Array
 type Action
   = ExpandIssue SpecificIssue
   | HoverIssue SpecificIssue
-  | ExpandImage (Maybe Source)
+  | ExpandImage DisplayImage
   | Tick Time
   | AnimateClosing Time
   | NoOp
@@ -59,6 +59,7 @@ update action model =
         if newElapsedTime > (second / 2.0) then
           { model
             | expandedIssue = None
+            , displayImage = All
             , closingAnimating = False
             , closingAnimationState = Nothing
           }
@@ -74,8 +75,8 @@ update action model =
           }
             => Effects.tick AnimateClosing
 
-    ExpandImage maybeSource ->
-      { model | maybeExpandedImage = maybeSource } => Effects.none
+    ExpandImage display ->
+      { model | displayImage = display } => Effects.none
 
     ExpandIssue expandedIssue ->
       case expandedIssue of

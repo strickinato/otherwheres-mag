@@ -100,11 +100,12 @@ h3
   letter-spacing: 3px
 
 =button-location
-  padding-top: 24px
-  padding-right: 24px
+  position: absolute
   cursor: pointer
   font-size: 42px
-  float: right
+  top: 24px
+  right: 24px
+  z-index: 5
 
 .close-button
   +button-location
@@ -114,13 +115,13 @@ h3
 
 .minimize-button
   +button-location
-  margin-top: 24px
-  -webkit-transform: rotate(135deg)
-  transform: rotate(135deg)
   color: $otherwheres-red
+  height: 25px
+  width: 24px
+  background-image: url('/assets/issues/collapse-arrow.png')
 
   &:before
-    content: "➡"
+    content: " "
 
 =beforeBackgroundImage($url)
   &:before
@@ -255,11 +256,22 @@ h3
     cursor: pointer
     height: 230px
 
+.big-image-center-helper
+  transition: all $animation-speed ease
+  height: 100%
+  width: 100%
+  position: absolute
+  display: table
+  padding-top: 24px
+  top: 0px
+  left: 0px
+
+  &:after
+    left: 0px
 
 .big-image
-  max-width: 98%
-  position: absolute
-  left: 1%
+  margin: 0 auto
+  max-width: 90%
+  display: table-cell
   cursor: pointer
-  top: 28px
 

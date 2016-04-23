@@ -3,7 +3,7 @@ module View (..) where
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Model exposing (Model, Issue, isShowingMenu, Source, SpecificIssue(..), issueFromIssueType, IssueState(..))
+import Model exposing (Model, Issue, isShowingMenu, Source, SpecificIssue(..), issueFromIssueType, IssueState(..), DisplayImage(..))
 import Update exposing (Action(..))
 import Signal
 import Issues.About
@@ -43,55 +43,79 @@ viewSelectedIssue address model =
 
     expandedIssue ->
       viewFromIssue
-        model.maybeExpandedImage
-        (\maybeImgSource -> onClick address (ExpandImage maybeImgSource))
+        model.displayImage
+        (\displayImage -> onClick address (ExpandImage displayImage))
         (closeHandler address)
         (issueFromIssueType expandedIssue)
 
 
-viewFromIssue : Maybe Source -> (Maybe Source -> Html.Attribute) -> Html.Attribute -> Issue -> Html
-viewFromIssue maybeSource imgHandler closeHandler issue =
+viewFromIssue : DisplayImage -> (DisplayImage -> Html.Attribute) -> Html.Attribute -> Issue -> Html
+viewFromIssue displayImage imgHandler closeHandler issue =
   let
-    unexpanded =
-      div
-        [ class ("issue-content") ]
-        [ div [ class "close-button", closeHandler ] []
-        , div [ class "red-logo" ] []
-        , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
-        , h3 [ class "issue-tagline" ] [ text issue.tagline ]
-        , (issueImageView issue.images imgHandler)
-        , div
-            [ class "issue-quote" ]
-            [ text issue.quote ]
-        , div
-            [ class "issue-quote-credit" ]
-            [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
-        , button [ class "issue-content-action-button" ] [ text (String.toUpper issue.actionButtonText) ] 
-        ]
+    (closeButton) =
+      case displayImage of
+        All -> 
+          div [ class "close-button", closeHandler ] []
+        _ ->
+          div [ class "minimize-button", imgHandler All ] []
 
-    expanded source =
-      div
-        [ class ("issue-content") ]
-        [ div [ class "minimize-button", imgHandler Nothing ] []
-        , img [ class "big-image", imgHandler Nothing, src source ] []
-        ]
   in
-    case maybeSource of
-      Just src ->
-        expanded src
+    div
+      [ class ("issue-content") ]
+      [ closeButton
+      , div [ class "red-logo" ] []
+      , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
+      , h3 [ class "issue-tagline" ] [ text issue.tagline ]
+      , (issueImageView issue.images displayImage imgHandler)
+      , div
+          [ class "issue-quote" ]
+          [ text issue.quote ]
+      , div
+          [ class "issue-quote-credit" ]
+          [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
+      , button [ class "issue-content-action-button" ] [ text (String.toUpper issue.actionButtonText) ] 
+      ]
 
-      Nothing ->
-        unexpanded
 
+issueImageView : Model.ImagePaths -> DisplayImage -> (DisplayImage -> Html.Attribute) -> Html
+issueImageView images displayImage handler =
+  let
+    bigImageConstructor source =
+      div
+        [ class "big-image-center-helper redified" ]
+        [ img [src source, class "big-image", handler displayImage ] [] ]
+            
+    imageList =
+      [ img [ src images.left, class "small", (handler Left) ] []
+      , img [ src images.middle, class "small", (handler Middle) ] []
+      , img [ src images.right, class "small", (handler Right) ] []
+      ]
 
-issueImageView : Model.ImagePaths -> (Maybe Source -> Html.Attribute) -> Html
-issueImageView ( img1, img2, img3 ) handler =
-  div
-    [ class "images" ]
-    [ img [ src img1, class "small", handler (Just img1) ] []
-    , img [ src img2, class "small", handler (Just img2) ] []
-    , img [ src img3, class "small", handler (Just img3) ] []
-    ]
+    allImages =
+      case displayImage of
+        All ->
+          imageList
+          
+        Left ->
+          (::)
+            (bigImageConstructor images.left)
+            imageList
+
+        Middle ->
+          (::)
+            (bigImageConstructor images.middle)
+            imageList
+                                  
+
+        Right ->
+          (::)
+            (bigImageConstructor images.right)
+            imageList
+
+  in
+    div
+      [ class "images" ]
+      allImages
 
 
 issueContentAttributes : List Html.Attribute
