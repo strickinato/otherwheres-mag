@@ -16,6 +16,7 @@ type alias Model =
   , closingAnimating : Bool
   , closingAnimationState : Maybe AnimationState
   , displayImage : DisplayImage
+  , tooSmall : Bool
   }
 
 
@@ -51,6 +52,7 @@ init =
   , closingAnimating = False
   , closingAnimationState = Nothing
   , displayImage = All
+  , tooSmall = False
   }
 
 

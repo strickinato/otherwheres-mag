@@ -11,6 +11,7 @@ type Action
   = ExpandIssue SpecificIssue
   | HoverIssue SpecificIssue
   | ExpandImage DisplayImage
+  | Viewport ( Int, Int )
   | Tick Time
   | AnimateClosing Time
   | NoOp
@@ -93,6 +94,10 @@ update action model =
 
     HoverIssue hoveredIssue ->
       { model | hoveredIssue = hoveredIssue } => Effects.none
+
+    Viewport ( width, height ) ->
+      { model | tooSmall = (width < 1215) || (height < 645) }
+        => Effects.none
 
     NoOp ->
       model => Effects.none

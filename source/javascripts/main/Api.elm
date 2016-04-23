@@ -6,6 +6,9 @@ import Json.Decode exposing (Value)
 
 import Util exposing ((=>))
 
+import Window
+import Primer
+
 import Model exposing (init, Model)
 import Update exposing (update, Action(..))
 import View exposing (view)
@@ -16,7 +19,7 @@ app =
         { init = init => Effects.tick Tick
         , update = update
         , view = view
-        , inputs = []
+        , inputs = [ viewport ]
         }
 
 main : Signal Html
@@ -27,3 +30,8 @@ main =
 port tasks : Signal (Task.Task Never ())
 port tasks =
     app.tasks
+
+       
+viewport : Signal Action
+viewport =
+  Signal.map Viewport (Primer.prime Window.dimensions)
