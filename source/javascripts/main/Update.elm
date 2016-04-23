@@ -96,7 +96,7 @@ update action model =
       { model | hoveredIssue = hoveredIssue } => Effects.none
 
     Viewport ( width, height ) ->
-      { model | tooSmall = (width < 1215) || (height < 850) }
+      { model | tooSmall = False }
         => Effects.none
 
     NoOp ->
