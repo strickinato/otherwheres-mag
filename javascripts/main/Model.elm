@@ -15,7 +15,7 @@ type alias Model =
   , phrases : Array String
   , closingAnimating : Bool
   , closingAnimationState : Maybe AnimationState
-  , maybeExpandedImage : Maybe Source
+  , displayImage : DisplayImage
   }
 
 
@@ -55,7 +55,7 @@ init =
   , phrases = otherwheresPhrases
   , closingAnimating = False
   , closingAnimationState = Nothing
-  , maybeExpandedImage = Nothing
+  , displayImage = All
   }
 
 
@@ -132,18 +132,22 @@ issueFromIssueType issueType =
     TruthOrFiction ->
       truthOrFiction
 
-      
     _ ->
       {- TODO Make default bad issue -}
       disaster
 
 
-
-
-
 type alias ImagePaths =
-  ( String, String, String )
+  { left : String
+  , middle : String
+  , right : String
+  }
 
+type DisplayImage
+  = All
+  | Left
+  | Middle
+  | Right
 
 imagePaths : String -> ImagePaths
 imagePaths issueFolder =
@@ -151,10 +155,10 @@ imagePaths issueFolder =
     imagePath =
       "/assets/issues/" ++ issueFolder ++ "/"
   in
-    ( imagePath ++ "img1.png"
-    , imagePath ++ "img2.png"
-    , imagePath ++ "img3.png"
-    )
+    { left = imagePath ++ "img1.png"
+    , middle = imagePath ++ "img2.png"
+    , right = imagePath ++ "img3.png"
+    }
 
 
 truthOrFiction : Issue

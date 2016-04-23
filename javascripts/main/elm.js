@@ -10774,11 +10774,15 @@ Elm.Model.make = function (_elm) {
    var isShowingMenu = function (model) {    var _p0 = model.expandedIssue;if (_p0.ctor === "None") {    return true;} else {    return false;}};
    var imagePaths = function (issueFolder) {
       var imagePath = A2($Basics._op["++"],"/assets/issues/",A2($Basics._op["++"],issueFolder,"/"));
-      return {ctor: "_Tuple3"
-             ,_0: A2($Basics._op["++"],imagePath,"img1.png")
-             ,_1: A2($Basics._op["++"],imagePath,"img2.png")
-             ,_2: A2($Basics._op["++"],imagePath,"img3.png")};
+      return {left: A2($Basics._op["++"],imagePath,"img1.png")
+             ,middle: A2($Basics._op["++"],imagePath,"img2.png")
+             ,right: A2($Basics._op["++"],imagePath,"img3.png")};
    };
+   var Right = {ctor: "Right"};
+   var Middle = {ctor: "Middle"};
+   var Left = {ctor: "Left"};
+   var All = {ctor: "All"};
+   var ImagePaths = F3(function (a,b,c) {    return {left: a,middle: b,right: c};});
    var None = {ctor: "None"};
    var About = {ctor: "About"};
    var TruthOrFiction = {ctor: "TruthOrFiction"};
@@ -10861,7 +10865,7 @@ Elm.Model.make = function (_elm) {
               ,phrases: otherwheresPhrases
               ,closingAnimating: false
               ,closingAnimationState: $Maybe.Nothing
-              ,maybeExpandedImage: $Maybe.Nothing};
+              ,displayImage: All};
    var Hidden = {ctor: "Hidden"};
    var Selected = {ctor: "Selected"};
    var Hovered = {ctor: "Hovered"};
@@ -10908,7 +10912,7 @@ Elm.Model.make = function (_elm) {
              ,phrases: f
              ,closingAnimating: g
              ,closingAnimationState: h
-             ,maybeExpandedImage: i};
+             ,displayImage: i};
    });
    return _elm.Model.values = {_op: _op
                               ,Model: Model
@@ -10931,6 +10935,11 @@ Elm.Model.make = function (_elm) {
                               ,About: About
                               ,None: None
                               ,issueFromIssueType: issueFromIssueType
+                              ,ImagePaths: ImagePaths
+                              ,All: All
+                              ,Left: Left
+                              ,Middle: Middle
+                              ,Right: Right
                               ,imagePaths: imagePaths
                               ,truthOrFiction: truthOrFiction
                               ,travel: travel
@@ -10986,11 +10995,11 @@ Elm.Update.make = function (_elm) {
                  }
            }();
            return _U.cmp(newElapsedTime,$Time.second / 2.0) > 0 ? A2($Util._op["=>"],
-           _U.update(model,{expandedIssue: $Model.None,closingAnimating: false,closingAnimationState: $Maybe.Nothing}),
+           _U.update(model,{expandedIssue: $Model.None,displayImage: $Model.All,closingAnimating: false,closingAnimationState: $Maybe.Nothing}),
            $Effects.none) : A2($Util._op["=>"],
            _U.update(model,{closingAnimating: true,closingAnimationState: $Maybe.Just({elapsedTime: newElapsedTime,prevClockTime: _p4})}),
            $Effects.tick(AnimateClosing));
-         case "ExpandImage": return A2($Util._op["=>"],_U.update(model,{maybeExpandedImage: _p0._0}),$Effects.none);
+         case "ExpandImage": return A2($Util._op["=>"],_U.update(model,{displayImage: _p0._0}),$Effects.none);
          case "ExpandIssue": var _p5 = _p0._0;
            if (_p5.ctor === "None") {
                  return A2($Util._op["=>"],model,$Effects.tick(AnimateClosing));
@@ -11148,57 +11157,63 @@ Elm.View.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "float",_1: "right"}]));
       return _U.list([$Html$Attributes.$class("issue-content"),styles]);
    }();
-   var issueImageView = F2(function (_p6,handler) {
-      var _p7 = _p6;
-      var _p10 = _p7._2;
-      var _p9 = _p7._1;
-      var _p8 = _p7._0;
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class("images")]),
-      _U.list([A2($Html.img,_U.list([$Html$Attributes.src(_p8),$Html$Attributes.$class("small"),handler($Maybe.Just(_p8))]),_U.list([]))
-              ,A2($Html.img,_U.list([$Html$Attributes.src(_p9),$Html$Attributes.$class("small"),handler($Maybe.Just(_p9))]),_U.list([]))
-              ,A2($Html.img,_U.list([$Html$Attributes.src(_p10),$Html$Attributes.$class("small"),handler($Maybe.Just(_p10))]),_U.list([]))]));
-   });
-   var viewFromIssue = F4(function (maybeSource,imgHandler,closeHandler,issue) {
-      var expanded = function (source) {
+   var issueImageView = F3(function (images,displayImage,handler) {
+      var imageList = _U.list([A2($Html.img,_U.list([$Html$Attributes.src(images.left),$Html$Attributes.$class("small"),handler($Model.Left)]),_U.list([]))
+                              ,A2($Html.img,_U.list([$Html$Attributes.src(images.middle),$Html$Attributes.$class("small"),handler($Model.Middle)]),_U.list([]))
+                              ,A2($Html.img,_U.list([$Html$Attributes.src(images.right),$Html$Attributes.$class("small"),handler($Model.Right)]),_U.list([]))]);
+      var bigImageConstructor = function (source) {
          return A2($Html.div,
-         _U.list([$Html$Attributes.$class("issue-content")]),
-         _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("minimize-button"),imgHandler($Maybe.Nothing)]),_U.list([]))
-                 ,A2($Html.img,_U.list([$Html$Attributes.$class("big-image"),imgHandler($Maybe.Nothing),$Html$Attributes.src(source)]),_U.list([]))]));
+         _U.list([$Html$Attributes.$class("big-image-center-helper redified")]),
+         _U.list([A2($Html.img,_U.list([$Html$Attributes.src(source),$Html$Attributes.$class("big-image"),handler(displayImage)]),_U.list([]))]));
       };
-      var unexpanded = A2($Html.div,
+      var allImages = function () {
+         var _p6 = displayImage;
+         switch (_p6.ctor)
+         {case "All": return imageList;
+            case "Left": return A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),bigImageConstructor(images.left),imageList);
+            case "Middle": return A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),bigImageConstructor(images.middle),imageList);
+            default: return A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),bigImageConstructor(images.right),imageList);}
+      }();
+      return A2($Html.div,_U.list([$Html$Attributes.$class("images")]),allImages);
+   });
+   var viewFromIssue = F4(function (displayImage,imgHandler,closeHandler,issue) {
+      var closeButton = function () {
+         var _p7 = displayImage;
+         if (_p7.ctor === "All") {
+               return A2($Html.div,_U.list([$Html$Attributes.$class("close-button"),closeHandler]),_U.list([]));
+            } else {
+               return A2($Html.div,_U.list([$Html$Attributes.$class("minimize-button"),imgHandler($Model.All)]),_U.list([]));
+            }
+      }();
+      return A2($Html.div,
       _U.list([$Html$Attributes.$class("issue-content")]),
-      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("close-button"),closeHandler]),_U.list([]))
+      _U.list([closeButton
               ,A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
               ,A2($Html.h3,
               _U.list([$Html$Attributes.$class("issue-number")]),
               _U.list([$Html.text(A2($Basics._op["++"],"VOLUME ",A2($Basics._op["++"],issue.symbol,":")))]))
               ,A2($Html.h3,_U.list([$Html$Attributes.$class("issue-tagline")]),_U.list([$Html.text(issue.tagline)]))
-              ,A2(issueImageView,issue.images,imgHandler)
+              ,A3(issueImageView,issue.images,displayImage,imgHandler)
               ,A2($Html.div,_U.list([$Html$Attributes.$class("issue-quote")]),_U.list([$Html.text(issue.quote)]))
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
               _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
-              ,A2($Html.button,_U.list([$Html$Attributes.$class("issue-content-action-button")]),_U.list([$Html.text(issue.actionButtonText)]))]));
-      var _p11 = maybeSource;
-      if (_p11.ctor === "Just") {
-            return expanded(_p11._0);
-         } else {
-            return unexpanded;
-         }
+              ,A2($Html.button,
+              _U.list([$Html$Attributes.$class("issue-content-action-button")]),
+              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
    });
    var viewSelectedIssue = F2(function (address,model) {
-      var _p12 = model.expandedIssue;
-      switch (_p12.ctor)
+      var _p8 = model.expandedIssue;
+      switch (_p8.ctor)
       {case "About": return A2($Issues$About.view,address,model);
          case "None": return A2($Html.span,_U.list([]),_U.list([]));
          default: return A4(viewFromIssue,
-           model.maybeExpandedImage,
-           function (maybeImgSource) {
-              return A2($Html$Events.onClick,address,$Update.ExpandImage(maybeImgSource));
+           model.displayImage,
+           function (displayImage) {
+              return A2($Html$Events.onClick,address,$Update.ExpandImage(displayImage));
            },
            closeHandler(address),
-           $Model.issueFromIssueType(_p12));}
+           $Model.issueFromIssueType(_p8));}
    });
    var viewMenu = F2(function (address,model) {
       var issueMenuItems = A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);

@@ -16,11 +16,15 @@ Elm.Model.make = function (_elm) {
    var isShowingMenu = function (model) {    var _p0 = model.expandedIssue;if (_p0.ctor === "None") {    return true;} else {    return false;}};
    var imagePaths = function (issueFolder) {
       var imagePath = A2($Basics._op["++"],"/assets/issues/",A2($Basics._op["++"],issueFolder,"/"));
-      return {ctor: "_Tuple3"
-             ,_0: A2($Basics._op["++"],imagePath,"img1.png")
-             ,_1: A2($Basics._op["++"],imagePath,"img2.png")
-             ,_2: A2($Basics._op["++"],imagePath,"img3.png")};
+      return {left: A2($Basics._op["++"],imagePath,"img1.png")
+             ,middle: A2($Basics._op["++"],imagePath,"img2.png")
+             ,right: A2($Basics._op["++"],imagePath,"img3.png")};
    };
+   var Right = {ctor: "Right"};
+   var Middle = {ctor: "Middle"};
+   var Left = {ctor: "Left"};
+   var All = {ctor: "All"};
+   var ImagePaths = F3(function (a,b,c) {    return {left: a,middle: b,right: c};});
    var None = {ctor: "None"};
    var About = {ctor: "About"};
    var TruthOrFiction = {ctor: "TruthOrFiction"};
@@ -103,7 +107,7 @@ Elm.Model.make = function (_elm) {
               ,phrases: otherwheresPhrases
               ,closingAnimating: false
               ,closingAnimationState: $Maybe.Nothing
-              ,maybeExpandedImage: $Maybe.Nothing};
+              ,displayImage: All};
    var Hidden = {ctor: "Hidden"};
    var Selected = {ctor: "Selected"};
    var Hovered = {ctor: "Hovered"};
@@ -150,7 +154,7 @@ Elm.Model.make = function (_elm) {
              ,phrases: f
              ,closingAnimating: g
              ,closingAnimationState: h
-             ,maybeExpandedImage: i};
+             ,displayImage: i};
    });
    return _elm.Model.values = {_op: _op
                               ,Model: Model
@@ -173,6 +177,11 @@ Elm.Model.make = function (_elm) {
                               ,About: About
                               ,None: None
                               ,issueFromIssueType: issueFromIssueType
+                              ,ImagePaths: ImagePaths
+                              ,All: All
+                              ,Left: Left
+                              ,Middle: Middle
+                              ,Right: Right
                               ,imagePaths: imagePaths
                               ,truthOrFiction: truthOrFiction
                               ,travel: travel

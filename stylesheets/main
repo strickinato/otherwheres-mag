@@ -107,26 +107,28 @@ h3 {
   letter-spacing: 3px; }
 
 .close-button {
-  padding-top: 24px;
-  padding-right: 24px;
+  position: absolute;
   cursor: pointer;
   font-size: 42px;
-  float: right; }
+  top: 24px;
+  right: 24px;
+  z-index: 5; }
   .close-button:before {
     content: "✗"; }
 
 .minimize-button {
-  padding-top: 24px;
-  padding-right: 24px;
+  position: absolute;
   cursor: pointer;
   font-size: 42px;
-  float: right;
-  margin-top: 24px;
-  -webkit-transform: rotate(135deg);
-  transform: rotate(135deg);
-  color: #9F2B22; }
+  top: 24px;
+  right: 24px;
+  z-index: 5;
+  color: #9F2B22;
+  height: 25px;
+  width: 24px;
+  background-image: url("/assets/issues/collapse-arrow.png"); }
   .minimize-button:before {
-    content: "➡"; }
+    content: " "; }
 
 .issue {
   transition: all 500ms ease;
@@ -174,7 +176,9 @@ h3 {
   .issue-content .red-logo {
     padding-top: 36px;
     margin: 0 auto;
-    margin-top: 32px; }
+    margin-top: 32px;
+    height: 71px;
+    width: 47px; }
 
 .issue-number {
   padding-top: 24px;
@@ -212,9 +216,25 @@ h3 {
   text-align: right;
   padding-right: 16px;
   letter-spacing: 3.3px;
-  color: #424242; }
+  color: #424242;
+  padding-bottom: 36px; }
   .issue-quote-credit:before {
     content: "—"; }
+
+.issue-content-action-button {
+  width: 210px;
+  height: 56px;
+  background-color: #9F2B22;
+  border-radius: 4px;
+  color: white;
+  font-family: BrandonGrotesqueBlack;
+  letter-spacing: 3px;
+  font-size: 16px;
+  border: 2px solid #9F2B22;
+  cursor: pointer; }
+  .issue-content-action-button:hover {
+    background-color: white;
+    color: #9F2B22; }
 
 .images {
   width: 100%;
@@ -226,9 +246,20 @@ h3 {
     cursor: pointer;
     height: 230px; }
 
-.big-image {
-  max-width: 98%;
+.big-image-center-helper {
+  transition: all 500ms ease;
+  height: 100%;
+  width: 100%;
   position: absolute;
-  left: 1%;
-  cursor: pointer;
-  top: 28px; }
+  display: table;
+  padding-top: 24px;
+  top: 0px;
+  left: 0px; }
+  .big-image-center-helper:after {
+    left: 0px; }
+
+.big-image {
+  margin: 0 auto;
+  max-width: 90%;
+  display: table-cell;
+  cursor: pointer; }
