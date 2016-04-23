@@ -90,8 +90,8 @@ viewNextIssueInfo =
 
 viewContactButton : Html
 viewContactButton =
-  button
-    [ class "about-contact-button" ]
+  a
+    [ class "about-contact-link-button", href "mailto:jbienkhan@gmail.com" ]
     [ text "HIT US UP" ]
 
 grey : String
