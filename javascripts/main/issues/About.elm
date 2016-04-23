@@ -29,30 +29,21 @@ view address model =
           , viewLiteIs
           , viewChangingText currentPhrase
           , viewLine
+          , viewCurrentlyAccepting
+          , viewNextIssueInfo
+          , viewContactButton
           ]
       ]
 
 
 viewHeader : Html
 viewHeader =
-  let
-    styles =
-      style
-        [ ( "padding-top", "96px" ) ]
-  in
-    h1 [ styles ] [ text ("OTHERWHERES") ]
+  h1 [ class "about-header" ] [ text ("OTHERWHERES") ]
 
 
 viewLiteIs : Html
 viewLiteIs =
-  let
-    styles =
-      style
-        [ ( "padding-top", "20px" )
-        , ( "font-size", "26px" )
-        ]
-  in
-    span [ styles, class "lite-italic" ] [ text "IS" ]
+  span [ class "lite-italic" ] [ text "IS" ]
 
 
 viewChangingText : String -> Html
@@ -81,6 +72,27 @@ viewLine =
   in
     div [ styles ] []
 
+
+viewCurrentlyAccepting : Html
+viewCurrentlyAccepting =
+  div
+    [ class "currently-accepting" ]
+    [ text "Currently Accepting Submissions for Volume V:" ]
+
+
+viewNextIssueInfo : Html
+viewNextIssueInfo =
+  div
+    [ class "next-issue" ]
+    [ h3 [] [ text "UNDERTOW" ]
+    , p [] [ text "Tell us your stories about rising tides, tugging currents, hidden traps, and whatever else \"undertow\" means to you" ]
+    ]
+
+viewContactButton : Html
+viewContactButton =
+  button
+    [ class "about-contact-button" ]
+    [ text "HIT US UP" ]
 
 grey : String
 grey =
