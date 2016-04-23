@@ -11179,7 +11179,9 @@ Elm.View.make = function (_elm) {
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
               _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
-              ,A2($Html.button,_U.list([$Html$Attributes.$class("issue-content-action-button")]),_U.list([$Html.text(issue.actionButtonText)]))]));
+              ,A2($Html.button,
+              _U.list([$Html$Attributes.$class("issue-content-action-button")]),
+              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
       var _p11 = maybeSource;
       if (_p11.ctor === "Just") {
             return expanded(_p11._0);

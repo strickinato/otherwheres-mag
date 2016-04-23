@@ -66,7 +66,7 @@ viewFromIssue maybeSource imgHandler closeHandler issue =
         , div
             [ class "issue-quote-credit" ]
             [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
-        , button [ class "issue-content-action-button" ] [ text issue.actionButtonText ]
+        , button [ class "issue-content-action-button" ] [ text (String.toUpper issue.actionButtonText) ] 
         ]
 
     expanded source =
