@@ -7,6 +7,15 @@ $large: 68px
 $medium: 26px
 $text: 16px
 
+=cta-button
+  width: 210px
+  height: 56px
+  font-family:  BrandonGrotesqueBlack
+  border-radius: 4px
+  letter-spacing: 3px
+  font-size: $text
+  cursor: pointer
+
 #wrapper
   height: 100%
   width: 100%
@@ -36,6 +45,24 @@ h3
   font-family: BrandonGrotesqueLightItalic, sans
   font-style: italic
   letter-spacing: 5px
+
+=medium-light-script
+  font-family: BrandonGrotesqueMediumItalic
+  letter-spacing: 0.5px
+  font-size: 16px
+
+.currently-accepting
+  +medium-light-script
+  padding-top: 42px
+
+.next-issue
+  p
+    +medium-light-script
+  padding-top: 16px
+
+  h3
+    margin-bottom: 16px
+
 
 .menu-issue-title
   font-family: BrandonGrotesqueBlack
@@ -146,8 +173,21 @@ h3
   overflow: hidden
   white-space: nowrap
 
+.about-header
+  padding-top: 96px
+
   p
     margin: 0px
+
+.about-contact-button
+  +cta-button
+  background-color: white
+  color: $otherwheres-red
+  border: solid 2px white
+
+  &:hover
+    background-color: rgba(0,0,0,0)
+    color: white
 
 .redified
   &:after
@@ -227,18 +267,11 @@ h3
   &:before
     content: "—"
 
-
 .issue-content-action-button
-  width: 210px
-  height: 56px
+  +cta-button
   background-color: $otherwheres-red
-  border-radius: 4px
   color: white
-  font-family:  BrandonGrotesqueBlack
-  letter-spacing: 3px
-  font-size: $text
   border: 2px solid $otherwheres-red
-  cursor: pointer
 
   &:hover
     background-color: white

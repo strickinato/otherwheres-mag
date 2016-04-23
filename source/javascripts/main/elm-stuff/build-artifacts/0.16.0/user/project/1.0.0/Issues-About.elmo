@@ -18,6 +18,16 @@ Elm.Issues.About.make = function (_elm) {
    $String = Elm.String.make(_elm);
    var _op = {};
    var grey = "#979797";
+   var viewContactButton = A2($Html.button,_U.list([$Html$Attributes.$class("about-contact-button")]),_U.list([$Html.text("HIT US UP")]));
+   var viewNextIssueInfo = A2($Html.div,
+   _U.list([$Html$Attributes.$class("next-issue")]),
+   _U.list([A2($Html.h3,_U.list([]),_U.list([$Html.text("UNDERTOW")]))
+           ,A2($Html.p,
+           _U.list([]),
+           _U.list([$Html.text("Tell us your stories about rising tides, tugging currents, hidden traps, and whatever else \"undertow\" means to you")]))]));
+   var viewCurrentlyAccepting = A2($Html.div,
+   _U.list([$Html$Attributes.$class("currently-accepting")]),
+   _U.list([$Html.text("Currently Accepting Submissions for Volume V:")]));
    var viewLine = function () {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "border",_1: A2($Basics._op["++"],"1px solid ",grey)}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "0px"}
@@ -31,14 +41,8 @@ Elm.Issues.About.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "padding-bottom",_1: "8px"}]));
       return A2($Html.h3,_U.list([styles]),_U.list([$Html.text($String.toUpper(currentText))]));
    };
-   var viewLiteIs = function () {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "padding-top",_1: "20px"},{ctor: "_Tuple2",_0: "font-size",_1: "26px"}]));
-      return A2($Html.span,_U.list([styles,$Html$Attributes.$class("lite-italic")]),_U.list([$Html.text("IS")]));
-   }();
-   var viewHeader = function () {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "padding-top",_1: "96px"}]));
-      return A2($Html.h1,_U.list([styles]),_U.list([$Html.text("OTHERWHERES")]));
-   }();
+   var viewLiteIs = A2($Html.span,_U.list([$Html$Attributes.$class("lite-italic")]),_U.list([$Html.text("IS")]));
+   var viewHeader = A2($Html.h1,_U.list([$Html$Attributes.$class("about-header")]),_U.list([$Html.text("OTHERWHERES")]));
    var view = F2(function (address,model) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-image",_1: "url(assets/issues/about/bg.png)"}
                                                   ,{ctor: "_Tuple2",_0: "background-size",_1: "cover"}
@@ -49,7 +53,9 @@ Elm.Issues.About.make = function (_elm) {
       var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("issue-content")]),
-      _U.list([A2($Html.div,_U.list([styles]),_U.list([viewHeader,viewLiteIs,viewChangingText(currentPhrase),viewLine]))]));
+      _U.list([A2($Html.div,
+      _U.list([styles]),
+      _U.list([viewHeader,viewLiteIs,viewChangingText(currentPhrase),viewLine,viewCurrentlyAccepting,viewNextIssueInfo,viewContactButton]))]));
    });
    return _elm.Issues.About.values = {_op: _op
                                      ,view: view
@@ -57,5 +63,8 @@ Elm.Issues.About.make = function (_elm) {
                                      ,viewLiteIs: viewLiteIs
                                      ,viewChangingText: viewChangingText
                                      ,viewLine: viewLine
+                                     ,viewCurrentlyAccepting: viewCurrentlyAccepting
+                                     ,viewNextIssueInfo: viewNextIssueInfo
+                                     ,viewContactButton: viewContactButton
                                      ,grey: grey};
 };
