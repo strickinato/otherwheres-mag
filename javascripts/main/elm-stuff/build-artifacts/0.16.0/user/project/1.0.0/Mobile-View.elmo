@@ -22,8 +22,12 @@ Elm.Mobile.View.make = function (_elm) {
            ,A2($Html.div,
            _U.list([$Html$Attributes.$class("tag-line-text")]),
            _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("{ mostly } true")])),A2($Html.p,_U.list([]),_U.list([$Html.text("stories")]))]))
-           ,A2($Html.p,_U.list([]),_U.list([$Html.text("This screen is hella small")]))
-           ,A2($Html.p,_U.list([]),_U.list([$Html.text("We\'re currently working hard on a version of our site that works well on screens like this one. ")]))
-           ,A2($Html.p,_U.list([]),_U.list([$Html.text("Until then, check us out on a computer (or make your browser bigger)")]))]));
+           ,A2($Html.div,
+           _U.list([$Html$Attributes.$class("mobile-explanatory-text")]),
+           _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("This screen is hella small")]))
+                   ,A2($Html.p,
+                   _U.list([]),
+                   _U.list([$Html.text("We\'re currently working hard on a version of our site that works well on screens like this one. ")]))
+                   ,A2($Html.p,_U.list([]),_U.list([$Html.text("Until then, check us out on your computer (or make your browser bigger).")]))]))]));
    return _elm.Mobile.View.values = {_op: _op,view: view};
 };

@@ -30,14 +30,17 @@ html, body {
   src: url(../assets/branding/fonts/brandon_medium_italic.otf); }
 #mobile-wrapper {
   margin: 0 auto;
-  width: 40%;
-  margin-top: 200px;
+  width: 100%;
+  margin-top: 100px;
   text-align: center;
   font-family: BrandonGrotesque; }
   #mobile-wrapper .red-logo {
     margin: 0 auto; }
   #mobile-wrapper .tag-line-text {
     margin-bottom: 42px; }
+  #mobile-wrapper .mobile-explanatory-text {
+    margin: 0 auto;
+    width: 50%; }
 
 #wrapper {
   height: 100%;
