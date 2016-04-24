@@ -1,7 +1,7 @@
 module Update (..) where
 
 import Effects exposing (Effects, tick)
-import Model exposing (Model, Issue, initialAnimation, resetTime, SpecificIssue(..), DisplayImage(..))
+import Model exposing (Model, Issue, initialAnimation, resetTime, SpecificIssue(..), DisplayImage(..), Screen(..))
 import Util exposing ((=>))
 import Time exposing (Time, second)
 import Array
@@ -96,8 +96,18 @@ update action model =
       { model | hoveredIssue = hoveredIssue } => Effects.none
 
     Viewport ( width, height ) ->
-      { model | tooSmall = False }
-        => Effects.none
+      let
+        screenType =
+          if (width > 1250) then
+            Big
+          else if (width > 1023 ) then
+            Medium
+          else
+            TooSmall
+          
+      in
+        { model | screen = screenType }
+          => Effects.none
 
     NoOp ->
       model => Effects.none

@@ -95,6 +95,10 @@ Elm.Model.make = function (_elm) {
    var resetTime = function (currentAnimationState) {    return {prevClockTime: currentAnimationState.prevClockTime,elapsedTime: 0 - 2.0};};
    var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0 - 2.0};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
+   var midScreen = function (model) {    var _p2 = model.screen;if (_p2.ctor === "Medium") {    return true;} else {    return false;}};
+   var TooSmall = {ctor: "TooSmall"};
+   var Medium = {ctor: "Medium"};
+   var Big = {ctor: "Big"};
    var init = {issues: allIssues
               ,expandedIssue: None
               ,hoveredIssue: None
@@ -104,7 +108,7 @@ Elm.Model.make = function (_elm) {
               ,closingAnimating: false
               ,closingAnimationState: $Maybe.Nothing
               ,displayImage: All
-              ,tooSmall: false};
+              ,screen: Big};
    var Hidden = {ctor: "Hidden"};
    var Selected = {ctor: "Selected"};
    var Hovered = {ctor: "Hovered"};
@@ -158,7 +162,7 @@ Elm.Model.make = function (_elm) {
                                         ,closingAnimating: g
                                         ,closingAnimationState: h
                                         ,displayImage: i
-                                        ,tooSmall: j};
+                                        ,screen: j};
                               };
                            };
                         };
@@ -176,6 +180,10 @@ Elm.Model.make = function (_elm) {
                               ,Hovered: Hovered
                               ,Selected: Selected
                               ,Hidden: Hidden
+                              ,Big: Big
+                              ,Medium: Medium
+                              ,TooSmall: TooSmall
+                              ,midScreen: midScreen
                               ,init: init
                               ,AnimationState: AnimationState
                               ,initialAnimation: initialAnimation
