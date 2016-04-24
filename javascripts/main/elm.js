@@ -11152,7 +11152,7 @@ Elm.Update.make = function (_elm) {
                  $Effects.none);
               }
          case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssue: _p0._0}),$Effects.none);
-         case "Viewport": return A2($Util._op["=>"],_U.update(model,{tooSmall: _U.cmp(_p0._0._0,1215) < 0 || _U.cmp(_p0._0._1,645) < 0}),$Effects.none);
+         case "Viewport": return A2($Util._op["=>"],_U.update(model,{tooSmall: false}),$Effects.none);
          default: return A2($Util._op["=>"],model,$Effects.none);}
    });
    var Viewport = function (a) {    return {ctor: "Viewport",_0: a};};
