@@ -11196,12 +11196,22 @@ Elm.Mobile.View.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var view = A2($Html.span,_U.list([]),_U.list([]));
+   var view = A2($Html.div,
+   _U.list([$Html$Attributes.id("mobile-wrapper")]),
+   _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([]))
+           ,A2($Html.div,_U.list([$Html$Attributes.$class("logo-text")]),_U.list([$Html.text("OTHERWHERES")]))
+           ,A2($Html.div,
+           _U.list([$Html$Attributes.$class("tag-line-text")]),
+           _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("{ mostly } true")])),A2($Html.p,_U.list([]),_U.list([$Html.text("stories")]))]))
+           ,A2($Html.p,_U.list([]),_U.list([$Html.text("This screen is hella small")]))
+           ,A2($Html.p,_U.list([]),_U.list([$Html.text("We\'re currently working hard on a version of our site that works well on screens like this one. ")]))
+           ,A2($Html.p,_U.list([]),_U.list([$Html.text("Until then, check us out on a computer (or make your browser bigger)")]))]));
    return _elm.Mobile.View.values = {_op: _op,view: view};
 };
 Elm.View = Elm.View || {};
