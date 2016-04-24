@@ -87,6 +87,8 @@ Elm.View.make = function (_elm) {
       return A2($Html.section,A2($List.append,handlers,attributes),_U.list([A2(viewMenuInner,model,issue)]));
    });
    var viewAboutMenuItem = F2(function (address,model) {
+      var logoTextClasses = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "logo-text",_1: true}
+                                                               ,{ctor: "_Tuple2",_0: "mid-screen",_1: $Model.midScreen(model)}]));
       var logoAttributes = F2(function (name,link) {
          return _U.list([$Html$Attributes.$class(name),$Html$Attributes.href(link),$Html$Attributes.target("_blank")]);
       });
@@ -121,7 +123,7 @@ Elm.View.make = function (_elm) {
       _U.list([A2($Html.div,
       _U.list([innerStyle]),
       _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([logos]))
-              ,A2($Html.div,_U.list([$Html$Attributes.$class("logo-text")]),_U.list([$Html.text("OTHERWHERES")]))
+              ,A2($Html.div,_U.list([logoTextClasses]),_U.list([$Html.text("OTHERWHERES")]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("tag-line-text")]),subText)]))]));
    });
    var issueContentAttributes = function () {
@@ -196,9 +198,14 @@ Elm.View.make = function (_elm) {
       return A2($List._op["::"],aboutMenu,issueMenuItems);
    });
    var view = F2(function (address,model) {
-      return model.tooSmall ? $Mobile$View.view : A2($Html.div,
-      _U.list([$Html$Attributes.id("wrapper")]),
-      A2($List.append,A2(viewMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
+      var _p9 = model.screen;
+      if (_p9.ctor === "TooSmall") {
+            return $Mobile$View.view;
+         } else {
+            return A2($Html.div,
+            _U.list([$Html$Attributes.id("wrapper")]),
+            A2($List.append,A2(viewMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
+         }
    });
    return _elm.View.values = {_op: _op
                              ,view: view

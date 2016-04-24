@@ -10758,78 +10758,6 @@ Elm.StartApp.make = function (_elm) {
    var Config = F4(function (a,b,c,d) {    return {init: a,update: b,view: c,inputs: d};});
    return _elm.StartApp.values = {_op: _op,start: start,Config: Config,App: App};
 };
-Elm.Issues = Elm.Issues || {};
-Elm.Issues.About = Elm.Issues.About || {};
-Elm.Issues.About.make = function (_elm) {
-   "use strict";
-   _elm.Issues = _elm.Issues || {};
-   _elm.Issues.About = _elm.Issues.About || {};
-   if (_elm.Issues.About.values) return _elm.Issues.About.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Array = Elm.Array.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm);
-   var _op = {};
-   var grey = "#979797";
-   var viewContactButton = A2($Html.a,
-   _U.list([$Html$Attributes.$class("about-contact-link-button"),$Html$Attributes.href("mailto:jbienkhan@gmail.com")]),
-   _U.list([$Html.text("HIT US UP")]));
-   var viewNextIssueInfo = A2($Html.div,
-   _U.list([$Html$Attributes.$class("next-issue")]),
-   _U.list([A2($Html.h3,_U.list([]),_U.list([$Html.text("UNDERTOW")]))
-           ,A2($Html.p,
-           _U.list([]),
-           _U.list([$Html.text("Tell us your stories about rising tides, tugging currents, hidden traps, and whatever else \"undertow\" means to you")]))]));
-   var viewCurrentlyAccepting = A2($Html.div,
-   _U.list([$Html$Attributes.$class("currently-accepting")]),
-   _U.list([$Html.text("Currently Accepting Submissions for Volume V:")]));
-   var viewLine = function () {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "border",_1: A2($Basics._op["++"],"1px solid ",grey)}
-                                                  ,{ctor: "_Tuple2",_0: "height",_1: "0px"}
-                                                  ,{ctor: "_Tuple2",_0: "width",_1: "80%"}
-                                                  ,{ctor: "_Tuple2",_0: "margin",_1: "0 auto"}]));
-      return A2($Html.div,_U.list([styles]),_U.list([]));
-   }();
-   var viewChangingText = function (currentText) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "padding-top",_1: "20px"}
-                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "26px"}
-                                                  ,{ctor: "_Tuple2",_0: "padding-bottom",_1: "8px"}]));
-      return A2($Html.h3,_U.list([styles]),_U.list([$Html.text($String.toUpper(currentText))]));
-   };
-   var viewLiteIs = A2($Html.span,_U.list([$Html$Attributes.$class("lite-italic")]),_U.list([$Html.text("IS")]));
-   var viewHeader = A2($Html.h1,_U.list([$Html$Attributes.$class("about-header")]),_U.list([$Html.text("OTHERWHERES")]));
-   var view = F2(function (address,model) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-image",_1: "url(assets/issues/about/bg.png)"}
-                                                  ,{ctor: "_Tuple2",_0: "background-size",_1: "cover"}
-                                                  ,{ctor: "_Tuple2",_0: "background-position",_1: "bottom"}
-                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
-                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
-                                                  ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
-      var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class("issue-content")]),
-      _U.list([A2($Html.div,
-      _U.list([styles]),
-      _U.list([viewHeader,viewLiteIs,viewChangingText(currentPhrase),viewLine,viewCurrentlyAccepting,viewNextIssueInfo,viewContactButton]))]));
-   });
-   return _elm.Issues.About.values = {_op: _op
-                                     ,view: view
-                                     ,viewHeader: viewHeader
-                                     ,viewLiteIs: viewLiteIs
-                                     ,viewChangingText: viewChangingText
-                                     ,viewLine: viewLine
-                                     ,viewCurrentlyAccepting: viewCurrentlyAccepting
-                                     ,viewNextIssueInfo: viewNextIssueInfo
-                                     ,viewContactButton: viewContactButton
-                                     ,grey: grey};
-};
 Elm.Util = Elm.Util || {};
 Elm.Util.make = function (_elm) {
    "use strict";
@@ -10846,45 +10774,6 @@ Elm.Util.make = function (_elm) {
    _op["?=="] = F2(function (item,maybeItem) {    var _p0 = maybeItem;if (_p0.ctor === "Just") {    return _U.eq(item,_p0._0);} else {    return false;}});
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    return _elm.Util.values = {_op: _op};
-};
-// adapted from
-// https://github.com/coreytrampe/elm-signal-primer
-
-Elm.Native.Primer = Elm.Native.Primer || {};
-Elm.Native.Primer.make = function(elm) {
-    elm.Native = elm.Native || {};
-    elm.Native.Primer = elm.Native.Primer || {};
-    if (elm.Native.Primer.values) return elm.Native.Primer.values;
-
-    var NS = Elm.Native.Signal.make(elm);
-
-    return elm.Native.Primer.values = {
-        prime: function(sig){
-            setTimeout(function(){
-                elm.notify(sig.id, sig.value)
-            }, 1);
-
-            return sig;
-        }
-    };
-};
-
-Elm.Primer = Elm.Primer || {};
-Elm.Primer.make = function (_elm) {
-   "use strict";
-   _elm.Primer = _elm.Primer || {};
-   if (_elm.Primer.values) return _elm.Primer.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Native$Primer = Elm.Native.Primer.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var prime = $Native$Primer.prime;
-   return _elm.Primer.values = {_op: _op,prime: prime};
 };
 Elm.Model = Elm.Model || {};
 Elm.Model.make = function (_elm) {
@@ -10983,6 +10872,10 @@ Elm.Model.make = function (_elm) {
    var resetTime = function (currentAnimationState) {    return {prevClockTime: currentAnimationState.prevClockTime,elapsedTime: 0 - 2.0};};
    var initialAnimation = {prevClockTime: 0.0,elapsedTime: 0 - 2.0};
    var AnimationState = F2(function (a,b) {    return {prevClockTime: a,elapsedTime: b};});
+   var midScreen = function (model) {    var _p2 = model.screen;if (_p2.ctor === "Medium") {    return true;} else {    return false;}};
+   var TooSmall = {ctor: "TooSmall"};
+   var Medium = {ctor: "Medium"};
+   var Big = {ctor: "Big"};
    var init = {issues: allIssues
               ,expandedIssue: None
               ,hoveredIssue: None
@@ -10992,7 +10885,7 @@ Elm.Model.make = function (_elm) {
               ,closingAnimating: false
               ,closingAnimationState: $Maybe.Nothing
               ,displayImage: All
-              ,tooSmall: false};
+              ,screen: Big};
    var Hidden = {ctor: "Hidden"};
    var Selected = {ctor: "Selected"};
    var Hovered = {ctor: "Hovered"};
@@ -11046,7 +10939,7 @@ Elm.Model.make = function (_elm) {
                                         ,closingAnimating: g
                                         ,closingAnimationState: h
                                         ,displayImage: i
-                                        ,tooSmall: j};
+                                        ,screen: j};
                               };
                            };
                         };
@@ -11064,6 +10957,10 @@ Elm.Model.make = function (_elm) {
                               ,Hovered: Hovered
                               ,Selected: Selected
                               ,Hidden: Hidden
+                              ,Big: Big
+                              ,Medium: Medium
+                              ,TooSmall: TooSmall
+                              ,midScreen: midScreen
                               ,init: init
                               ,AnimationState: AnimationState
                               ,initialAnimation: initialAnimation
@@ -11089,6 +10986,122 @@ Elm.Model.make = function (_elm) {
                               ,comics: comics
                               ,disaster: disaster
                               ,isShowingMenu: isShowingMenu};
+};
+Elm.Issues = Elm.Issues || {};
+Elm.Issues.About = Elm.Issues.About || {};
+Elm.Issues.About.make = function (_elm) {
+   "use strict";
+   _elm.Issues = _elm.Issues || {};
+   _elm.Issues.About = _elm.Issues.About || {};
+   if (_elm.Issues.About.values) return _elm.Issues.About.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Array = Elm.Array.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Model = Elm.Model.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var grey = "#979797";
+   var viewContactButton = A2($Html.a,
+   _U.list([$Html$Attributes.$class("about-contact-link-button"),$Html$Attributes.href("mailto:jbienkhan@gmail.com")]),
+   _U.list([$Html.text("HIT US UP")]));
+   var viewNextIssueInfo = A2($Html.div,
+   _U.list([$Html$Attributes.$class("next-issue")]),
+   _U.list([A2($Html.h3,_U.list([]),_U.list([$Html.text("UNDERTOW")]))
+           ,A2($Html.p,
+           _U.list([]),
+           _U.list([$Html.text("Tell us your stories about rising tides, tugging currents, hidden traps, and whatever else \"undertow\" means to you")]))]));
+   var viewCurrentlyAccepting = A2($Html.div,
+   _U.list([$Html$Attributes.$class("currently-accepting")]),
+   _U.list([$Html.text("Currently Accepting Submissions for Volume V:")]));
+   var viewLine = function () {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "border",_1: A2($Basics._op["++"],"1px solid ",grey)}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "0px"}
+                                                  ,{ctor: "_Tuple2",_0: "width",_1: "80%"}
+                                                  ,{ctor: "_Tuple2",_0: "margin",_1: "0 auto"}]));
+      return A2($Html.div,_U.list([styles]),_U.list([]));
+   }();
+   var viewChangingText = function (currentText) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "padding-top",_1: "20px"}
+                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "26px"}
+                                                  ,{ctor: "_Tuple2",_0: "padding-bottom",_1: "8px"}]));
+      return A2($Html.h3,_U.list([styles]),_U.list([$Html.text($String.toUpper(currentText))]));
+   };
+   var viewLiteIs = A2($Html.span,_U.list([$Html$Attributes.$class("lite-italic")]),_U.list([$Html.text("IS")]));
+   var viewHeader = function (model) {
+      var classes = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "about-header",_1: true}
+                                                       ,{ctor: "_Tuple2",_0: "mid-screen",_1: $Model.midScreen(model)}]));
+      return A2($Html.h1,_U.list([classes]),_U.list([$Html.text("OTHERWHERES")]));
+   };
+   var view = F2(function (address,model) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-image",_1: "url(assets/issues/about/bg.png)"}
+                                                  ,{ctor: "_Tuple2",_0: "background-size",_1: "cover"}
+                                                  ,{ctor: "_Tuple2",_0: "background-position",_1: "bottom"}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
+                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
+                                                  ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
+      var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("issue-content")]),
+      _U.list([A2($Html.div,
+      _U.list([styles]),
+      _U.list([viewHeader(model),viewLiteIs,viewChangingText(currentPhrase),viewLine,viewCurrentlyAccepting,viewNextIssueInfo,viewContactButton]))]));
+   });
+   return _elm.Issues.About.values = {_op: _op
+                                     ,view: view
+                                     ,viewHeader: viewHeader
+                                     ,viewLiteIs: viewLiteIs
+                                     ,viewChangingText: viewChangingText
+                                     ,viewLine: viewLine
+                                     ,viewCurrentlyAccepting: viewCurrentlyAccepting
+                                     ,viewNextIssueInfo: viewNextIssueInfo
+                                     ,viewContactButton: viewContactButton
+                                     ,grey: grey};
+};
+// adapted from
+// https://github.com/coreytrampe/elm-signal-primer
+
+Elm.Native.Primer = Elm.Native.Primer || {};
+Elm.Native.Primer.make = function(elm) {
+    elm.Native = elm.Native || {};
+    elm.Native.Primer = elm.Native.Primer || {};
+    if (elm.Native.Primer.values) return elm.Native.Primer.values;
+
+    var NS = Elm.Native.Signal.make(elm);
+
+    return elm.Native.Primer.values = {
+        prime: function(sig){
+            setTimeout(function(){
+                elm.notify(sig.id, sig.value)
+            }, 1);
+
+            return sig;
+        }
+    };
+};
+
+Elm.Primer = Elm.Primer || {};
+Elm.Primer.make = function (_elm) {
+   "use strict";
+   _elm.Primer = _elm.Primer || {};
+   if (_elm.Primer.values) return _elm.Primer.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Native$Primer = Elm.Native.Primer.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var prime = $Native$Primer.prime;
+   return _elm.Primer.values = {_op: _op,prime: prime};
 };
 Elm.Update = Elm.Update || {};
 Elm.Update.make = function (_elm) {
@@ -11152,7 +11165,9 @@ Elm.Update.make = function (_elm) {
                  $Effects.none);
               }
          case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssue: _p0._0}),$Effects.none);
-         case "Viewport": return A2($Util._op["=>"],_U.update(model,{tooSmall: false}),$Effects.none);
+         case "Viewport": var _p6 = _p0._0._0;
+           var screenType = _U.cmp(_p6,1250) > 0 ? $Model.Big : _U.cmp(_p6,1023) > 0 ? $Model.Medium : $Model.TooSmall;
+           return A2($Util._op["=>"],_U.update(model,{screen: screenType}),$Effects.none);
          default: return A2($Util._op["=>"],model,$Effects.none);}
    });
    var Viewport = function (a) {    return {ctor: "Viewport",_0: a};};
@@ -11278,6 +11293,8 @@ Elm.View.make = function (_elm) {
       return A2($Html.section,A2($List.append,handlers,attributes),_U.list([A2(viewMenuInner,model,issue)]));
    });
    var viewAboutMenuItem = F2(function (address,model) {
+      var logoTextClasses = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "logo-text",_1: true}
+                                                               ,{ctor: "_Tuple2",_0: "mid-screen",_1: $Model.midScreen(model)}]));
       var logoAttributes = F2(function (name,link) {
          return _U.list([$Html$Attributes.$class(name),$Html$Attributes.href(link),$Html$Attributes.target("_blank")]);
       });
@@ -11312,7 +11329,7 @@ Elm.View.make = function (_elm) {
       _U.list([A2($Html.div,
       _U.list([innerStyle]),
       _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([logos]))
-              ,A2($Html.div,_U.list([$Html$Attributes.$class("logo-text")]),_U.list([$Html.text("OTHERWHERES")]))
+              ,A2($Html.div,_U.list([logoTextClasses]),_U.list([$Html.text("OTHERWHERES")]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("tag-line-text")]),subText)]))]));
    });
    var issueContentAttributes = function () {
@@ -11387,9 +11404,14 @@ Elm.View.make = function (_elm) {
       return A2($List._op["::"],aboutMenu,issueMenuItems);
    });
    var view = F2(function (address,model) {
-      return model.tooSmall ? $Mobile$View.view : A2($Html.div,
-      _U.list([$Html$Attributes.id("wrapper")]),
-      A2($List.append,A2(viewMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
+      var _p9 = model.screen;
+      if (_p9.ctor === "TooSmall") {
+            return $Mobile$View.view;
+         } else {
+            return A2($Html.div,
+            _U.list([$Html$Attributes.id("wrapper")]),
+            A2($List.append,A2(viewMenu,address,model),_U.list([A2(viewSelectedIssue,address,model)])));
+         }
    });
    return _elm.View.values = {_op: _op
                              ,view: view

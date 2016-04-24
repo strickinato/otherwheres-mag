@@ -47,6 +47,12 @@ h1 {
   letter-spacing: 16px;
   font-family: BrandonGrotesqueBold; }
 
+h1.mid-screen {
+  font-size: 68px; }
+
+.mid-screen.logo-text {
+  font-size: 18px; }
+
 h3 {
   font-size: 26px;
   letter-spacing: 5px;

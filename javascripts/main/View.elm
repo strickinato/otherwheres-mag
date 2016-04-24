@@ -3,7 +3,7 @@ module View (..) where
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Model exposing (Model, Issue, isShowingMenu, SpecificIssue(..), issueFromIssueType, IssueState(..), DisplayImage(..))
+import Model exposing (Model, Issue, isShowingMenu, midScreen, SpecificIssue(..), issueFromIssueType, IssueState(..), DisplayImage(..), Screen(..))
 import Update exposing (Action(..))
 import Mobile.View
 import Signal
@@ -13,15 +13,16 @@ import String
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-  if model.tooSmall then
-    Mobile.View.view
-  else
-    div
-      [ id "wrapper" ]
-      (List.append
-        (viewMenu address model)
-        [ viewSelectedIssue address model ]
-      )
+  case model.screen of
+    TooSmall ->
+      Mobile.View.view
+    _ ->
+      div
+        [ id "wrapper" ]
+        (List.append
+          (viewMenu address model)
+          [ viewSelectedIssue address model ]
+        )
 
 
 viewMenu : Signal.Address Action -> Model -> List Html
@@ -176,6 +177,12 @@ viewAboutMenuItem address model =
         _ ->
           "0"
 
+    logoTextClasses =
+      classList
+        [("logo-text", True)
+        ,("mid-screen", midScreen model)
+        ]
+
     subText =
       case issueState of
         MenuItem ->
@@ -201,7 +208,7 @@ viewAboutMenuItem address model =
           [ div
               [ class "red-logo" ]
               [ logos ]
-          , div [ class "logo-text" ] [ text "OTHERWHERES" ]
+          , div [ logoTextClasses ] [ text "OTHERWHERES" ]
           , div
               [ class "tag-line-text" ]
               subText

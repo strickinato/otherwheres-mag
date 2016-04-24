@@ -16,7 +16,7 @@ type alias Model =
   , closingAnimating : Bool
   , closingAnimationState : Maybe AnimationState
   , displayImage : DisplayImage
-  , tooSmall : Bool
+  , screen : Screen
   }
 
 
@@ -41,6 +41,22 @@ type IssueState
   | Hidden
 
 
+type Screen
+  = Big
+  | Medium
+  | TooSmall
+
+
+midScreen : Model -> Bool
+midScreen model =
+  case model.screen of
+    Medium ->
+      True
+
+    _ ->
+      False
+
+
 init : Model
 init =
   { issues = allIssues
@@ -52,7 +68,7 @@ init =
   , closingAnimating = False
   , closingAnimationState = Nothing
   , displayImage = All
-  , tooSmall = False
+  , screen = Big
   }
 
 

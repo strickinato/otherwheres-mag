@@ -60,7 +60,9 @@ Elm.Update.make = function (_elm) {
                  $Effects.none);
               }
          case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssue: _p0._0}),$Effects.none);
-         case "Viewport": return A2($Util._op["=>"],_U.update(model,{tooSmall: false}),$Effects.none);
+         case "Viewport": var _p6 = _p0._0._0;
+           var screenType = _U.cmp(_p6,1250) > 0 ? $Model.Big : _U.cmp(_p6,1023) > 0 ? $Model.Medium : $Model.TooSmall;
+           return A2($Util._op["=>"],_U.update(model,{screen: screenType}),$Effects.none);
          default: return A2($Util._op["=>"],model,$Effects.none);}
    });
    var Viewport = function (a) {    return {ctor: "Viewport",_0: a};};

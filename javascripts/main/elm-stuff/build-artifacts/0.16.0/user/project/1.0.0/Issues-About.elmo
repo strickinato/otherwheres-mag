@@ -13,6 +13,7 @@ Elm.Issues.About.make = function (_elm) {
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
+   $Model = Elm.Model.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $String = Elm.String.make(_elm);
@@ -44,7 +45,11 @@ Elm.Issues.About.make = function (_elm) {
       return A2($Html.h3,_U.list([styles]),_U.list([$Html.text($String.toUpper(currentText))]));
    };
    var viewLiteIs = A2($Html.span,_U.list([$Html$Attributes.$class("lite-italic")]),_U.list([$Html.text("IS")]));
-   var viewHeader = A2($Html.h1,_U.list([$Html$Attributes.$class("about-header")]),_U.list([$Html.text("OTHERWHERES")]));
+   var viewHeader = function (model) {
+      var classes = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "about-header",_1: true}
+                                                       ,{ctor: "_Tuple2",_0: "mid-screen",_1: $Model.midScreen(model)}]));
+      return A2($Html.h1,_U.list([classes]),_U.list([$Html.text("OTHERWHERES")]));
+   };
    var view = F2(function (address,model) {
       var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-image",_1: "url(assets/issues/about/bg.png)"}
                                                   ,{ctor: "_Tuple2",_0: "background-size",_1: "cover"}
@@ -57,7 +62,7 @@ Elm.Issues.About.make = function (_elm) {
       _U.list([$Html$Attributes.$class("issue-content")]),
       _U.list([A2($Html.div,
       _U.list([styles]),
-      _U.list([viewHeader,viewLiteIs,viewChangingText(currentPhrase),viewLine,viewCurrentlyAccepting,viewNextIssueInfo,viewContactButton]))]));
+      _U.list([viewHeader(model),viewLiteIs,viewChangingText(currentPhrase),viewLine,viewCurrentlyAccepting,viewNextIssueInfo,viewContactButton]))]));
    });
    return _elm.Issues.About.values = {_op: _op
                                      ,view: view

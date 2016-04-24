@@ -2,6 +2,7 @@ module Issues.About (..) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Model exposing (Model, midScreen)
 import String
 import Array
 
@@ -25,7 +26,7 @@ view address model =
       [ class "issue-content" ]
       [ div
           [ styles ]
-          [ viewHeader
+          [ viewHeader model
           , viewLiteIs
           , viewChangingText currentPhrase
           , viewLine
@@ -36,9 +37,16 @@ view address model =
       ]
 
 
-viewHeader : Html
-viewHeader =
-  h1 [ class "about-header" ] [ text ("OTHERWHERES") ]
+viewHeader : Model -> Html
+viewHeader model =
+  let
+    classes =
+      classList
+        [ ("about-header", True)
+        , ("mid-screen", midScreen model)
+        ]
+  in
+    h1 [ classes ] [ text ("OTHERWHERES") ]
 
 
 viewLiteIs : Html
