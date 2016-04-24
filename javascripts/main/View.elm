@@ -52,12 +52,13 @@ viewSelectedIssue address model =
         (\displayImage -> onClick address (ExpandImage displayImage))
         (closeHandler address)
         (issueFromIssueType expandedIssue)
+        (onClick address OpenStripe)
 
 
-viewFromIssue : DisplayImage -> (DisplayImage -> Html.Attribute) -> Html.Attribute -> Issue -> Html
-viewFromIssue displayImage imgHandler closeHandler issue =
+viewFromIssue : DisplayImage -> (DisplayImage -> Html.Attribute) -> Html.Attribute -> Issue -> Html.Attribute -> Html
+viewFromIssue displayImage imgHandler closeHandler issue stripeHandler =
   let
-    (closeButton) =
+    closeButton =
       case displayImage of
         All -> 
           div [ class "close-button", closeHandler ] []
@@ -78,7 +79,7 @@ viewFromIssue displayImage imgHandler closeHandler issue =
       , div
           [ class "issue-quote-credit" ]
           [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
-      , button [ class "issue-content-action-button" ] [ text (String.toUpper issue.actionButtonText) ] 
+      , button [ class "issue-content-action-button", stripeHandler ] [ text (String.toUpper issue.actionButtonText) ] 
       ]
 
 

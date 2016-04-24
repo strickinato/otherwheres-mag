@@ -5,20 +5,22 @@ import Model exposing (Model, Issue, initialAnimation, resetTime, SpecificIssue(
 import Util exposing ((=>))
 import Time exposing (Time, second)
 import Array
+import Task
 
 
 type Action
   = ExpandIssue SpecificIssue
   | HoverIssue SpecificIssue
   | ExpandImage DisplayImage
+  | OpenStripe
   | Viewport ( Int, Int )
   | Tick Time
   | AnimateClosing Time
   | NoOp
 
 
-update : Action -> Model -> ( Model, Effects Action )
-update action model =
+update : Signal.Address () -> Action -> Model -> ( Model, Effects Action )
+update stripeAddress action model =
   case action of
     Tick clockTime ->
       let
@@ -91,6 +93,15 @@ update action model =
             , phraseAnimationState = resetTime model.phraseAnimationState
           }
             => Effects.none
+
+    OpenStripe ->
+      let
+
+        pingAddress =
+          Task.map (\_ -> NoOp) (Signal.send stripeAddress ())
+            
+      in
+        model => Effects.task pingAddress
 
     HoverIssue hoveredIssue ->
       { model | hoveredIssue = hoveredIssue } => Effects.none

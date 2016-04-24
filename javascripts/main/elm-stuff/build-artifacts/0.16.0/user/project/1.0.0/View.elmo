@@ -153,7 +153,7 @@ Elm.View.make = function (_elm) {
       }();
       return A2($Html.div,_U.list([$Html$Attributes.$class("images")]),allImages);
    });
-   var viewFromIssue = F4(function (displayImage,imgHandler,closeHandler,issue) {
+   var viewFromIssue = F5(function (displayImage,imgHandler,closeHandler,issue,stripeHandler) {
       var closeButton = function () {
          var _p7 = displayImage;
          if (_p7.ctor === "All") {
@@ -176,7 +176,7 @@ Elm.View.make = function (_elm) {
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
               _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
               ,A2($Html.button,
-              _U.list([$Html$Attributes.$class("issue-content-action-button")]),
+              _U.list([$Html$Attributes.$class("issue-content-action-button"),stripeHandler]),
               _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
    });
    var viewSelectedIssue = F2(function (address,model) {
@@ -184,13 +184,14 @@ Elm.View.make = function (_elm) {
       switch (_p8.ctor)
       {case "About": return A2($Issues$About.view,address,model);
          case "None": return A2($Html.span,_U.list([]),_U.list([]));
-         default: return A4(viewFromIssue,
+         default: return A5(viewFromIssue,
            model.displayImage,
            function (displayImage) {
               return A2($Html$Events.onClick,address,$Update.ExpandImage(displayImage));
            },
            closeHandler(address),
-           $Model.issueFromIssueType(_p8));}
+           $Model.issueFromIssueType(_p8),
+           A2($Html$Events.onClick,address,$Update.OpenStripe));}
    });
    var viewMenu = F2(function (address,model) {
       var issueMenuItems = A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);

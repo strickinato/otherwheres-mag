@@ -22,11 +22,13 @@ Elm.Main.make = function (_elm) {
    $Window = Elm.Window.make(_elm);
    var _op = {};
    var viewport = A2($Signal.map,$Update.Viewport,$Primer.prime($Window.dimensions));
+   var openStripe = $Signal.mailbox({ctor: "_Tuple0"});
+   var requestOpenStripe = Elm.Native.Port.make(_elm).outboundSignal("requestOpenStripe",function (v) {    return [];},openStripe.signal);
    var app = $StartApp.start({init: A2($Util._op["=>"],$Model.init,$Effects.tick($Update.Tick))
-                             ,update: $Update.update
+                             ,update: $Update.update(openStripe.address)
                              ,view: $View.view
                              ,inputs: _U.list([viewport])});
    var main = app.html;
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
-   return _elm.Main.values = {_op: _op,app: app,main: main,viewport: viewport};
+   return _elm.Main.values = {_op: _op,app: app,main: main,openStripe: openStripe,viewport: viewport};
 };
