@@ -1,4 +1,15 @@
 @charset "UTF-8";
+#mobile-wrapper {
+  margin: 0 auto;
+  width: 40%;
+  margin-top: 200px;
+  text-align: center;
+  font-family: BrandonGrotesque; }
+  #mobile-wrapper .red-logo {
+    margin: 0 auto; }
+  #mobile-wrapper .tag-line-text {
+    margin-bottom: 42px; }
+
 #wrapper {
   height: 100%;
   width: 100%;
