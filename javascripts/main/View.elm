@@ -193,7 +193,7 @@ viewAboutMenuItem address model =
         ]
         [ a (logoAttributes "facebook" "https://www.facebook.com/otherwheres") []
         , a (logoAttributes "twitter" "https://twitter.com/otherwheresmag") []
-        , a (logoAttributes "instagram" "https://instagram.com/") []
+        , a (logoAttributes "instagram" "https://www.instagram.com/otherwheres_magazine/") []
         ]
 
     logoSpaceVisibility =

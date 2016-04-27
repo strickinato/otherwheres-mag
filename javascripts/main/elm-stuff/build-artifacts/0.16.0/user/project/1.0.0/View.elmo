@@ -107,7 +107,7 @@ Elm.View.make = function (_elm) {
       _U.list([$Html$Attributes.$class("logo-space"),$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "opacity",_1: logoSpaceVisibility}]))]),
       _U.list([A2($Html.a,A2(logoAttributes,"facebook","https://www.facebook.com/otherwheres"),_U.list([]))
               ,A2($Html.a,A2(logoAttributes,"twitter","https://twitter.com/otherwheresmag"),_U.list([]))
-              ,A2($Html.a,A2(logoAttributes,"instagram","https://instagram.com/"),_U.list([]))]));
+              ,A2($Html.a,A2(logoAttributes,"instagram","https://www.instagram.com/otherwheres_magazine/"),_U.list([]))]));
       var subText = function () {
          var _p5 = issueState;
          switch (_p5.ctor)
