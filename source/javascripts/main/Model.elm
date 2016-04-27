@@ -171,9 +171,9 @@ imagePaths issueFolder =
     imagePath =
       "/assets/issues/" ++ issueFolder ++ "/"
   in
-    { left = imagePath ++ "img1.jpg"
-    , middle = imagePath ++ "img2.jpg"
-    , right = imagePath ++ "img3.jpg"
+    { left = imagePath ++ "img1.png"
+    , middle = imagePath ++ "img2.png"
+    , right = imagePath ++ "img3.png"
     }
 
 
