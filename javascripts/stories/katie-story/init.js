@@ -1,12 +1,1 @@
-var mount = document.getElementById("katie-story-mount");
-
-var mountedApp = Elm.embed(Elm.Main, mount, { sendStoryHeight: 0 });
-
-getStoryHeight = function() {
-  var story = document.getElementById("katie-story-story-section");
-  if (typeof story !== "undefined" && story !== null) {
-    mountedApp.ports.sendStoryHeight.send(story.scrollHeight);
-  }
-};
-
-mountedApp.ports.requestStoryHeight.subscribe(getStoryHeight);
+var mount=document.getElementById("katie-story-mount"),mountedApp=Elm.embed(Elm.Main,mount,{sendStoryHeight:0});getStoryHeight=function(){var t=document.getElementById("katie-story-story-section");"undefined"!=typeof t&&null!==t&&mountedApp.ports.sendStoryHeight.send(t.scrollHeight)},mountedApp.ports.requestStoryHeight.subscribe(getStoryHeight);

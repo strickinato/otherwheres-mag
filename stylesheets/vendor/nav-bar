@@ -90,6 +90,8 @@ Backtrace:
 /Users/aaronstrick/.gem/ruby/2.2.3/gems/rack-1.6.4/lib/rack/urlmap.rb:66:in `block in call'
 /Users/aaronstrick/.gem/ruby/2.2.3/gems/rack-1.6.4/lib/rack/urlmap.rb:50:in `each'
 /Users/aaronstrick/.gem/ruby/2.2.3/gems/rack-1.6.4/lib/rack/urlmap.rb:50:in `call'
+/Users/aaronstrick/.gem/ruby/2.2.3/gems/middleman-core-4.1.1/lib/middleman-core/extensions/minify_javascript.rb:52:in `call'
+/Users/aaronstrick/.gem/ruby/2.2.3/gems/middleman-core-4.1.1/lib/middleman-core/extensions/minify_css.rb:60:in `call'
 /Users/aaronstrick/.gem/ruby/2.2.3/gems/middleman-core-4.1.1/lib/middleman-core/core_extensions/inline_url_rewriter.rb:61:in `call'
 /Users/aaronstrick/.gem/ruby/2.2.3/gems/rack-1.6.4/lib/rack/head.rb:13:in `call'
 /Users/aaronstrick/.gem/ruby/2.2.3/gems/rack-1.6.4/lib/rack/lint.rb:49:in `_call'

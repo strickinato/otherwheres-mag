@@ -73,13 +73,23 @@ h3 {
   color: white; }
 
 .red-logo {
-  background-image: url("/assets/branding/red-logo.png");
   background-position: center;
   background-size: cover;
   height: 114px;
   width: 75px;
-  margin-bottom: 26px; }
+  margin-bottom: 26px;
+  background-image: url("/assets/branding/red-logo.png"); }
   .red-logo:before {
+    content: " "; }
+
+.grey-logo {
+  background-position: center;
+  background-size: cover;
+  height: 114px;
+  width: 75px;
+  margin-bottom: 26px;
+  background-image: url("/assets/branding/grey-logo.png"); }
+  .grey-logo:before {
     content: " "; }
 
 .logo-space {
@@ -135,6 +145,9 @@ h3 {
   font-size: 26px;
   color: #9F2B22;
   margin-bottom: 26px; }
+
+.logo-text.hovered {
+  color: #424242; }
 
 .tag-line-text {
   height: 32px;

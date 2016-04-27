@@ -87,8 +87,6 @@ Elm.View.make = function (_elm) {
       return A2($Html.section,A2($List.append,handlers,attributes),_U.list([A2(viewMenuInner,model,issue)]));
    });
    var viewAboutMenuItem = F2(function (address,model) {
-      var logoTextClasses = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "logo-text",_1: true}
-                                                               ,{ctor: "_Tuple2",_0: "mid-screen",_1: $Model.midScreen(model)}]));
       var logoAttributes = F2(function (name,link) {
          return _U.list([$Html$Attributes.$class(name),$Html$Attributes.href(link),$Html$Attributes.target("_blank")]);
       });
@@ -108,9 +106,14 @@ Elm.View.make = function (_elm) {
       _U.list([A2($Html.a,A2(logoAttributes,"facebook","https://www.facebook.com/otherwheres"),_U.list([]))
               ,A2($Html.a,A2(logoAttributes,"twitter","https://twitter.com/otherwheresmag"),_U.list([]))
               ,A2($Html.a,A2(logoAttributes,"instagram","https://www.instagram.com/otherwheres_magazine/"),_U.list([]))]));
+      var hovered = function () {    var _p5 = issueState;if (_p5.ctor === "Hovered") {    return true;} else {    return false;}}();
+      var logoTextClasses = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "logo-text",_1: true}
+                                                               ,{ctor: "_Tuple2",_0: "mid-screen",_1: $Model.midScreen(model)}
+                                                               ,{ctor: "_Tuple2",_0: "hovered",_1: hovered}]));
+      var logoClass = hovered ? $Html$Attributes.$class("grey-logo") : $Html$Attributes.$class("red-logo");
       var subText = function () {
-         var _p5 = issueState;
-         switch (_p5.ctor)
+         var _p6 = issueState;
+         switch (_p6.ctor)
          {case "MenuItem": return _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("{ mostly } true")]))
                                           ,A2($Html.p,_U.list([]),_U.list([$Html.text("stories")]))]);
             case "Hovered": return _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text("who are we")]))]);
@@ -122,7 +125,7 @@ Elm.View.make = function (_elm) {
       A2($List.append,handlers,attributes),
       _U.list([A2($Html.div,
       _U.list([innerStyle]),
-      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("red-logo")]),_U.list([logos]))
+      _U.list([A2($Html.div,_U.list([logoClass]),_U.list([logos]))
               ,A2($Html.div,_U.list([logoTextClasses]),_U.list([$Html.text("OTHERWHERES")]))
               ,A2($Html.div,_U.list([$Html$Attributes.$class("tag-line-text")]),subText)]))]));
    });
@@ -144,8 +147,8 @@ Elm.View.make = function (_elm) {
          _U.list([A2($Html.img,_U.list([$Html$Attributes.src(source),$Html$Attributes.$class("big-image"),handler($Model.All)]),_U.list([]))]));
       };
       var allImages = function () {
-         var _p6 = displayImage;
-         switch (_p6.ctor)
+         var _p7 = displayImage;
+         switch (_p7.ctor)
          {case "All": return imageList;
             case "Left": return A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),bigImageConstructor(images.left),imageList);
             case "Middle": return A2(F2(function (x,y) {    return A2($List._op["::"],x,y);}),bigImageConstructor(images.middle),imageList);
@@ -155,15 +158,15 @@ Elm.View.make = function (_elm) {
    });
    var tictailHref = function (issue) {    return _U.list([$Html$Attributes.href(issue.actionButtonHref),$Html$Attributes.target("_blank")]);};
    var actionButton = function (issue) {
-      var isDisaster = function () {    var _p7 = issue.issueType;if (_p7.ctor === "Disaster") {    return true;} else {    return false;}}();
+      var isDisaster = function () {    var _p8 = issue.issueType;if (_p8.ctor === "Disaster") {    return true;} else {    return false;}}();
       var classes = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "issue-content-action-button",_1: true}
                                                        ,{ctor: "_Tuple2",_0: "disaster",_1: isDisaster}]));
       return A2($Html.a,tictailHref(issue),_U.list([A2($Html.div,_U.list([classes]),_U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
    };
    var viewFromIssue = F4(function (displayImage,imgHandler,closeHandler,issue) {
       var closeButton = function () {
-         var _p8 = displayImage;
-         if (_p8.ctor === "All") {
+         var _p9 = displayImage;
+         if (_p9.ctor === "All") {
                return A2($Html.div,_U.list([$Html$Attributes.$class("close-button"),closeHandler]),_U.list([]));
             } else {
                return A2($Html.div,_U.list([$Html$Attributes.$class("minimize-button"),imgHandler($Model.All)]),_U.list([]));
@@ -185,8 +188,8 @@ Elm.View.make = function (_elm) {
               ,actionButton(issue)]));
    });
    var viewSelectedIssue = F2(function (address,model) {
-      var _p9 = model.expandedIssue;
-      switch (_p9.ctor)
+      var _p10 = model.expandedIssue;
+      switch (_p10.ctor)
       {case "About": return A2($Issues$About.view,address,model);
          case "None": return A2($Html.span,_U.list([]),_U.list([]));
          default: return A4(viewFromIssue,
@@ -195,7 +198,7 @@ Elm.View.make = function (_elm) {
               return A2($Html$Events.onClick,address,$Update.ExpandImage(displayImage));
            },
            closeHandler(address),
-           $Model.issueFromIssueType(_p9));}
+           $Model.issueFromIssueType(_p10));}
    });
    var viewMenu = F2(function (address,model) {
       var issueMenuItems = A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);
@@ -203,8 +206,8 @@ Elm.View.make = function (_elm) {
       return A2($List._op["::"],aboutMenu,issueMenuItems);
    });
    var view = F2(function (address,model) {
-      var _p10 = model.screen;
-      if (_p10.ctor === "TooSmall") {
+      var _p11 = model.screen;
+      if (_p11.ctor === "TooSmall") {
             return $Mobile$View.view;
          } else {
             return A2($Html.div,

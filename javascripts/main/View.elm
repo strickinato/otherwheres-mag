@@ -207,11 +207,25 @@ viewAboutMenuItem address model =
         _ ->
           "0"
 
+    hovered =
+      case issueState of
+        Hovered ->
+          True
+        _ ->
+          False
+
     logoTextClasses =
       classList
         [("logo-text", True)
         ,("mid-screen", midScreen model)
+        ,("hovered", hovered)
         ]
+
+    logoClass =
+      if hovered then
+        class "grey-logo"
+      else
+        class "red-logo"
 
     subText =
       case issueState of
@@ -236,7 +250,7 @@ viewAboutMenuItem address model =
       [ div
           [ innerStyle ]
           [ div
-              [ class "red-logo" ]
+              [ logoClass ]
               [ logos ]
           , div [ logoTextClasses ] [ text "OTHERWHERES" ]
           , div
