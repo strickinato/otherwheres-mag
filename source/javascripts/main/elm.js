@@ -10861,7 +10861,7 @@ Elm.Model.make = function (_elm) {
          case "TruthOrFiction": return truthOrFiction;
          default: return disaster;}
    };
-   var allIssues = _U.list([disaster,comics,travel,truthOrFiction]);
+   var allIssues = _U.list([truthOrFiction,travel,comics,disaster]);
    var currentPhrase = function (model) {    return A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));};
    var otherwheresPhrases = $Array.fromList(_U.list(["mostly true"
                                                     ,"hella literary"
