@@ -153,6 +153,7 @@ Elm.View.make = function (_elm) {
       }();
       return A2($Html.div,_U.list([$Html$Attributes.$class("images")]),allImages);
    });
+   var tictailHref = function (issue) {    return _U.list([$Html$Attributes.href(issue.actionButtonHref),$Html$Attributes.target("_blank")]);};
    var viewFromIssue = F4(function (displayImage,imgHandler,closeHandler,issue) {
       var closeButton = function () {
          var _p7 = displayImage;
@@ -175,9 +176,11 @@ Elm.View.make = function (_elm) {
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
               _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
-              ,A2($Html.button,
+              ,A2($Html.a,
+              tictailHref(issue),
+              _U.list([A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-content-action-button")]),
-              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
+              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]))]));
    });
    var viewSelectedIssue = F2(function (address,model) {
       var _p8 = model.expandedIssue;
@@ -212,6 +215,7 @@ Elm.View.make = function (_elm) {
                              ,viewMenu: viewMenu
                              ,viewSelectedIssue: viewSelectedIssue
                              ,viewFromIssue: viewFromIssue
+                             ,tictailHref: tictailHref
                              ,issueImageView: issueImageView
                              ,issueContentAttributes: issueContentAttributes
                              ,viewAboutMenuItem: viewAboutMenuItem

@@ -24,8 +24,6 @@ $text: 16px
     margin: 0 auto
     width: 50%
 
-
-
 =cta-button
   outline: 0
   width: 210px
@@ -48,6 +46,7 @@ $text: 16px
   position: absolute
   display: inline-block
   float: right
+
 
 h1
   font-size: $huge
@@ -247,6 +246,10 @@ h3
 .issue-content
   text-align: center
 
+  a
+    text-decoration: none
+    line-height: 52px // height minus the border
+
   .red-logo
     padding-top: 36px
     margin: 0 auto
@@ -303,10 +306,13 @@ h3
   background-color: $otherwheres-red
   color: white
   border: 2px solid $otherwheres-red
+  margin: 0 auto
+  vertical-align: center
 
   &:hover
     background-color: white
     color: $otherwheres-red
+
 
 
 .images

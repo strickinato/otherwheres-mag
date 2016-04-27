@@ -31,6 +31,7 @@ type alias Issue =
   , quoteCredit : String
   , quoteStory : String
   , actionButtonText : String
+  , actionButtonHref : String
   }
 
 
@@ -170,9 +171,9 @@ imagePaths issueFolder =
     imagePath =
       "/assets/issues/" ++ issueFolder ++ "/"
   in
-    { left = imagePath ++ "img1.png"
-    , middle = imagePath ++ "img2.png"
-    , right = imagePath ++ "img3.png"
+    { left = imagePath ++ "img1.jpg"
+    , middle = imagePath ++ "img2.jpg"
+    , right = imagePath ++ "img3.jpg"
     }
 
 
@@ -181,13 +182,14 @@ truthOrFiction =
   { issueType = TruthOrFiction
   , symbol = "I"
   , class = "volume1"
-  , title = "Truth or Fiction"
+  , title = "Truth and Fiction"
   , tagline = "5 Mostly True Stories"
   , images = imagePaths "truth_or_fiction"
   , quote = "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
   , quoteCredit = "Joseph Bien-Kahn"
   , quoteStory = "Faces"
-  , actionButtonText = "Sold Out"
+  , actionButtonText = "Buy"
+  , actionButtonHref = "https://tictail.com/s/otherwheres/otherwheres-i-truth-and-fiction"
   }
 
 
@@ -202,7 +204,8 @@ travel =
   , quote = "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
   , quoteCredit = "Adam Wilson"
   , quoteStory = "Belgium"
-  , actionButtonText = "Sold Out"
+  , actionButtonText = "Buy"
+  , actionButtonHref = "https://tictail.com/s/otherwheres/otherwheres-ii-travel"
   }
 
 
@@ -217,7 +220,8 @@ comics =
   , quote = "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
   , quoteCredit = "Andrew \"Dirtman\" Hine"
   , quoteStory = "On Comics"
-  , actionButtonText = "Sold Out"
+  , actionButtonText = "Buy"
+  , actionButtonHref = "https://tictail.com/s/otherwheres/otherwheres-iii-comics"
   }
 
 
@@ -232,7 +236,8 @@ disaster =
   , quote = "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
   , quoteCredit = "Katie Wheeler-Dubin"
   , quoteStory = "Storm Season"
-  , actionButtonText = "Sold Out"
+  , actionButtonText = "Coming Soon"
+  , actionButtonHref = "javascript:void(0)"
   }
 
 

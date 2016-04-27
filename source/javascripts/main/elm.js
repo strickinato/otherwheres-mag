@@ -10793,9 +10793,9 @@ Elm.Model.make = function (_elm) {
    var isShowingMenu = function (model) {    var _p0 = model.expandedIssue;if (_p0.ctor === "None") {    return true;} else {    return false;}};
    var imagePaths = function (issueFolder) {
       var imagePath = A2($Basics._op["++"],"/assets/issues/",A2($Basics._op["++"],issueFolder,"/"));
-      return {left: A2($Basics._op["++"],imagePath,"img1.png")
-             ,middle: A2($Basics._op["++"],imagePath,"img2.png")
-             ,right: A2($Basics._op["++"],imagePath,"img3.png")};
+      return {left: A2($Basics._op["++"],imagePath,"img1.jpg")
+             ,middle: A2($Basics._op["++"],imagePath,"img2.jpg")
+             ,right: A2($Basics._op["++"],imagePath,"img3.jpg")};
    };
    var Right = {ctor: "Right"};
    var Middle = {ctor: "Middle"};
@@ -10808,13 +10808,14 @@ Elm.Model.make = function (_elm) {
    var truthOrFiction = {issueType: TruthOrFiction
                         ,symbol: "I"
                         ,$class: "volume1"
-                        ,title: "Truth or Fiction"
+                        ,title: "Truth and Fiction"
                         ,tagline: "5 Mostly True Stories"
                         ,images: imagePaths("truth_or_fiction")
                         ,quote: "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
                         ,quoteCredit: "Joseph Bien-Kahn"
                         ,quoteStory: "Faces"
-                        ,actionButtonText: "Sold Out"};
+                        ,actionButtonText: "Order"
+                        ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-i-truth-and-fiction"};
    var Travel = {ctor: "Travel"};
    var travel = {issueType: Travel
                 ,symbol: "II"
@@ -10825,7 +10826,8 @@ Elm.Model.make = function (_elm) {
                 ,quote: "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
                 ,quoteCredit: "Adam Wilson"
                 ,quoteStory: "Belgium"
-                ,actionButtonText: "Sold Out"};
+                ,actionButtonText: "Order"
+                ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-ii-travel"};
    var Comics = {ctor: "Comics"};
    var comics = {issueType: Comics
                 ,symbol: "III"
@@ -10836,7 +10838,8 @@ Elm.Model.make = function (_elm) {
                 ,quote: "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
                 ,quoteCredit: "Andrew \"Dirtman\" Hine"
                 ,quoteStory: "On Comics"
-                ,actionButtonText: "Sold Out"};
+                ,actionButtonText: "Buy"
+                ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-iii-comics"};
    var Disaster = {ctor: "Disaster"};
    var disaster = {issueType: Disaster
                   ,symbol: "IV"
@@ -10847,7 +10850,8 @@ Elm.Model.make = function (_elm) {
                   ,quote: "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
                   ,quoteCredit: "Katie Wheeler-Dubin"
                   ,quoteStory: "Storm Season"
-                  ,actionButtonText: "Sold Out"};
+                  ,actionButtonText: "Coming Soon"
+                  ,actionButtonHref: "javascript:void(0)"};
    var issueFromIssueType = function (issueType) {
       var _p1 = issueType;
       switch (_p1.ctor)
@@ -10900,16 +10904,19 @@ Elm.Model.make = function (_elm) {
                         return function (h) {
                            return function (i) {
                               return function (j) {
-                                 return {issueType: a
-                                        ,symbol: b
-                                        ,$class: c
-                                        ,title: d
-                                        ,tagline: e
-                                        ,images: f
-                                        ,quote: g
-                                        ,quoteCredit: h
-                                        ,quoteStory: i
-                                        ,actionButtonText: j};
+                                 return function (k) {
+                                    return {issueType: a
+                                           ,symbol: b
+                                           ,$class: c
+                                           ,title: d
+                                           ,tagline: e
+                                           ,images: f
+                                           ,quote: g
+                                           ,quoteCredit: h
+                                           ,quoteStory: i
+                                           ,actionButtonText: j
+                                           ,actionButtonHref: k};
+                                 };
                               };
                            };
                         };
@@ -11373,6 +11380,7 @@ Elm.View.make = function (_elm) {
       }();
       return A2($Html.div,_U.list([$Html$Attributes.$class("images")]),allImages);
    });
+   var tictailHref = function (issue) {    return _U.list([$Html$Attributes.href(issue.actionButtonHref),$Html$Attributes.target("_blank")]);};
    var viewFromIssue = F4(function (displayImage,imgHandler,closeHandler,issue) {
       var closeButton = function () {
          var _p7 = displayImage;
@@ -11395,9 +11403,11 @@ Elm.View.make = function (_elm) {
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
               _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
-              ,A2($Html.button,
+              ,A2($Html.a,
+              tictailHref(issue),
+              _U.list([A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-content-action-button")]),
-              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
+              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]))]));
    });
    var viewSelectedIssue = F2(function (address,model) {
       var _p8 = model.expandedIssue;
@@ -11432,6 +11442,7 @@ Elm.View.make = function (_elm) {
                              ,viewMenu: viewMenu
                              ,viewSelectedIssue: viewSelectedIssue
                              ,viewFromIssue: viewFromIssue
+                             ,tictailHref: tictailHref
                              ,issueImageView: issueImageView
                              ,issueContentAttributes: issueContentAttributes
                              ,viewAboutMenuItem: viewAboutMenuItem
