@@ -2,7 +2,9 @@ module Issues.About (..) where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Model exposing (Model, midScreen)
+import Html.Events exposing (..)
+import Model exposing (Model, midScreen, SpecificIssue(..))
+import Update exposing (Action(..))
 import String
 import Array
 
@@ -11,6 +13,10 @@ view address model =
   let
     currentPhrase =
       Maybe.withDefault "" (Array.get model.currentPhraseIndex model.phrases)
+
+    
+    closeHandler =
+      onClick address (ExpandIssue None)
 
     styles =
       style
@@ -26,7 +32,8 @@ view address model =
       [ class "issue-content" ]
       [ div
           [ styles ]
-          [ viewHeader model
+          [ div [ class "close-button about", closeHandler ] []
+          , viewHeader model
           , viewLiteIs
           , viewChangingText currentPhrase
           , viewLine

@@ -10994,122 +10994,6 @@ Elm.Model.make = function (_elm) {
                               ,disaster: disaster
                               ,isShowingMenu: isShowingMenu};
 };
-Elm.Issues = Elm.Issues || {};
-Elm.Issues.About = Elm.Issues.About || {};
-Elm.Issues.About.make = function (_elm) {
-   "use strict";
-   _elm.Issues = _elm.Issues || {};
-   _elm.Issues.About = _elm.Issues.About || {};
-   if (_elm.Issues.About.values) return _elm.Issues.About.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Array = Elm.Array.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Model = Elm.Model.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm);
-   var _op = {};
-   var grey = "#979797";
-   var viewContactButton = A2($Html.a,
-   _U.list([$Html$Attributes.$class("about-contact-link-button"),$Html$Attributes.href("mailto:jbienkhan@gmail.com")]),
-   _U.list([$Html.text("HIT US UP")]));
-   var viewNextIssueInfo = A2($Html.div,
-   _U.list([$Html$Attributes.$class("next-issue")]),
-   _U.list([A2($Html.h3,_U.list([]),_U.list([$Html.text("UNDERTOW")]))
-           ,A2($Html.p,
-           _U.list([]),
-           _U.list([$Html.text("Tell us your stories about rising tides, tugging currents, hidden traps, and whatever else \"undertow\" means to you")]))]));
-   var viewCurrentlyAccepting = A2($Html.div,
-   _U.list([$Html$Attributes.$class("currently-accepting")]),
-   _U.list([$Html.text("Currently Accepting Submissions for Volume V:")]));
-   var viewLine = function () {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "border",_1: A2($Basics._op["++"],"1px solid ",grey)}
-                                                  ,{ctor: "_Tuple2",_0: "height",_1: "0px"}
-                                                  ,{ctor: "_Tuple2",_0: "width",_1: "80%"}
-                                                  ,{ctor: "_Tuple2",_0: "margin",_1: "0 auto"}]));
-      return A2($Html.div,_U.list([styles]),_U.list([]));
-   }();
-   var viewChangingText = function (currentText) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "padding-top",_1: "20px"}
-                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "26px"}
-                                                  ,{ctor: "_Tuple2",_0: "padding-bottom",_1: "8px"}]));
-      return A2($Html.h3,_U.list([styles]),_U.list([$Html.text($String.toUpper(currentText))]));
-   };
-   var viewLiteIs = A2($Html.span,_U.list([$Html$Attributes.$class("lite-italic")]),_U.list([$Html.text("IS")]));
-   var viewHeader = function (model) {
-      var classes = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "about-header",_1: true}
-                                                       ,{ctor: "_Tuple2",_0: "mid-screen",_1: $Model.midScreen(model)}]));
-      return A2($Html.h1,_U.list([classes]),_U.list([$Html.text("OTHERWHERES")]));
-   };
-   var view = F2(function (address,model) {
-      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-image",_1: "url(assets/issues/about/bg.png)"}
-                                                  ,{ctor: "_Tuple2",_0: "background-size",_1: "cover"}
-                                                  ,{ctor: "_Tuple2",_0: "background-position",_1: "bottom"}
-                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
-                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
-                                                  ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
-      var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class("issue-content")]),
-      _U.list([A2($Html.div,
-      _U.list([styles]),
-      _U.list([viewHeader(model),viewLiteIs,viewChangingText(currentPhrase),viewLine,viewCurrentlyAccepting,viewNextIssueInfo,viewContactButton]))]));
-   });
-   return _elm.Issues.About.values = {_op: _op
-                                     ,view: view
-                                     ,viewHeader: viewHeader
-                                     ,viewLiteIs: viewLiteIs
-                                     ,viewChangingText: viewChangingText
-                                     ,viewLine: viewLine
-                                     ,viewCurrentlyAccepting: viewCurrentlyAccepting
-                                     ,viewNextIssueInfo: viewNextIssueInfo
-                                     ,viewContactButton: viewContactButton
-                                     ,grey: grey};
-};
-// adapted from
-// https://github.com/coreytrampe/elm-signal-primer
-
-Elm.Native.Primer = Elm.Native.Primer || {};
-Elm.Native.Primer.make = function(elm) {
-    elm.Native = elm.Native || {};
-    elm.Native.Primer = elm.Native.Primer || {};
-    if (elm.Native.Primer.values) return elm.Native.Primer.values;
-
-    var NS = Elm.Native.Signal.make(elm);
-
-    return elm.Native.Primer.values = {
-        prime: function(sig){
-            setTimeout(function(){
-                elm.notify(sig.id, sig.value)
-            }, 1);
-
-            return sig;
-        }
-    };
-};
-
-Elm.Primer = Elm.Primer || {};
-Elm.Primer.make = function (_elm) {
-   "use strict";
-   _elm.Primer = _elm.Primer || {};
-   if (_elm.Primer.values) return _elm.Primer.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Native$Primer = Elm.Native.Primer.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
-   var _op = {};
-   var prime = $Native$Primer.prime;
-   return _elm.Primer.values = {_op: _op,prime: prime};
-};
 Elm.Update = Elm.Update || {};
 Elm.Update.make = function (_elm) {
    "use strict";
@@ -11191,6 +11075,132 @@ Elm.Update.make = function (_elm) {
                                ,NoOp: NoOp
                                ,update: update
                                ,nextCurrentPhraseIndex: nextCurrentPhraseIndex};
+};
+Elm.Issues = Elm.Issues || {};
+Elm.Issues.About = Elm.Issues.About || {};
+Elm.Issues.About.make = function (_elm) {
+   "use strict";
+   _elm.Issues = _elm.Issues || {};
+   _elm.Issues.About = _elm.Issues.About || {};
+   if (_elm.Issues.About.values) return _elm.Issues.About.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Array = Elm.Array.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Model = Elm.Model.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm),
+   $Update = Elm.Update.make(_elm);
+   var _op = {};
+   var grey = "#979797";
+   var viewContactButton = A2($Html.a,
+   _U.list([$Html$Attributes.$class("about-contact-link-button"),$Html$Attributes.href("mailto:jbienkhan@gmail.com")]),
+   _U.list([$Html.text("HIT US UP")]));
+   var viewNextIssueInfo = A2($Html.div,
+   _U.list([$Html$Attributes.$class("next-issue")]),
+   _U.list([A2($Html.h3,_U.list([]),_U.list([$Html.text("UNDERTOW")]))
+           ,A2($Html.p,
+           _U.list([]),
+           _U.list([$Html.text("Tell us your stories about rising tides, tugging currents, hidden traps, and whatever else \"undertow\" means to you")]))]));
+   var viewCurrentlyAccepting = A2($Html.div,
+   _U.list([$Html$Attributes.$class("currently-accepting")]),
+   _U.list([$Html.text("Currently Accepting Submissions for Volume V:")]));
+   var viewLine = function () {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "border",_1: A2($Basics._op["++"],"1px solid ",grey)}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "0px"}
+                                                  ,{ctor: "_Tuple2",_0: "width",_1: "80%"}
+                                                  ,{ctor: "_Tuple2",_0: "margin",_1: "0 auto"}]));
+      return A2($Html.div,_U.list([styles]),_U.list([]));
+   }();
+   var viewChangingText = function (currentText) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "padding-top",_1: "20px"}
+                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "26px"}
+                                                  ,{ctor: "_Tuple2",_0: "padding-bottom",_1: "8px"}]));
+      return A2($Html.h3,_U.list([styles]),_U.list([$Html.text($String.toUpper(currentText))]));
+   };
+   var viewLiteIs = A2($Html.span,_U.list([$Html$Attributes.$class("lite-italic")]),_U.list([$Html.text("IS")]));
+   var viewHeader = function (model) {
+      var classes = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "about-header",_1: true}
+                                                       ,{ctor: "_Tuple2",_0: "mid-screen",_1: $Model.midScreen(model)}]));
+      return A2($Html.h1,_U.list([classes]),_U.list([$Html.text("OTHERWHERES")]));
+   };
+   var view = F2(function (address,model) {
+      var styles = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "background-image",_1: "url(assets/issues/about/bg.png)"}
+                                                  ,{ctor: "_Tuple2",_0: "background-size",_1: "cover"}
+                                                  ,{ctor: "_Tuple2",_0: "background-position",_1: "bottom"}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
+                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
+                                                  ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
+      var closeHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Model.None));
+      var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("issue-content")]),
+      _U.list([A2($Html.div,
+      _U.list([styles]),
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("close-button about"),closeHandler]),_U.list([]))
+              ,viewHeader(model)
+              ,viewLiteIs
+              ,viewChangingText(currentPhrase)
+              ,viewLine
+              ,viewCurrentlyAccepting
+              ,viewNextIssueInfo
+              ,viewContactButton]))]));
+   });
+   return _elm.Issues.About.values = {_op: _op
+                                     ,view: view
+                                     ,viewHeader: viewHeader
+                                     ,viewLiteIs: viewLiteIs
+                                     ,viewChangingText: viewChangingText
+                                     ,viewLine: viewLine
+                                     ,viewCurrentlyAccepting: viewCurrentlyAccepting
+                                     ,viewNextIssueInfo: viewNextIssueInfo
+                                     ,viewContactButton: viewContactButton
+                                     ,grey: grey};
+};
+// adapted from
+// https://github.com/coreytrampe/elm-signal-primer
+
+Elm.Native.Primer = Elm.Native.Primer || {};
+Elm.Native.Primer.make = function(elm) {
+    elm.Native = elm.Native || {};
+    elm.Native.Primer = elm.Native.Primer || {};
+    if (elm.Native.Primer.values) return elm.Native.Primer.values;
+
+    var NS = Elm.Native.Signal.make(elm);
+
+    return elm.Native.Primer.values = {
+        prime: function(sig){
+            setTimeout(function(){
+                elm.notify(sig.id, sig.value)
+            }, 1);
+
+            return sig;
+        }
+    };
+};
+
+Elm.Primer = Elm.Primer || {};
+Elm.Primer.make = function (_elm) {
+   "use strict";
+   _elm.Primer = _elm.Primer || {};
+   if (_elm.Primer.values) return _elm.Primer.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Native$Primer = Elm.Native.Primer.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var prime = $Native$Primer.prime;
+   return _elm.Primer.values = {_op: _op,prime: prime};
 };
 Elm.Mobile = Elm.Mobile || {};
 Elm.Mobile.View = Elm.Mobile.View || {};

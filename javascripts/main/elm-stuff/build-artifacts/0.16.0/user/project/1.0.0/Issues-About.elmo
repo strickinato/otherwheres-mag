@@ -11,12 +11,14 @@ Elm.Issues.About.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Model = Elm.Model.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm);
+   $String = Elm.String.make(_elm),
+   $Update = Elm.Update.make(_elm);
    var _op = {};
    var grey = "#979797";
    var viewContactButton = A2($Html.a,
@@ -57,12 +59,20 @@ Elm.Issues.About.make = function (_elm) {
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
                                                   ,{ctor: "_Tuple2",_0: "color",_1: "white"}]));
+      var closeHandler = A2($Html$Events.onClick,address,$Update.ExpandIssue($Model.None));
       var currentPhrase = A2($Maybe.withDefault,"",A2($Array.get,model.currentPhraseIndex,model.phrases));
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("issue-content")]),
       _U.list([A2($Html.div,
       _U.list([styles]),
-      _U.list([viewHeader(model),viewLiteIs,viewChangingText(currentPhrase),viewLine,viewCurrentlyAccepting,viewNextIssueInfo,viewContactButton]))]));
+      _U.list([A2($Html.div,_U.list([$Html$Attributes.$class("close-button about"),closeHandler]),_U.list([]))
+              ,viewHeader(model)
+              ,viewLiteIs
+              ,viewChangingText(currentPhrase)
+              ,viewLine
+              ,viewCurrentlyAccepting
+              ,viewNextIssueInfo
+              ,viewContactButton]))]));
    });
    return _elm.Issues.About.values = {_op: _op
                                      ,view: view
