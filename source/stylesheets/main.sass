@@ -97,8 +97,7 @@ h3
   font-family: BrandonGrotesqueBlackItalic, sans
   color: white
 
-.red-logo
-  background-image: url("/assets/branding/red-logo.png")
+=otherwheres-logo
   background-position: center
   background-size: cover
   height: 114px
@@ -107,6 +106,14 @@ h3
 
   &:before
     content: " "
+
+.red-logo
+  +otherwheres-logo
+  background-image: url("/assets/branding/red-logo.png")
+
+.grey-logo
+  +otherwheres-logo
+  background-image: url("/assets/branding/grey-logo.png")
 
 =logo($top, $left, $logo)
   $icon-size: 25px
@@ -144,6 +151,9 @@ h3
   font-size: $medium
   color: $otherwheres-red
   margin-bottom: 26px
+
+.logo-text.hovered
+  color: $light-grey
 
 .tag-line-text
   height: 32px
