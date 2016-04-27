@@ -78,17 +78,39 @@ viewFromIssue displayImage imgHandler closeHandler issue =
       , div
           [ class "issue-quote-credit" ]
           [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
-      , a
-          ( tictailHref issue)
-          [ div
-            [ class "issue-content-action-button"]
-            [ text (String.toUpper issue.actionButtonText) ]
-          ]
+      , actionButton issue
       ]
+
+
+actionButton : Issue -> Html
+actionButton issue =
+  let
+    isDisaster =
+      case issue.issueType of
+        Disaster ->
+          True
+        _ ->
+          False
+
+
+    classes =
+      classList
+        [ ("issue-content-action-button", True)
+        , ("disaster", isDisaster)
+        ]
+  in
+    a
+      ( tictailHref issue )
+      [ div
+        [ classes ]
+        [ text (String.toUpper issue.actionButtonText) ]
+      ]
+
 
 tictailHref : Issue -> List Html.Attribute
 tictailHref issue =
   [ href issue.actionButtonHref, target "_blank" ]
+
 
 issueImageView : Model.ImagePaths -> DisplayImage -> (DisplayImage -> Html.Attribute) -> Html
 issueImageView images displayImage handler =
