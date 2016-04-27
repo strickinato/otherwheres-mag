@@ -232,6 +232,9 @@ h3 {
 
 .issue-content {
   text-align: center; }
+  .issue-content a {
+    text-decoration: none;
+    line-height: 52px; }
   .issue-content .red-logo {
     padding-top: 36px;
     margin: 0 auto;
@@ -291,7 +294,9 @@ h3 {
   cursor: pointer;
   background-color: #9F2B22;
   color: white;
-  border: 2px solid #9F2B22; }
+  border: 2px solid #9F2B22;
+  margin: 0 auto;
+  vertical-align: center; }
   .issue-content-action-button:hover {
     background-color: white;
     color: #9F2B22; }

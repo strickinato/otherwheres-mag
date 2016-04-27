@@ -153,7 +153,8 @@ Elm.View.make = function (_elm) {
       }();
       return A2($Html.div,_U.list([$Html$Attributes.$class("images")]),allImages);
    });
-   var viewFromIssue = F5(function (displayImage,imgHandler,closeHandler,issue,stripeHandler) {
+   var tictailHref = function (issue) {    return _U.list([$Html$Attributes.href(issue.actionButtonHref),$Html$Attributes.target("_blank")]);};
+   var viewFromIssue = F4(function (displayImage,imgHandler,closeHandler,issue) {
       var closeButton = function () {
          var _p7 = displayImage;
          if (_p7.ctor === "All") {
@@ -175,23 +176,24 @@ Elm.View.make = function (_elm) {
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
               _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
-              ,A2($Html.button,
-              _U.list([$Html$Attributes.$class("issue-content-action-button"),stripeHandler]),
-              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
+              ,A2($Html.a,
+              tictailHref(issue),
+              _U.list([A2($Html.div,
+              _U.list([$Html$Attributes.$class("issue-content-action-button")]),
+              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]))]));
    });
    var viewSelectedIssue = F2(function (address,model) {
       var _p8 = model.expandedIssue;
       switch (_p8.ctor)
       {case "About": return A2($Issues$About.view,address,model);
          case "None": return A2($Html.span,_U.list([]),_U.list([]));
-         default: return A5(viewFromIssue,
+         default: return A4(viewFromIssue,
            model.displayImage,
            function (displayImage) {
               return A2($Html$Events.onClick,address,$Update.ExpandImage(displayImage));
            },
            closeHandler(address),
-           $Model.issueFromIssueType(_p8),
-           A2($Html$Events.onClick,address,$Update.OpenStripe));}
+           $Model.issueFromIssueType(_p8));}
    });
    var viewMenu = F2(function (address,model) {
       var issueMenuItems = A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);
@@ -213,6 +215,7 @@ Elm.View.make = function (_elm) {
                              ,viewMenu: viewMenu
                              ,viewSelectedIssue: viewSelectedIssue
                              ,viewFromIssue: viewFromIssue
+                             ,tictailHref: tictailHref
                              ,issueImageView: issueImageView
                              ,issueContentAttributes: issueContentAttributes
                              ,viewAboutMenuItem: viewAboutMenuItem

@@ -10808,13 +10808,14 @@ Elm.Model.make = function (_elm) {
    var truthOrFiction = {issueType: TruthOrFiction
                         ,symbol: "I"
                         ,$class: "volume1"
-                        ,title: "Truth or Fiction"
+                        ,title: "Truth and Fiction"
                         ,tagline: "5 Mostly True Stories"
                         ,images: imagePaths("truth_or_fiction")
                         ,quote: "Now his brain was a sundial in a bed of fog. Sure, there were moments the sun would peak through and it was right square at twelve o’clock. But then came the darkness, and then it was another day. Perhaps every hour was there, but not in any predictable order. And I’d bet some of the times were borrowed."
                         ,quoteCredit: "Joseph Bien-Kahn"
                         ,quoteStory: "Faces"
-                        ,actionButtonText: "Sold Out"};
+                        ,actionButtonText: "Buy"
+                        ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-i-truth-and-fiction"};
    var Travel = {ctor: "Travel"};
    var travel = {issueType: Travel
                 ,symbol: "II"
@@ -10825,7 +10826,8 @@ Elm.Model.make = function (_elm) {
                 ,quote: "My Ghent is ten square blocks in size, and likely bears little resemblance to the objective Ghent one might find online, or in a guidebook, or in, well, Ghent."
                 ,quoteCredit: "Adam Wilson"
                 ,quoteStory: "Belgium"
-                ,actionButtonText: "Sold Out"};
+                ,actionButtonText: "Buy"
+                ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-ii-travel"};
    var Comics = {ctor: "Comics"};
    var comics = {issueType: Comics
                 ,symbol: "III"
@@ -10836,7 +10838,8 @@ Elm.Model.make = function (_elm) {
                 ,quote: "He tells me that I probably haven’t heard of a character named Batgirl. Frantically and boastfully, I whip out Frank Miller’s All Star Batman and Robin and scan to the Batgirl cover. “Oh, Barb?” He races for his sister and aunt in the next room. My desire to challenge children often cuts short my interactions with them."
                 ,quoteCredit: "Andrew \"Dirtman\" Hine"
                 ,quoteStory: "On Comics"
-                ,actionButtonText: "Sold Out"};
+                ,actionButtonText: "Buy"
+                ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-iii-comics"};
    var Disaster = {ctor: "Disaster"};
    var disaster = {issueType: Disaster
                   ,symbol: "IV"
@@ -10847,7 +10850,8 @@ Elm.Model.make = function (_elm) {
                   ,quote: "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
                   ,quoteCredit: "Katie Wheeler-Dubin"
                   ,quoteStory: "Storm Season"
-                  ,actionButtonText: "Sold Out"};
+                  ,actionButtonText: "Coming Soon"
+                  ,actionButtonHref: "javascript:void(0)"};
    var issueFromIssueType = function (issueType) {
       var _p1 = issueType;
       switch (_p1.ctor)
@@ -10900,16 +10904,19 @@ Elm.Model.make = function (_elm) {
                         return function (h) {
                            return function (i) {
                               return function (j) {
-                                 return {issueType: a
-                                        ,symbol: b
-                                        ,$class: c
-                                        ,title: d
-                                        ,tagline: e
-                                        ,images: f
-                                        ,quote: g
-                                        ,quoteCredit: h
-                                        ,quoteStory: i
-                                        ,actionButtonText: j};
+                                 return function (k) {
+                                    return {issueType: a
+                                           ,symbol: b
+                                           ,$class: c
+                                           ,title: d
+                                           ,tagline: e
+                                           ,images: f
+                                           ,quote: g
+                                           ,quoteCredit: h
+                                           ,quoteStory: i
+                                           ,actionButtonText: j
+                                           ,actionButtonHref: k};
+                                 };
                               };
                            };
                         };
@@ -11118,7 +11125,6 @@ Elm.Update.make = function (_elm) {
    $Model = Elm.Model.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $Task = Elm.Task.make(_elm),
    $Time = Elm.Time.make(_elm),
    $Util = Elm.Util.make(_elm);
    var _op = {};
@@ -11130,7 +11136,7 @@ Elm.Update.make = function (_elm) {
    var NoOp = {ctor: "NoOp"};
    var AnimateClosing = function (a) {    return {ctor: "AnimateClosing",_0: a};};
    var Tick = function (a) {    return {ctor: "Tick",_0: a};};
-   var update = F3(function (stripeAddress,action,model) {
+   var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
       {case "Tick": var _p2 = _p0._0;
@@ -11165,16 +11171,13 @@ Elm.Update.make = function (_elm) {
                  _U.update(model,{expandedIssue: _p5,currentPhraseIndex: 0,phraseAnimationState: $Model.resetTime(model.phraseAnimationState)}),
                  $Effects.none);
               }
-         case "OpenStripe": var pingAddress = A2($Task.map,function (_p6) {    return NoOp;},A2($Signal.send,stripeAddress,{ctor: "_Tuple0"}));
-           return A2($Util._op["=>"],model,$Effects.task(pingAddress));
          case "HoverIssue": return A2($Util._op["=>"],_U.update(model,{hoveredIssue: _p0._0}),$Effects.none);
-         case "Viewport": var _p7 = _p0._0._0;
-           var screenType = _U.cmp(_p7,1250) > 0 ? $Model.Big : _U.cmp(_p7,1023) > 0 ? $Model.Medium : $Model.TooSmall;
+         case "Viewport": var _p6 = _p0._0._0;
+           var screenType = _U.cmp(_p6,1250) > 0 ? $Model.Big : _U.cmp(_p6,1023) > 0 ? $Model.Medium : $Model.TooSmall;
            return A2($Util._op["=>"],_U.update(model,{screen: screenType}),$Effects.none);
          default: return A2($Util._op["=>"],model,$Effects.none);}
    });
    var Viewport = function (a) {    return {ctor: "Viewport",_0: a};};
-   var OpenStripe = {ctor: "OpenStripe"};
    var ExpandImage = function (a) {    return {ctor: "ExpandImage",_0: a};};
    var HoverIssue = function (a) {    return {ctor: "HoverIssue",_0: a};};
    var ExpandIssue = function (a) {    return {ctor: "ExpandIssue",_0: a};};
@@ -11182,7 +11185,6 @@ Elm.Update.make = function (_elm) {
                                ,ExpandIssue: ExpandIssue
                                ,HoverIssue: HoverIssue
                                ,ExpandImage: ExpandImage
-                               ,OpenStripe: OpenStripe
                                ,Viewport: Viewport
                                ,Tick: Tick
                                ,AnimateClosing: AnimateClosing
@@ -11378,7 +11380,8 @@ Elm.View.make = function (_elm) {
       }();
       return A2($Html.div,_U.list([$Html$Attributes.$class("images")]),allImages);
    });
-   var viewFromIssue = F5(function (displayImage,imgHandler,closeHandler,issue,stripeHandler) {
+   var tictailHref = function (issue) {    return _U.list([$Html$Attributes.href(issue.actionButtonHref),$Html$Attributes.target("_blank")]);};
+   var viewFromIssue = F4(function (displayImage,imgHandler,closeHandler,issue) {
       var closeButton = function () {
          var _p7 = displayImage;
          if (_p7.ctor === "All") {
@@ -11400,23 +11403,24 @@ Elm.View.make = function (_elm) {
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("issue-quote-credit")]),
               _U.list([$Html.text(A2($Basics._op["++"],"From ",A2($Basics._op["++"],issue.quoteStory,A2($Basics._op["++"]," by ",issue.quoteCredit))))]))
-              ,A2($Html.button,
-              _U.list([$Html$Attributes.$class("issue-content-action-button"),stripeHandler]),
-              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
+              ,A2($Html.a,
+              tictailHref(issue),
+              _U.list([A2($Html.div,
+              _U.list([$Html$Attributes.$class("issue-content-action-button")]),
+              _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]))]));
    });
    var viewSelectedIssue = F2(function (address,model) {
       var _p8 = model.expandedIssue;
       switch (_p8.ctor)
       {case "About": return A2($Issues$About.view,address,model);
          case "None": return A2($Html.span,_U.list([]),_U.list([]));
-         default: return A5(viewFromIssue,
+         default: return A4(viewFromIssue,
            model.displayImage,
            function (displayImage) {
               return A2($Html$Events.onClick,address,$Update.ExpandImage(displayImage));
            },
            closeHandler(address),
-           $Model.issueFromIssueType(_p8),
-           A2($Html$Events.onClick,address,$Update.OpenStripe));}
+           $Model.issueFromIssueType(_p8));}
    });
    var viewMenu = F2(function (address,model) {
       var issueMenuItems = A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);
@@ -11438,6 +11442,7 @@ Elm.View.make = function (_elm) {
                              ,viewMenu: viewMenu
                              ,viewSelectedIssue: viewSelectedIssue
                              ,viewFromIssue: viewFromIssue
+                             ,tictailHref: tictailHref
                              ,issueImageView: issueImageView
                              ,issueContentAttributes: issueContentAttributes
                              ,viewAboutMenuItem: viewAboutMenuItem
@@ -11475,13 +11480,11 @@ Elm.Main.make = function (_elm) {
    $Window = Elm.Window.make(_elm);
    var _op = {};
    var viewport = A2($Signal.map,$Update.Viewport,$Primer.prime($Window.dimensions));
-   var openStripe = $Signal.mailbox({ctor: "_Tuple0"});
-   var requestOpenStripe = Elm.Native.Port.make(_elm).outboundSignal("requestOpenStripe",function (v) {    return [];},openStripe.signal);
    var app = $StartApp.start({init: A2($Util._op["=>"],$Model.init,$Effects.tick($Update.Tick))
-                             ,update: $Update.update(openStripe.address)
+                             ,update: $Update.update
                              ,view: $View.view
                              ,inputs: _U.list([viewport])});
    var main = app.html;
    var tasks = Elm.Native.Task.make(_elm).performSignal("tasks",app.tasks);
-   return _elm.Main.values = {_op: _op,app: app,main: main,openStripe: openStripe,viewport: viewport};
+   return _elm.Main.values = {_op: _op,app: app,main: main,viewport: viewport};
 };

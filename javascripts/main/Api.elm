@@ -15,12 +15,12 @@ import View exposing (view)
 
 app : StartApp.App Model
 app =
-  StartApp.start
-    { init = init => Effects.tick Tick
-    , update = update openStripe.address
-    , view = view
-    , inputs = [ viewport ]
-    }
+    StartApp.start
+        { init = init => Effects.tick Tick
+        , update = update
+        , view = view
+        , inputs = [ viewport ]
+        }
 
 main : Signal Html
 main =
@@ -31,13 +31,6 @@ port tasks : Signal (Task.Task Never ())
 port tasks =
     app.tasks
 
-openStripe : Signal.Mailbox ()
-openStripe =
-  Signal.mailbox ()
-
-port requestOpenStripe : Signal ()
-port requestOpenStripe =
-  openStripe.signal
        
 viewport : Signal Action
 viewport =
