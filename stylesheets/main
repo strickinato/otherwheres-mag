@@ -163,9 +163,13 @@ h3 {
   z-index: 5; }
   .close-button:before {
     content: "✗"; }
+  .close-button:hover {
+    color: #9F2B22; }
 
 .close-button.about {
   color: white; }
+  .close-button.about:hover {
+    color: #9F2B22; }
 
 .minimize-button {
   position: absolute;
