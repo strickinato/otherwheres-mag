@@ -186,7 +186,7 @@ h3 {
   white-space: nowrap; }
 
 .about-header {
-  padding-top: 96px; }
+  padding-top: 66px; }
   .about-header p {
     margin: 0px; }
 
