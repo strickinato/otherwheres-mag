@@ -115,10 +115,10 @@ currentPhrase model =
 
 allIssues : List Issue
 allIssues =
-  [ disaster
-  , comics
+  [ truthOrFiction
   , travel
-  , truthOrFiction
+  , comics
+  , disaster
   ]
 
 
