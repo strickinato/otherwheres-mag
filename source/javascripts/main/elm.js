@@ -10850,8 +10850,8 @@ Elm.Model.make = function (_elm) {
                   ,quote: "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
                   ,quoteCredit: "Katie Wheeler-Dubin"
                   ,quoteStory: "Storm Season"
-                  ,actionButtonText: "Coming Soon"
-                  ,actionButtonHref: "javascript:void(0)"};
+                  ,actionButtonText: "Buy"
+                  ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-iv-disaster"};
    var issueFromIssueType = function (issueType) {
       var _p1 = issueType;
       switch (_p1.ctor)
@@ -11395,15 +11395,16 @@ Elm.View.make = function (_elm) {
    });
    var tictailHref = function (issue) {    return _U.list([$Html$Attributes.href(issue.actionButtonHref),$Html$Attributes.target("_blank")]);};
    var actionButton = function (issue) {
-      var isDisaster = function () {    var _p8 = issue.issueType;if (_p8.ctor === "Disaster") {    return true;} else {    return false;}}();
-      var classes = $Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "issue-content-action-button",_1: true}
-                                                       ,{ctor: "_Tuple2",_0: "disaster",_1: isDisaster}]));
-      return A2($Html.a,tictailHref(issue),_U.list([A2($Html.div,_U.list([classes]),_U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
+      return A2($Html.a,
+      tictailHref(issue),
+      _U.list([A2($Html.div,
+      _U.list([$Html$Attributes.$class("issue-content-action-button")]),
+      _U.list([$Html.text($String.toUpper(issue.actionButtonText))]))]));
    };
    var viewFromIssue = F4(function (displayImage,imgHandler,closeHandler,issue) {
       var closeButton = function () {
-         var _p9 = displayImage;
-         if (_p9.ctor === "All") {
+         var _p8 = displayImage;
+         if (_p8.ctor === "All") {
                return A2($Html.div,_U.list([$Html$Attributes.$class("close-button"),closeHandler]),_U.list([]));
             } else {
                return A2($Html.div,_U.list([$Html$Attributes.$class("minimize-button"),imgHandler($Model.All)]),_U.list([]));
@@ -11425,8 +11426,8 @@ Elm.View.make = function (_elm) {
               ,actionButton(issue)]));
    });
    var viewSelectedIssue = F2(function (address,model) {
-      var _p10 = model.expandedIssue;
-      switch (_p10.ctor)
+      var _p9 = model.expandedIssue;
+      switch (_p9.ctor)
       {case "About": return A2($Issues$About.view,address,model);
          case "None": return A2($Html.span,_U.list([]),_U.list([]));
          default: return A4(viewFromIssue,
@@ -11435,7 +11436,7 @@ Elm.View.make = function (_elm) {
               return A2($Html$Events.onClick,address,$Update.ExpandImage(displayImage));
            },
            closeHandler(address),
-           $Model.issueFromIssueType(_p10));}
+           $Model.issueFromIssueType(_p9));}
    });
    var viewMenu = F2(function (address,model) {
       var issueMenuItems = A2($List.map,A2(viewIssueMenuItem,address,model),model.issues);
@@ -11443,8 +11444,8 @@ Elm.View.make = function (_elm) {
       return A2($List._op["::"],aboutMenu,issueMenuItems);
    });
    var view = F2(function (address,model) {
-      var _p11 = model.screen;
-      if (_p11.ctor === "TooSmall") {
+      var _p10 = model.screen;
+      if (_p10.ctor === "TooSmall") {
             return $Mobile$View.view;
          } else {
             return A2($Html.div,

@@ -84,27 +84,12 @@ viewFromIssue displayImage imgHandler closeHandler issue =
 
 actionButton : Issue -> Html
 actionButton issue =
-  let
-    isDisaster =
-      case issue.issueType of
-        Disaster ->
-          True
-        _ ->
-          False
-
-
-    classes =
-      classList
-        [ ("issue-content-action-button", True)
-        , ("disaster", isDisaster)
-        ]
-  in
-    a
-      ( tictailHref issue )
-      [ div
-        [ classes ]
-        [ text (String.toUpper issue.actionButtonText) ]
-      ]
+  a
+    ( tictailHref issue )
+    [ div
+      [ class "issue-content-action-button" ]
+      [ text (String.toUpper issue.actionButtonText) ]
+    ]
 
 
 tictailHref : Issue -> List Html.Attribute

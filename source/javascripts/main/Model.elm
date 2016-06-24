@@ -236,8 +236,8 @@ disaster =
   , quote = "There are big disasters like passing out and creating puddles of vomit on the carpet of a bar, and there are small disasters like the blindness that occurs from wanting more from your friends when there is no more of them to share."
   , quoteCredit = "Katie Wheeler-Dubin"
   , quoteStory = "Storm Season"
-  , actionButtonText = "Coming Soon"
-  , actionButtonHref = "javascript:void(0)"
+  , actionButtonText = "Buy"
+  , actionButtonHref = "https://tictail.com/s/otherwheres/otherwheres-iv-disaster"
   }
 
 
