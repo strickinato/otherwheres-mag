@@ -324,11 +324,6 @@ h3 {
     background-color: white;
     color: #9F2B22; }
 
-.issue-content-action-button.disaster {
-  background-color: white;
-  color: #9F2B22;
-  cursor: default; }
-
 .images {
   width: 100%;
   padding: 40px 0px;
