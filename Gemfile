@@ -16,3 +16,6 @@ gem 'middleman-gh-pages'
 gem 'bourbon'
 gem 'neat'
 gem 'bitters'
+
+#analytics
+gem "middleman-google-analytics"

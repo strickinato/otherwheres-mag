@@ -28,6 +28,11 @@ configure :development do
   activate :livereload
 end
 
+# Activate google-analytics extension
+activate :google_analytics do |ga|
+  ga.tracking_id = 'UA-79858225-1'
+end
+
 ###
 # Helpers
 ###
