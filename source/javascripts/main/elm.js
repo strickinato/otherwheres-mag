@@ -10815,7 +10815,7 @@ Elm.Model.make = function (_elm) {
                         ,quoteCredit: "Joseph Bien-Kahn"
                         ,quoteStory: "Faces"
                         ,actionButtonText: "Buy"
-                        ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-i-truth-and-fiction"};
+                        ,actionButtonHref: "http://otherwheres.tictail.com/products/otherwheres-i-truth-and-fiction"};
    var Travel = {ctor: "Travel"};
    var travel = {issueType: Travel
                 ,symbol: "II"
@@ -10827,7 +10827,7 @@ Elm.Model.make = function (_elm) {
                 ,quoteCredit: "Adam Wilson"
                 ,quoteStory: "Belgium"
                 ,actionButtonText: "Buy"
-                ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-ii-travel"};
+                ,actionButtonHref: "http://otherwheres.tictail.com/products/otherwheres-ii-travel"};
    var Comics = {ctor: "Comics"};
    var comics = {issueType: Comics
                 ,symbol: "III"
@@ -10839,7 +10839,7 @@ Elm.Model.make = function (_elm) {
                 ,quoteCredit: "Andrew \"Dirtman\" Hine"
                 ,quoteStory: "On Comics"
                 ,actionButtonText: "Buy"
-                ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-iii-comics"};
+                ,actionButtonHref: "http://otherwheres.tictail.com/products/otherwheres-iii-comics"};
    var Disaster = {ctor: "Disaster"};
    var disaster = {issueType: Disaster
                   ,symbol: "IV"
@@ -10851,7 +10851,7 @@ Elm.Model.make = function (_elm) {
                   ,quoteCredit: "Katie Wheeler-Dubin"
                   ,quoteStory: "Storm Season"
                   ,actionButtonText: "Buy"
-                  ,actionButtonHref: "https://tictail.com/s/otherwheres/otherwheres-iv-disaster"};
+                  ,actionButtonHref: "http://otherwheres.tictail.com/products/otherwheres-iv-disaster"};
    var issueFromIssueType = function (issueType) {
       var _p1 = issueType;
       switch (_p1.ctor)
