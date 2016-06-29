@@ -189,7 +189,7 @@ truthOrFiction =
   , quoteCredit = "Joseph Bien-Kahn"
   , quoteStory = "Faces"
   , actionButtonText = "Buy"
-  , actionButtonHref = "https://tictail.com/s/otherwheres/otherwheres-i-truth-and-fiction"
+  , actionButtonHref = "http://otherwheres.tictail.com/products/otherwheres-i-truth-and-fiction"
   }
 
 
@@ -205,7 +205,7 @@ travel =
   , quoteCredit = "Adam Wilson"
   , quoteStory = "Belgium"
   , actionButtonText = "Buy"
-  , actionButtonHref = "https://tictail.com/s/otherwheres/otherwheres-ii-travel"
+  , actionButtonHref = "http://otherwheres.tictail.com/products/otherwheres-ii-travel"
   }
 
 
@@ -221,7 +221,7 @@ comics =
   , quoteCredit = "Andrew \"Dirtman\" Hine"
   , quoteStory = "On Comics"
   , actionButtonText = "Buy"
-  , actionButtonHref = "https://tictail.com/s/otherwheres/otherwheres-iii-comics"
+  , actionButtonHref = "http://otherwheres.tictail.com/products/otherwheres-iii-comics"
   }
 
 
@@ -237,7 +237,7 @@ disaster =
   , quoteCredit = "Katie Wheeler-Dubin"
   , quoteStory = "Storm Season"
   , actionButtonText = "Buy"
-  , actionButtonHref = "https://tictail.com/s/otherwheres/otherwheres-iv-disaster"
+  , actionButtonHref = "http://otherwheres.tictail.com/products/otherwheres-iv-disaster"
   }
 
 
