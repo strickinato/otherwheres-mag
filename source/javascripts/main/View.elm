@@ -1,393 +1,392 @@
-module View (..) where
+module View exposing (..)
 
 import Html exposing (..)
-import Html.Events exposing (..)
 import Html.Attributes exposing (..)
-import Model exposing (Model, Issue, isShowingMenu, midScreen, SpecificIssue(..), issueFromIssueType, IssueState(..), DisplayImage(..), Screen(..))
-import Update exposing (Action(..))
-import Mobile.View
-import Signal
+import Html.Events exposing (..)
 import Issues.About
+import Mobile.View
+import Model exposing (DisplayImage(..), Issue, IssueState(..), Model, Screen(..), SpecificIssue(..), isShowingMenu, issueFromIssueType, midScreen)
 import String
+import Update exposing (Msg(..))
 
 
-view : Signal.Address Action -> Model -> Html
-view address model =
-  case model.screen of
-    TooSmall ->
-      Mobile.View.view
-    _ ->
-      div
-        [ id "wrapper" ]
-        (List.append
-          (viewMenu address model)
-          [ viewSelectedIssue address model ]
-        )
+view : Model -> Html Msg
+view model =
+    case model.screen of
+        TooSmall ->
+            Mobile.View.view
+
+        _ ->
+            div
+                [ id "wrapper" ]
+                (List.append
+                    (viewMenu model)
+                    [ viewSelectedIssue model ]
+                )
 
 
-viewMenu : Signal.Address Action -> Model -> List Html
-viewMenu address model =
-  let
-    aboutMenu =
-      (viewAboutMenuItem address model)
+viewMenu : Model -> List (Html Msg)
+viewMenu model =
+    let
+        aboutMenu =
+            viewAboutMenuItem model
 
-    issueMenuItems =
-      (List.map (viewIssueMenuItem address model) model.issues)
-  in
+        issueMenuItems =
+            List.map (viewIssueMenuItem model) model.issues
+    in
     aboutMenu :: issueMenuItems
 
 
-viewSelectedIssue : Signal.Address Action -> Model -> Html
-viewSelectedIssue address model =
-  case model.expandedIssue of
-    About ->
-      Issues.About.view address model
+viewSelectedIssue : Model -> Html Msg
+viewSelectedIssue model =
+    case model.expandedIssue of
+        About ->
+            Issues.About.view model
 
-    None ->
-      span [] []
+        None ->
+            span [] []
 
-    expandedIssue ->
-      viewFromIssue
-        model.displayImage
-        (\displayImage -> onClick address (ExpandImage displayImage))
-        (closeHandler address)
-        (issueFromIssueType expandedIssue)
+        expandedIssue ->
+            viewFromIssue
+                model.displayImage
+                (\displayImage -> onClick (ExpandImage displayImage))
+                (closeHandler )
+                (issueFromIssueType expandedIssue)
 
 
-viewFromIssue : DisplayImage -> (DisplayImage -> Html.Attribute) -> Html.Attribute -> Issue -> Html
+viewFromIssue : DisplayImage -> (DisplayImage -> Html.Attribute Msg) -> Html.Attribute Msg -> Issue -> Html Msg
 viewFromIssue displayImage imgHandler closeHandler issue =
-  let
-    (closeButton) =
-      case displayImage of
-        All -> 
-          div [ class "close-button", closeHandler ] []
-        _ ->
-          div [ class "minimize-button", imgHandler All ] []
+    let
+        closeButton =
+            case displayImage of
+                All ->
+                    div [ class "close-button", closeHandler ] []
 
-  in
+                _ ->
+                    div [ class "minimize-button", imgHandler All ] []
+    in
     div
-      [ class ("issue-content") ]
-      [ closeButton
-      , div [ class "red-logo" ] []
-      , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
-      , h3 [ class "issue-tagline" ] [ text (String.toUpper issue.tagline) ]
-      , (issueImageView issue.images displayImage imgHandler)
-      , div
-          [ class "issue-quote" ]
-          [ text issue.quote ]
-      , div
-          [ class "issue-quote-credit" ]
-          [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
-      , actionButton issue
-      ]
-
-
-actionButton : Issue -> Html
-actionButton issue =
-  a
-    ( tictailHref issue )
-    [ div
-      [ class "issue-content-action-button" ]
-      [ text (String.toUpper issue.actionButtonText) ]
-    ]
-
-
-tictailHref : Issue -> List Html.Attribute
-tictailHref issue =
-  [ href issue.actionButtonHref, target "_blank" ]
-
-
-issueImageView : Model.ImagePaths -> DisplayImage -> (DisplayImage -> Html.Attribute) -> Html
-issueImageView images displayImage handler =
-  let
-    bigImageConstructor source =
-      div
-        [ class "big-image-center-helper redified" ]
-        [ img [src source, class "big-image", handler All ] [] ]
-            
-    imageList =
-      [ img [ src images.left, class "small", (handler Left) ] []
-      , img [ src images.middle, class "small", (handler Middle) ] []
-      , img [ src images.right, class "small", (handler Right) ] []
-      ]
-
-    allImages =
-      case displayImage of
-        All ->
-          imageList
-          
-        Left ->
-          (::)
-            (bigImageConstructor images.left)
-            imageList
-
-        Middle ->
-          (::)
-            (bigImageConstructor images.middle)
-            imageList
-                                  
-
-        Right ->
-          (::)
-            (bigImageConstructor images.right)
-            imageList
-
-  in
-    div
-      [ class "images" ]
-      allImages
-
-
-issueContentAttributes : List Html.Attribute
-issueContentAttributes =
-  let
-    styles =
-      style
-        [ ( "width", "80%" )
-        , ( "height", "100%" )
-        , ( "position", "absolute" )
-        , ( "display", "inline-block" )
-        , ( "float", "right" )
+        [ class "issue-content" ]
+        [ closeButton
+        , div [ class "red-logo" ] []
+        , h3 [ class "issue-number" ] [ text ("VOLUME " ++ issue.symbol ++ ":") ]
+        , h3 [ class "issue-tagline" ] [ text (String.toUpper issue.tagline) ]
+        , issueImageView issue.images displayImage imgHandler
+        , div
+            [ class "issue-quote" ]
+            [ text issue.quote ]
+        , div
+            [ class "issue-quote-credit" ]
+            [ text ("From " ++ issue.quoteStory ++ " by " ++ issue.quoteCredit) ]
+        , actionButton issue
         ]
-  in
+
+
+actionButton : Issue -> Html Msg
+actionButton issue =
+    a
+        (tictailHref issue)
+        [ div
+            [ class "issue-content-action-button" ]
+            [ text (String.toUpper issue.actionButtonText) ]
+        ]
+
+
+tictailHref : Issue -> List (Html.Attribute Msg)
+tictailHref issue =
+    [ href issue.actionButtonHref, target "_blank" ]
+
+
+issueImageView : Model.ImagePaths -> DisplayImage -> (DisplayImage -> Html.Attribute Msg) -> Html Msg
+issueImageView images displayImage handler =
+    let
+        bigImageConstructor source =
+            div
+                [ class "big-image-center-helper redified" ]
+                [ img [ src source, class "big-image", handler All ] [] ]
+
+        imageList =
+            [ img [ src images.left, class "small", handler Left ] []
+            , img [ src images.middle, class "small", handler Middle ] []
+            , img [ src images.right, class "small", handler Right ] []
+            ]
+
+        allImages =
+            case displayImage of
+                All ->
+                    imageList
+
+                Left ->
+                    (::)
+                        (bigImageConstructor images.left)
+                        imageList
+
+                Middle ->
+                    (::)
+                        (bigImageConstructor images.middle)
+                        imageList
+
+                Right ->
+                    (::)
+                        (bigImageConstructor images.right)
+                        imageList
+    in
+    div
+        [ class "images" ]
+        allImages
+
+
+issueContentAttributes : List ( Html.Attribute Msg)
+issueContentAttributes =
+    let
+        styles =
+            style
+                [ ( "width", "80%" )
+                , ( "height", "100%" )
+                , ( "position", "absolute" )
+                , ( "display", "inline-block" )
+                , ( "float", "right" )
+                ]
+    in
     [ class "issue-content", styles ]
 
 
-viewAboutMenuItem : Signal.Address Action -> Model -> Html
-viewAboutMenuItem address model =
-  let
-    issueState =
-      getIssueState About model
+viewAboutMenuItem : Model -> Html Msg
+viewAboutMenuItem model =
+    let
+        issueState =
+            getIssueState About model
 
-    attributes =
-      issueStyle issueState "about" False model.closingAnimating
+        attributes =
+            issueStyle issueState "about" False model.closingAnimating
 
-    handlers =
-      handlersDependingOnState issueState About address
+        handlers =
+            handlersDependingOnState issueState About
 
-    logoAttributes name link =
-      [ class name
-      , href link
-      , target "_blank"
-      ]
+        logoAttributes name link =
+            [ class name
+            , href link
+            , target "_blank"
+            ]
 
-    logos =
-      div
-        [ class "logo-space"
-        , style [ ( "opacity", logoSpaceVisibility ) ]
-        ]
-        [ a (logoAttributes "facebook" "https://www.facebook.com/otherwheres") []
-        , a (logoAttributes "twitter" "https://twitter.com/otherwheresmag") []
-        , a (logoAttributes "instagram" "https://www.instagram.com/otherwheres_magazine/") []
-        ]
+        logos =
+            div
+                [ class "logo-space"
+                , style [ ( "opacity", logoSpaceVisibility ) ]
+                ]
+                [ a (logoAttributes "facebook" "https://www.facebook.com/otherwheres") []
+                , a (logoAttributes "twitter" "https://twitter.com/otherwheresmag") []
+                , a (logoAttributes "instagram" "https://www.instagram.com/otherwheres_magazine/") []
+                ]
 
-    logoSpaceVisibility =
-      case issueState of
-        Selected ->
-          if model.closingAnimating then
-            "0"
-          else
-            "1"
+        logoSpaceVisibility =
+            case issueState of
+                Selected ->
+                    if model.closingAnimating then
+                        "0"
+                    else
+                        "1"
 
-        _ ->
-          "0"
+                _ ->
+                    "0"
 
-    hovered =
-      case issueState of
-        Hovered ->
-          True
-        _ ->
-          False
+        hovered =
+            case issueState of
+                Hovered ->
+                    True
 
-    logoTextClasses =
-      classList
-        [("logo-text", True)
-        ,("mid-screen", midScreen model)
-        ,("hovered", hovered)
-        ]
+                _ ->
+                    False
 
-    logoClass =
-      if hovered then
-        class "grey-logo"
-      else
-        class "red-logo"
+        logoTextClasses =
+            classList
+                [ ( "logo-text", True )
+                , ( "mid-screen", midScreen model )
+                , ( "hovered", hovered )
+                ]
 
-    subText =
-      case issueState of
-        MenuItem ->
-          [ p [] [ text "{ mostly } true" ]
-          , p [] [ text "stories" ]
-          ]
+        logoClass =
+            if hovered then
+                class "grey-logo"
+            else
+                class "red-logo"
 
-        Hovered ->
-          [ p [] [ text "who are we" ] ]
+        subText =
+            case issueState of
+                MenuItem ->
+                    [ p [] [ text "{ mostly } true" ]
+                    , p [] [ text "stories" ]
+                    ]
 
-        Selected ->
-          [ p [] [ text "who are we" ] ]
+                Hovered ->
+                    [ p [] [ text "who are we" ] ]
 
-        Hidden ->
-          [ p [] [ text "{ mostly } true" ]
-          , p [] [ text "stories" ]
-          ]
-  in
+                Selected ->
+                    [ p [] [ text "who are we" ] ]
+
+                Hidden ->
+                    [ p [] [ text "{ mostly } true" ]
+                    , p [] [ text "stories" ]
+                    ]
+    in
     section
-      (List.append handlers attributes)
-      [ div
-          [ innerStyle ]
-          [ div
-              [ logoClass ]
-              [ logos ]
-          , div [ logoTextClasses ] [ text "OTHERWHERES" ]
-          , div
-              [ class "tag-line-text" ]
-              subText
-          ]
-      ]
+        (List.append handlers attributes)
+        [ div
+            [ innerStyle ]
+            [ div
+                [ logoClass ]
+                [ logos ]
+            , div [ logoTextClasses ] [ text "OTHERWHERES" ]
+            , div
+                [ class "tag-line-text" ]
+                subText
+            ]
+        ]
 
 
-handlersDependingOnState : IssueState -> SpecificIssue -> Signal.Address Action -> List Html.Attribute
-handlersDependingOnState state issueType address =
-  case state of
-    Hidden ->
-      []
+handlersDependingOnState : IssueState -> SpecificIssue -> List ( Html.Attribute Msg)
+handlersDependingOnState state issueType =
+    case state of
+        Hidden ->
+            []
 
-    Selected ->
-      [ closeHandler address ]
+        Selected ->
+            [ closeHandler ]
 
-    _ ->
-      [ makeHoverHandler address issueType
-      , makeExpandHandler address issueType
-      ]
+        _ ->
+            [ makeHoverHandler issueType
+            , makeExpandHandler issueType
+            ]
 
 
 getIssueState : SpecificIssue -> Model -> IssueState
 getIssueState specificIssue model =
-  if isShowingMenu model then
-    if (specificIssue == model.hoveredIssue) then
-      Hovered
+    if isShowingMenu model then
+        if specificIssue == model.hoveredIssue then
+            Hovered
+        else
+            MenuItem
+    else if specificIssue == model.expandedIssue then
+        Selected
     else
-      MenuItem
-  else if (specificIssue == model.expandedIssue) then
-    Selected
-  else
-    Hidden
+        Hidden
 
 
-issueStyle : IssueState -> String -> Bool -> Bool -> List Html.Attribute
+issueStyle : IssueState -> String -> Bool -> Bool -> List (Html.Attribute Msg)
 issueStyle issueState issueClass redify closingAnimating =
-  let
-    ( visibility, width, border, redified ) =
-      case issueState of
-        MenuItem ->
-          ( "visible", "20%", "solid white 2px", True )
+    let
+        ( visibility, width, border, redified ) =
+            case issueState of
+                MenuItem ->
+                    ( "visible", "20%", "solid white 2px", True )
 
-        Hovered ->
-          ( "visible", "20%", "solid white 2px", False )
+                Hovered ->
+                    ( "visible", "20%", "solid white 2px", False )
 
-        Selected ->
-          ( "visible", "20%", "none", False )
+                Selected ->
+                    ( "visible", "20%", "none", False )
 
-        Hidden ->
-          if closingAnimating then
-            ( "visible", "20%", "solid white 2px", True )
-          else
-            ( "hidden", "0%", "none", False )
+                Hidden ->
+                    if closingAnimating then
+                        ( "visible", "20%", "solid white 2px", True )
+                    else
+                        ( "hidden", "0%", "none", False )
 
-    styles =
-      style
-        [ ( "width", width )
-        , ( "visibility", visibility )
-        , ( "height", "100%" )
-        , ( "float", "left" )
-        , ( "display", "inline-block" )
-        , ( "border-left", border )
-        , ( "border-right", border )
-        ]
+        styles =
+            style
+                [ ( "width", width )
+                , ( "visibility", visibility )
+                , ( "height", "100%" )
+                , ( "float", "left" )
+                , ( "display", "inline-block" )
+                , ( "border-left", border )
+                , ( "border-right", border )
+                ]
 
-    classes =
-      classList
-        [ ( "issue", True )
-        , ( issueClass, True )
-        , ( "redified", (redified && redify) )
-        ]
-  in
+        classes =
+            classList
+                [ ( "issue", True )
+                , ( issueClass, True )
+                , ( "redified", redified && redify )
+                ]
+    in
     [ styles, classes ]
 
 
-makeHoverHandler : Signal.Address Action -> SpecificIssue -> Html.Attribute
-makeHoverHandler address issueType =
-  issueType
-    |> HoverIssue
-    |> onMouseOver address
+makeHoverHandler : SpecificIssue -> ( Html.Attribute Msg)
+makeHoverHandler issueType =
+    issueType
+        |> HoverIssue
+        |> onMouseOver
 
 
-makeExpandHandler : Signal.Address Action -> SpecificIssue -> Html.Attribute
-makeExpandHandler address issueType =
-  issueType
-    |> ExpandIssue
-    |> onClick address
+makeExpandHandler : SpecificIssue -> Html.Attribute Msg
+makeExpandHandler issueType =
+    issueType
+        |> ExpandIssue
+        |> onClick
 
 
-closeHandler : Signal.Address Action -> Html.Attribute
-closeHandler address =
-  onClick address (ExpandIssue None)
+closeHandler : Html.Attribute Msg
+closeHandler =
+    onClick (ExpandIssue None)
 
 
-viewIssueMenuItem : Signal.Address Action -> Model -> Issue -> Html
-viewIssueMenuItem address model issue =
-  let
-    issueState =
-      getIssueState issue.issueType model
+viewIssueMenuItem : Model -> Issue -> Html Msg
+viewIssueMenuItem model issue =
+    let
+        issueState =
+            getIssueState issue.issueType model
 
-    attributes =
-      issueStyle issueState issue.class True model.closingAnimating
+        attributes =
+            issueStyle issueState issue.class True model.closingAnimating
 
-    handlers =
-      handlersDependingOnState issueState issue.issueType address
-  in
+        handlers =
+            handlersDependingOnState issueState issue.issueType
+    in
     section
-      (List.append handlers attributes)
-      [ viewMenuInner model issue ]
+        (List.append handlers attributes)
+        [ viewMenuInner model issue ]
 
 
-innerStyle : Html.Attribute
+innerStyle : Html.Attribute Msg
 innerStyle =
-  style
-    [ ( "display", "flex" )
-    , ( "flex-direction", "column" )
-    , ( "align-items", "center" )
-    , ( "justify-content", "center" )
-    , ( "height", "100%" )
-    , ( "text-align", "center" )
-    ]
+    style
+        [ ( "display", "flex" )
+        , ( "flex-direction", "column" )
+        , ( "align-items", "center" )
+        , ( "justify-content", "center" )
+        , ( "height", "100%" )
+        , ( "text-align", "center" )
+        ]
 
 
-viewMenuInner : Model -> Issue -> Html
+viewMenuInner : Model -> Issue -> Html Msg
 viewMenuInner model issue =
-  let
-    issueDisplay =
-      case getIssueState issue.issueType model of
-        MenuItem ->
-          h1
-            [ class "menu-issue-symbol" ]
-            [ text issue.symbol ]
+    let
+        issueDisplay =
+            case getIssueState issue.issueType model of
+                MenuItem ->
+                    h1
+                        [ class "menu-issue-symbol" ]
+                        [ text issue.symbol ]
 
-        Hovered ->
-          h3
-            [ class "menu-issue-title" ]
-            [ text (String.toUpper issue.title) ]
+                Hovered ->
+                    h3
+                        [ class "menu-issue-title" ]
+                        [ text (String.toUpper issue.title) ]
 
-        Selected ->
-          h3
-            [ class "menu-issue-title" ]
-            [ text (String.toUpper issue.title) ]
+                Selected ->
+                    h3
+                        [ class "menu-issue-title" ]
+                        [ text (String.toUpper issue.title) ]
 
-        Hidden ->
-          span [] []
+                Hidden ->
+                    span [] []
 
-    styles =
-      innerStyle
-  in
+        styles =
+            innerStyle
+    in
     div
-      [ styles ]
-      [ issueDisplay ]
+        [ styles ]
+        [ issueDisplay ]
