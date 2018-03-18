@@ -91,7 +91,7 @@ viewCurrentlyAccepting : Html Msg
 viewCurrentlyAccepting =
     div
         [ class "currently-accepting" ]
-        [ text "Currently Accepting Submissions for Volume V:" ]
+        [ text "Keep an eye out for Volume V" ]
 
 
 viewNextIssueInfo : Html Msg
@@ -99,7 +99,7 @@ viewNextIssueInfo =
     div
         [ class "next-issue" ]
         [ h3 [] [ text "UNDERTOW" ]
-        , p [] [ text "Tell us your stories about rising tides, tugging currents, hidden traps, and whatever else \"undertow\" means to you" ]
+        , p [] [ text "Email us if you'd like to share stories, art, photographs, or just grab a beer." ]
         ]
 
 
