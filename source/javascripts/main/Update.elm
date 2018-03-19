@@ -1,20 +1,24 @@
 module Update exposing (..)
 
 import Array
-import Model exposing (DisplayImage(..), Issue, Model, Screen(..), SpecificIssue(..), initialAnimation, resetTime)
-import Time exposing (Time, second)
-import Window
-import Util exposing ((=>))
+import Issue exposing (DisplayImage(..), SpecificIssue(..))
+import Model exposing (AnimationState, Model, Screen(..), initialAnimation, resetTime)
+import Navigation
 import Task
+import Time exposing (Time, second)
+import Util exposing ((=>))
+import Window
 
 
 type Msg
     = ExpandIssue SpecificIssue
     | HoverIssue SpecificIssue
     | ExpandImage DisplayImage
+    | GoTo SpecificIssue
     | Viewport Window.Size
     | Tick Time
-    | AnimateClosing Time
+    | SetClosing Time
+    | UrlChanged Navigation.Location
     | NoOp
 
 
@@ -22,60 +26,18 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick clockTime ->
-            let
-                { elapsedTime, prevClockTime } =
-                    model.phraseAnimationState
+            (model
+                |> advancePhraseAnimation clockTime
+                |> advanceClosingAnimation clockTime
+            )
+                => Cmd.none
 
-                newElapsedTime =
-                    elapsedTime + (clockTime - prevClockTime)
-
-                newModel =
-                    if newElapsedTime > (1.5 * second) then
-                        { model
-                            | currentPhraseIndex = nextCurrentPhraseIndex model
-                            , phraseAnimationState =
-                                { elapsedTime = 0
-                                , prevClockTime = clockTime
-                                }
-                        }
-                    else
-                        { model
-                            | phraseAnimationState =
-                                { elapsedTime = newElapsedTime
-                                , prevClockTime = clockTime
-                                }
-                        }
-            in
-            newModel => Cmd.none  --Effects.tick Tick
-
-        AnimateClosing clockTime ->
-            let
-                newElapsedTime =
-                    case model.closingAnimationState of
-                        Nothing ->
-                            0
-
-                        Just { elapsedTime, prevClockTime } ->
-                            elapsedTime + (clockTime - prevClockTime)
-            in
-            if newElapsedTime > (second / 2.0) then
-                { model
-                    | expandedIssue = None
-                    , displayImage = All
-                    , closingAnimating = False
-                    , closingAnimationState = Nothing
-                }
-                    => Cmd.none
-            else
-                { model
-                    | closingAnimating = True
-                    , closingAnimationState =
-                        Just
-                            { elapsedTime = newElapsedTime
-                            , prevClockTime = clockTime
-                            }
-                }
-                    => Task.perform AnimateClosing Time.now
+        SetClosing clockTime ->
+            { model
+                | closingAnimationState = Just { elapsedTime = 0, prevClockTime = clockTime }
+                , closingAnimating = True
+            }
+                => Cmd.none
 
         ExpandImage display ->
             { model | displayImage = display } => Cmd.none
@@ -83,15 +45,13 @@ update msg model =
         ExpandIssue expandedIssue ->
             case expandedIssue of
                 None ->
-                    model => Task.perform AnimateClosing Time.now
+                    model => Task.perform SetClosing Time.now
 
                 specificIssue ->
-                    { model
-                        | expandedIssue = specificIssue
-                        , currentPhraseIndex = 0
-                        , phraseAnimationState = resetTime model.phraseAnimationState
-                    }
-                        => Cmd.none
+                    ( { model | expandedIssue = specificIssue }
+                        |> resetPhrases
+                    , Cmd.none
+                    )
 
         HoverIssue hoveredIssue ->
             { model | hoveredIssue = hoveredIssue } => Cmd.none
@@ -109,8 +69,27 @@ update msg model =
             { model | screen = screenType }
                 => Cmd.none
 
+        UrlChanged location ->
+            ( { model | history = location :: model.history }
+            , Task.perform ExpandIssue (Task.succeed <| Issue.fromLocation location)
+            )
+
+        GoTo specificIssue ->
+            {- This is simply used to change the URL, and ChangeUrl listens -}
+            ( model, Navigation.newUrl <| Issue.slug specificIssue )
+
         NoOp ->
             model => Cmd.none
+
+
+{-| We always want this to start with "Mostly True" because that's the best.
+-}
+resetPhrases : Model -> Model
+resetPhrases model =
+    { model
+        | currentPhraseIndex = 0
+        , phraseAnimationState = resetTime model.phraseAnimationState
+    }
 
 
 nextCurrentPhraseIndex : Model -> Int
@@ -123,3 +102,53 @@ nextCurrentPhraseIndex model =
             model.currentPhraseIndex + 1
     in
     newCurrentPhraseIndex % length
+
+
+advanceAnimation : Time -> Time -> AnimationState -> ( Bool, AnimationState )
+advanceAnimation clockTime checkTime { elapsedTime, prevClockTime } =
+    let
+        newElapsedTime =
+            elapsedTime + (clockTime - prevClockTime)
+    in
+    if newElapsedTime > checkTime then
+        ( True, { prevClockTime = clockTime, elapsedTime = 0 } )
+    else
+        ( False, { prevClockTime = clockTime, elapsedTime = newElapsedTime } )
+
+
+advancePhraseAnimation : Time -> Model -> Model
+advancePhraseAnimation clockTime model =
+    case advanceAnimation clockTime (second * 1.5) model.phraseAnimationState of
+        ( True, newState ) ->
+            { model
+                | currentPhraseIndex = nextCurrentPhraseIndex model
+                , phraseAnimationState = newState
+            }
+
+        ( False, newState ) ->
+            { model | phraseAnimationState = newState }
+
+
+advanceClosingAnimation : Time -> Model -> Model
+advanceClosingAnimation time model =
+    let
+        updater thing =
+            case thing of
+                ( True, newState ) ->
+                    { model
+                        | expandedIssue = None
+                        , displayImage = All
+                        , closingAnimating = False
+                        , closingAnimationState = Nothing
+                    }
+
+                ( False, newState ) ->
+                    { model
+                        | closingAnimating = True
+                        , closingAnimationState = Just newState
+                    }
+    in
+    model.closingAnimationState
+        |> Maybe.map (advanceAnimation time (second / 2.0))
+        |> Maybe.map updater
+        |> Maybe.withDefault model

@@ -3,9 +3,10 @@ module View exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Issue exposing (..)
 import Issues.About
 import Mobile.View
-import Model exposing (DisplayImage(..), Issue, IssueState(..), Model, Screen(..), SpecificIssue(..), isShowingMenu, issueFromIssueType, midScreen)
+import Model exposing (Model, Screen(..), isShowingMenu, midScreen)
 import String
 import Update exposing (Msg(..))
 
@@ -50,7 +51,7 @@ viewSelectedIssue model =
             viewFromIssue
                 model.displayImage
                 (\displayImage -> onClick (ExpandImage displayImage))
-                (closeHandler )
+                closeHandler
                 (issueFromIssueType expandedIssue)
 
 
@@ -97,7 +98,7 @@ tictailHref issue =
     [ href issue.actionButtonHref, target "_blank" ]
 
 
-issueImageView : Model.ImagePaths -> DisplayImage -> (DisplayImage -> Html.Attribute Msg) -> Html Msg
+issueImageView : ImagePaths -> DisplayImage -> (DisplayImage -> Html.Attribute Msg) -> Html Msg
 issueImageView images displayImage handler =
     let
         bigImageConstructor source =
@@ -136,7 +137,7 @@ issueImageView images displayImage handler =
         allImages
 
 
-issueContentAttributes : List ( Html.Attribute Msg)
+issueContentAttributes : List (Html.Attribute Msg)
 issueContentAttributes =
     let
         styles =
@@ -233,18 +234,14 @@ viewAboutMenuItem model =
         (List.append handlers attributes)
         [ div
             [ innerStyle ]
-            [ div
-                [ logoClass ]
-                [ logos ]
+            [ div [ logoClass ] [ logos ]
             , div [ logoTextClasses ] [ text "OTHERWHERES" ]
-            , div
-                [ class "tag-line-text" ]
-                subText
+            , div [ class "tag-line-text" ] subText
             ]
         ]
 
 
-handlersDependingOnState : IssueState -> SpecificIssue -> List ( Html.Attribute Msg)
+handlersDependingOnState : IssueState -> SpecificIssue -> List (Html.Attribute Msg)
 handlersDependingOnState state issueType =
     case state of
         Hidden ->
@@ -275,27 +272,26 @@ getIssueState specificIssue model =
 issueStyle : IssueState -> String -> Bool -> Bool -> List (Html.Attribute Msg)
 issueStyle issueState issueClass redify closingAnimating =
     let
-        ( visibility, width, border, redified ) =
+        ( width, border, redified ) =
             case issueState of
                 MenuItem ->
-                    ( "visible", "20%", "solid white 2px", True )
+                    ( "20%", "solid white 2px", True )
 
                 Hovered ->
-                    ( "visible", "20%", "solid white 2px", False )
+                    ( "20%", "solid white 2px", False )
 
                 Selected ->
-                    ( "visible", "20%", "none", False )
+                    ( "20%", "none", False )
 
                 Hidden ->
                     if closingAnimating then
-                        ( "visible", "20%", "solid white 2px", True )
+                        ( "20%", "solid white 2px", True )
                     else
-                        ( "hidden", "0%", "none", False )
+                        ( "0%", "none", True )
 
         styles =
             style
                 [ ( "width", width )
-                , ( "visibility", visibility )
                 , ( "height", "100%" )
                 , ( "float", "left" )
                 , ( "display", "inline-block" )
@@ -313,23 +309,19 @@ issueStyle issueState issueClass redify closingAnimating =
     [ styles, classes ]
 
 
-makeHoverHandler : SpecificIssue -> ( Html.Attribute Msg)
+makeHoverHandler : SpecificIssue -> Html.Attribute Msg
 makeHoverHandler issueType =
-    issueType
-        |> HoverIssue
-        |> onMouseOver
+    onMouseOver <| HoverIssue issueType
 
 
 makeExpandHandler : SpecificIssue -> Html.Attribute Msg
 makeExpandHandler issueType =
-    issueType
-        |> ExpandIssue
-        |> onClick
+    onClick <| GoTo issueType
 
 
 closeHandler : Html.Attribute Msg
 closeHandler =
-    onClick (ExpandIssue None)
+    onClick <| GoTo None
 
 
 viewIssueMenuItem : Model -> Issue -> Html Msg
