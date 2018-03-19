@@ -4,7 +4,8 @@ import Array
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Model exposing (Model, SpecificIssue(..), midScreen)
+import Issue exposing (SpecificIssue(..))
+import Model exposing (Model, midScreen)
 import String
 import Update exposing (Msg(..))
 

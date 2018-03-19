@@ -25,10 +25,10 @@ var _user$project$View$innerStyle = _elm_lang$html$Html_Attributes$style(
 		}
 	});
 var _user$project$View$closeHandler = _elm_lang$html$Html_Events$onClick(
-	_user$project$Update$ExpandIssue(_user$project$Model$None));
+	_user$project$Update$GoTo(_user$project$Issue$None));
 var _user$project$View$makeExpandHandler = function (issueType) {
 	return _elm_lang$html$Html_Events$onClick(
-		_user$project$Update$ExpandIssue(issueType));
+		_user$project$Update$GoTo(issueType));
 };
 var _user$project$View$makeHoverHandler = function (issueType) {
 	return _elm_lang$html$Html_Events$onMouseOver(
@@ -40,43 +40,38 @@ var _user$project$View$issueStyle = F4(
 			var _p1 = issueState;
 			switch (_p1.ctor) {
 				case 'MenuItem':
-					return {ctor: '_Tuple4', _0: 'visible', _1: '20%', _2: 'solid white 2px', _3: true};
+					return {ctor: '_Tuple3', _0: '20%', _1: 'solid white 2px', _2: true};
 				case 'Hovered':
-					return {ctor: '_Tuple4', _0: 'visible', _1: '20%', _2: 'solid white 2px', _3: false};
+					return {ctor: '_Tuple3', _0: '20%', _1: 'solid white 2px', _2: false};
 				case 'Selected':
-					return {ctor: '_Tuple4', _0: 'visible', _1: '20%', _2: 'none', _3: false};
+					return {ctor: '_Tuple3', _0: '20%', _1: 'none', _2: false};
 				default:
-					return closingAnimating ? {ctor: '_Tuple4', _0: 'visible', _1: '20%', _2: 'solid white 2px', _3: true} : {ctor: '_Tuple4', _0: 'hidden', _1: '0%', _2: 'none', _3: false};
+					return closingAnimating ? {ctor: '_Tuple3', _0: '20%', _1: 'solid white 2px', _2: true} : {ctor: '_Tuple3', _0: '0%', _1: 'none', _2: true};
 			}
 		}();
-		var visibility = _p0._0;
-		var width = _p0._1;
-		var border = _p0._2;
-		var redified = _p0._3;
+		var width = _p0._0;
+		var border = _p0._1;
+		var redified = _p0._2;
 		var styles = _elm_lang$html$Html_Attributes$style(
 			{
 				ctor: '::',
 				_0: {ctor: '_Tuple2', _0: 'width', _1: width},
 				_1: {
 					ctor: '::',
-					_0: {ctor: '_Tuple2', _0: 'visibility', _1: visibility},
+					_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
 					_1: {
 						ctor: '::',
-						_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+						_0: {ctor: '_Tuple2', _0: 'float', _1: 'left'},
 						_1: {
 							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'float', _1: 'left'},
+							_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
 							_1: {
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+								_0: {ctor: '_Tuple2', _0: 'border-left', _1: border},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'border-left', _1: border},
-									_1: {
-										ctor: '::',
-										_0: {ctor: '_Tuple2', _0: 'border-right', _1: border},
-										_1: {ctor: '[]'}
-									}
+									_0: {ctor: '_Tuple2', _0: 'border-right', _1: border},
+									_1: {ctor: '[]'}
 								}
 							}
 						}
@@ -109,7 +104,7 @@ var _user$project$View$issueStyle = F4(
 	});
 var _user$project$View$getIssueState = F2(
 	function (specificIssue, model) {
-		return _user$project$Model$isShowingMenu(model) ? (_elm_lang$core$Native_Utils.eq(specificIssue, model.hoveredIssue) ? _user$project$Model$Hovered : _user$project$Model$MenuItem) : (_elm_lang$core$Native_Utils.eq(specificIssue, model.expandedIssue) ? _user$project$Model$Selected : _user$project$Model$Hidden);
+		return _user$project$Model$isShowingMenu(model) ? (_elm_lang$core$Native_Utils.eq(specificIssue, model.hoveredIssue) ? _user$project$Issue$Hovered : _user$project$Issue$MenuItem) : (_elm_lang$core$Native_Utils.eq(specificIssue, model.expandedIssue) ? _user$project$Issue$Selected : _user$project$Issue$Hidden);
 	});
 var _user$project$View$viewMenuInner = F2(
 	function (model, issue) {
@@ -233,9 +228,9 @@ var _user$project$View$viewAboutMenuItem = function (model) {
 				}
 			};
 		});
-	var issueState = A2(_user$project$View$getIssueState, _user$project$Model$About, model);
+	var issueState = A2(_user$project$View$getIssueState, _user$project$Issue$About, model);
 	var attributes = A4(_user$project$View$issueStyle, issueState, 'about', false, model.closingAnimating);
-	var handlers = A2(_user$project$View$handlersDependingOnState, issueState, _user$project$Model$About);
+	var handlers = A2(_user$project$View$handlersDependingOnState, issueState, _user$project$Issue$About);
 	var logoSpaceVisibility = function () {
 		var _p4 = issueState;
 		if (_p4.ctor === 'Selected') {
@@ -492,7 +487,7 @@ var _user$project$View$issueImageView = F3(
 						_0: _elm_lang$html$Html_Attributes$class('small'),
 						_1: {
 							ctor: '::',
-							_0: handler(_user$project$Model$Left),
+							_0: handler(_user$project$Issue$Left),
 							_1: {ctor: '[]'}
 						}
 					}
@@ -510,7 +505,7 @@ var _user$project$View$issueImageView = F3(
 							_0: _elm_lang$html$Html_Attributes$class('small'),
 							_1: {
 								ctor: '::',
-								_0: handler(_user$project$Model$Middle),
+								_0: handler(_user$project$Issue$Middle),
 								_1: {ctor: '[]'}
 							}
 						}
@@ -528,7 +523,7 @@ var _user$project$View$issueImageView = F3(
 								_0: _elm_lang$html$Html_Attributes$class('small'),
 								_1: {
 									ctor: '::',
-									_0: handler(_user$project$Model$Right),
+									_0: handler(_user$project$Issue$Right),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -558,7 +553,7 @@ var _user$project$View$issueImageView = F3(
 								_0: _elm_lang$html$Html_Attributes$class('big-image'),
 								_1: {
 									ctor: '::',
-									_0: handler(_user$project$Model$All),
+									_0: handler(_user$project$Issue$All),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -665,7 +660,7 @@ var _user$project$View$viewFromIssue = F4(
 						_0: _elm_lang$html$Html_Attributes$class('minimize-button'),
 						_1: {
 							ctor: '::',
-							_0: imgHandler(_user$project$Model$All),
+							_0: imgHandler(_user$project$Issue$All),
 							_1: {ctor: '[]'}
 						}
 					},
@@ -795,7 +790,7 @@ var _user$project$View$viewSelectedIssue = function (model) {
 						_user$project$Update$ExpandImage(displayImage));
 				},
 				_user$project$View$closeHandler,
-				_user$project$Model$issueFromIssueType(_p9));
+				_user$project$Issue$issueFromIssueType(_p9));
 	}
 };
 var _user$project$View$viewMenu = function (model) {

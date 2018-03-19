@@ -1,0 +1,12 @@
+<h1 id="run-the-examples">Run the Examples</h1>
+
+<p>To run the examples in this folder, follow the following steps:</p>
+
+<p><code>bash
+git clone https://github.com/elm-lang/navigation.git
+cd navigation
+cd examples
+elm-reactor
+</code></p>
+
+<p>This will navigate into the <code>examples/</code> directory and start <code>elm-reactor</code>. From here, go to <a href="http://localhost:8000">http://localhost:8000</a> and start clicking on <code>.elm</code> files to see them in action.</p>

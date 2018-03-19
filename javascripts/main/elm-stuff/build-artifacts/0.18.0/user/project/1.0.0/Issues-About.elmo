@@ -186,7 +186,7 @@ var _user$project$Issues_About$view = function (model) {
 			}
 		});
 	var closeHandler = _elm_lang$html$Html_Events$onClick(
-		_user$project$Update$ExpandIssue(_user$project$Model$None));
+		_user$project$Update$ExpandIssue(_user$project$Issue$None));
 	var currentPhrase = A2(
 		_elm_lang$core$Maybe$withDefault,
 		'',

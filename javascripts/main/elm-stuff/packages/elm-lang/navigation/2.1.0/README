@@ -1,0 +1,27 @@
+<h1 id="navigation">Navigation</h1>
+
+<p>Normally when the address bar changes, the browser sends some HTTP requests to load new pages.</p>
+
+<p>This library lets you capture navigation and handle it yourself. No need to kick off a request to your servers.</p>
+
+<h2 id="examples">Examples</h2>
+
+<p>Check out the <code>examples/</code> directory of this repo. The <code>README</code> there will give you more information.</p>
+
+<h2 id="right-and-middle-clicks-on-hashless-urls">Right and Middle Clicks on Hashless URLs</h2>
+
+<p>We got an issue asking "<a href="https://github.com/elm-lang/navigation/issues/13">what is the best way to handle clicks on <em>normal</em> URLs?</a>" where you want to handle the navigation by hand, but also permit middle and right clicks.</p>
+
+<p>The pending solution lives <a href="https://github.com/elm-lang/html/issues/110">here</a>.</p>
+
+<h2 id="context">Context</h2>
+
+<p>You want your website to load quickly, especially if many users will be on mobile phones. You also want to send as little data as possible to users, especially if they have slow internet connections or data caps.</p>
+
+<blockquote>
+  <p>For some reason, this general goal is called “Single Page Apps” or SPAs in the JavaScript world. It is odd in that the essence is that you want to manage multiple pages intelligently, and maybe “asset management” would have been clearer, but that ship has sailed.</p>
+</blockquote>
+
+<p>One important trick is to use the browser cache as much as possible. Ideally, when a user navigates to a new page, they do not make <em>any</em> HTTP requests. They have it all already. In a good case, you have most of the JS code you need already, and you just ask for a tiny bit more.</p>
+
+<p>Normally, browser navigation causes an HTTP request for some HTML. That HTML may then fetch some JavaScript and images and other stuff. By capturing navigation events (like this library does) you can skip that first HTTP request and figure out a way to get only the assets you are missing.</p>

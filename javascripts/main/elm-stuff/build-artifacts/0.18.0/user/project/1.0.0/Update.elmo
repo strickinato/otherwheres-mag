@@ -1,109 +1,89 @@
+var _user$project$Update$advanceAnimation = F3(
+	function (clockTime, checkTime, _p0) {
+		var _p1 = _p0;
+		var newElapsedTime = _p1.elapsedTime + (clockTime - _p1.prevClockTime);
+		return (_elm_lang$core$Native_Utils.cmp(newElapsedTime, checkTime) > 0) ? {
+			ctor: '_Tuple2',
+			_0: true,
+			_1: {prevClockTime: clockTime, elapsedTime: 0}
+		} : {
+			ctor: '_Tuple2',
+			_0: false,
+			_1: {prevClockTime: clockTime, elapsedTime: newElapsedTime}
+		};
+	});
+var _user$project$Update$advanceClosingAnimation = F2(
+	function (time, model) {
+		var updater = function (thing) {
+			var _p2 = thing;
+			if (_p2._0 === true) {
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{expandedIssue: _user$project$Issue$None, displayImage: _user$project$Issue$All, closingAnimating: false, closingAnimationState: _elm_lang$core$Maybe$Nothing});
+			} else {
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						closingAnimating: true,
+						closingAnimationState: _elm_lang$core$Maybe$Just(_p2._1)
+					});
+			}
+		};
+		return A2(
+			_elm_lang$core$Maybe$withDefault,
+			model,
+			A2(
+				_elm_lang$core$Maybe$map,
+				updater,
+				A2(
+					_elm_lang$core$Maybe$map,
+					A2(_user$project$Update$advanceAnimation, time, _elm_lang$core$Time$second / 2.0),
+					model.closingAnimationState)));
+	});
 var _user$project$Update$nextCurrentPhraseIndex = function (model) {
 	var newCurrentPhraseIndex = model.currentPhraseIndex + 1;
 	var length = _elm_lang$core$Array$length(model.phrases);
 	return A2(_elm_lang$core$Basics_ops['%'], newCurrentPhraseIndex, length);
 };
-var _user$project$Update$NoOp = {ctor: 'NoOp'};
-var _user$project$Update$AnimateClosing = function (a) {
-	return {ctor: 'AnimateClosing', _0: a};
-};
-var _user$project$Update$update = F2(
-	function (msg, model) {
-		var _p0 = msg;
-		switch (_p0.ctor) {
-			case 'Tick':
-				var _p2 = _p0._0;
-				var _p1 = model.phraseAnimationState;
-				var elapsedTime = _p1.elapsedTime;
-				var prevClockTime = _p1.prevClockTime;
-				var newElapsedTime = elapsedTime + (_p2 - prevClockTime);
-				var newModel = (_elm_lang$core$Native_Utils.cmp(newElapsedTime, 1.5 * _elm_lang$core$Time$second) > 0) ? _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						currentPhraseIndex: _user$project$Update$nextCurrentPhraseIndex(model),
-						phraseAnimationState: {elapsedTime: 0, prevClockTime: _p2}
-					}) : _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						phraseAnimationState: {elapsedTime: newElapsedTime, prevClockTime: _p2}
-					});
-				return A2(_user$project$Util_ops['=>'], newModel, _elm_lang$core$Platform_Cmd$none);
-			case 'AnimateClosing':
-				var _p4 = _p0._0;
-				var newElapsedTime = function () {
-					var _p3 = model.closingAnimationState;
-					if (_p3.ctor === 'Nothing') {
-						return 0;
-					} else {
-						return _p3._0.elapsedTime + (_p4 - _p3._0.prevClockTime);
-					}
-				}();
-				return (_elm_lang$core$Native_Utils.cmp(newElapsedTime, _elm_lang$core$Time$second / 2.0) > 0) ? A2(
-					_user$project$Util_ops['=>'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{expandedIssue: _user$project$Model$None, displayImage: _user$project$Model$All, closingAnimating: false, closingAnimationState: _elm_lang$core$Maybe$Nothing}),
-					_elm_lang$core$Platform_Cmd$none) : A2(
-					_user$project$Util_ops['=>'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							closingAnimating: true,
-							closingAnimationState: _elm_lang$core$Maybe$Just(
-								{elapsedTime: newElapsedTime, prevClockTime: _p4})
-						}),
-					A2(_elm_lang$core$Task$perform, _user$project$Update$AnimateClosing, _elm_lang$core$Time$now));
-			case 'ExpandImage':
-				return A2(
-					_user$project$Util_ops['=>'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{displayImage: _p0._0}),
-					_elm_lang$core$Platform_Cmd$none);
-			case 'ExpandIssue':
-				var _p5 = _p0._0;
-				if (_p5.ctor === 'None') {
-					return A2(
-						_user$project$Util_ops['=>'],
-						model,
-						A2(_elm_lang$core$Task$perform, _user$project$Update$AnimateClosing, _elm_lang$core$Time$now));
-				} else {
-					return A2(
-						_user$project$Util_ops['=>'],
-						_elm_lang$core$Native_Utils.update(
-							model,
-							{
-								expandedIssue: _p5,
-								currentPhraseIndex: 0,
-								phraseAnimationState: _user$project$Model$resetTime(model.phraseAnimationState)
-							}),
-						_elm_lang$core$Platform_Cmd$none);
-				}
-			case 'HoverIssue':
-				return A2(
-					_user$project$Util_ops['=>'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{hoveredIssue: _p0._0}),
-					_elm_lang$core$Platform_Cmd$none);
-			case 'Viewport':
-				var _p6 = _p0._0.width;
-				var screenType = (_elm_lang$core$Native_Utils.cmp(_p6, 1250) > 0) ? _user$project$Model$Big : ((_elm_lang$core$Native_Utils.cmp(_p6, 1023) > 0) ? _user$project$Model$Medium : _user$project$Model$TooSmall);
-				return A2(
-					_user$project$Util_ops['=>'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{screen: screenType}),
-					_elm_lang$core$Platform_Cmd$none);
-			default:
-				return A2(_user$project$Util_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
+var _user$project$Update$advancePhraseAnimation = F2(
+	function (clockTime, model) {
+		var _p3 = A3(_user$project$Update$advanceAnimation, clockTime, _elm_lang$core$Time$second * 1.5, model.phraseAnimationState);
+		if (_p3._0 === true) {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					currentPhraseIndex: _user$project$Update$nextCurrentPhraseIndex(model),
+					phraseAnimationState: _p3._1
+				});
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{phraseAnimationState: _p3._1});
 		}
 	});
+var _user$project$Update$resetPhrases = function (model) {
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			currentPhraseIndex: 0,
+			phraseAnimationState: _user$project$Model$resetTime(model.phraseAnimationState)
+		});
+};
+var _user$project$Update$NoOp = {ctor: 'NoOp'};
+var _user$project$Update$UrlChanged = function (a) {
+	return {ctor: 'UrlChanged', _0: a};
+};
+var _user$project$Update$SetClosing = function (a) {
+	return {ctor: 'SetClosing', _0: a};
+};
 var _user$project$Update$Tick = function (a) {
 	return {ctor: 'Tick', _0: a};
 };
 var _user$project$Update$Viewport = function (a) {
 	return {ctor: 'Viewport', _0: a};
+};
+var _user$project$Update$GoTo = function (a) {
+	return {ctor: 'GoTo', _0: a};
 };
 var _user$project$Update$ExpandImage = function (a) {
 	return {ctor: 'ExpandImage', _0: a};
@@ -114,3 +94,93 @@ var _user$project$Update$HoverIssue = function (a) {
 var _user$project$Update$ExpandIssue = function (a) {
 	return {ctor: 'ExpandIssue', _0: a};
 };
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'Tick':
+				var _p5 = _p4._0;
+				return A2(
+					_user$project$Util_ops['=>'],
+					A2(
+						_user$project$Update$advanceClosingAnimation,
+						_p5,
+						A2(_user$project$Update$advancePhraseAnimation, _p5, model)),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'SetClosing':
+				return A2(
+					_user$project$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							closingAnimationState: _elm_lang$core$Maybe$Just(
+								{elapsedTime: 0, prevClockTime: _p4._0}),
+							closingAnimating: true
+						}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'ExpandImage':
+				return A2(
+					_user$project$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{displayImage: _p4._0}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'ExpandIssue':
+				var _p6 = _p4._0;
+				if (_p6.ctor === 'None') {
+					return A2(
+						_user$project$Util_ops['=>'],
+						model,
+						A2(_elm_lang$core$Task$perform, _user$project$Update$SetClosing, _elm_lang$core$Time$now));
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _user$project$Update$resetPhrases(
+							_elm_lang$core$Native_Utils.update(
+								model,
+								{expandedIssue: _p6})),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'HoverIssue':
+				return A2(
+					_user$project$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{hoveredIssue: _p4._0}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'Viewport':
+				var _p7 = _p4._0.width;
+				var screenType = (_elm_lang$core$Native_Utils.cmp(_p7, 1250) > 0) ? _user$project$Model$Big : ((_elm_lang$core$Native_Utils.cmp(_p7, 1023) > 0) ? _user$project$Model$Medium : _user$project$Model$TooSmall);
+				return A2(
+					_user$project$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{screen: screenType}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'UrlChanged':
+				var _p8 = _p4._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							history: {ctor: '::', _0: _p8, _1: model.history}
+						}),
+					_1: A2(
+						_elm_lang$core$Task$perform,
+						_user$project$Update$ExpandIssue,
+						_elm_lang$core$Task$succeed(
+							_user$project$Issue$fromLocation(_p8)))
+				};
+			case 'GoTo':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _elm_lang$navigation$Navigation$newUrl(
+						_user$project$Issue$slug(_p4._0))
+				};
+			default:
+				return A2(_user$project$Util_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
+		}
+	});

@@ -4,20 +4,22 @@ import AnimationFrame
 import Html exposing (..)
 import Json.Decode exposing (Value)
 import Model exposing (Model, init)
-import Update exposing (Msg(..), update)
+import Navigation
 import Time
+import Update exposing (Msg(..), update)
 import View exposing (view)
 import Window
 
 
 main : Program Never Model Msg
 main =
-    Html.program
-        { init = ( init, Cmd.none )
+    Navigation.program UrlChanged
+        { init = \a -> ( init a, Cmd.none )
         , update = update
         , view = view
         , subscriptions = subscriptions
         }
+
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
