@@ -1,0 +1,20 @@
+<h1 id="properties-vs-attributes">Properties vs. Attributes</h1>
+
+<p>When you are working with HTML, you can have DOM nodes like <code>&lt;div&gt;&lt;/div&gt;</code>. And you can add <em>attributes</em> to those DOM nodes, like <code>&lt;div class="user-info"&gt;&lt;/div&gt;</code>.</p>
+
+<p>When you are creating DOM nodes in JavaScript, there are two ways to add attributes like this:</p>
+
+<ol>
+  <li>
+    <p><strong>Attributes</strong> — You can use the <code>setAttribute</code> function. So adding a class attribute would look like this: <code>domNode.setAttribute('class', 'user-info')</code>.</p>
+  </li>
+  <li>
+    <p><strong>Properties</strong> — JavaScript often exposes an alternate way to set these attributes. Another way to add a class attribute would be like this: <code>domNode.className = 'user-info'</code></p>
+  </li>
+</ol>
+
+<p>Notice that the attribute is called <code>class</code> but the property is called <code>className</code>. This is because <code>class</code> is a reserved word in JavaScript. Point is, <strong>attributes and properties do not always match up.</strong></p>
+
+<p>It is actually a bit crazier than that though. <strong>Sometimes an attribute exists, but there is no corresponding property.</strong> For example, as of this writing the <code>webkit-playsinline</code> can be added with <code>setAttribute</code>, but there is no corresponding property. And with SVG, you cannot use properties at all, you must to use <code>setAttributeNS</code> for everything.</p>
+
+<p>With all the corner cases here, it makes sense to have access to both approaches.</p>

@@ -1,0 +1,256 @@
+var _user$project$Issues_About$grey = '#979797';
+var _user$project$Issues_About$viewContactButton = A2(
+	_elm_lang$html$Html$a,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('about-contact-link-button'),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$href('mailto:jbienkhan@gmail.com'),
+			_1: {ctor: '[]'}
+		}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('HIT US UP'),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Issues_About$viewNextIssueInfo = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('next-issue'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$h3,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text('UNDERTOW'),
+				_1: {ctor: '[]'}
+			}),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$p,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Email us if you\'d like to share stories, art, photographs, or just grab a beer.'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		}
+	});
+var _user$project$Issues_About$viewCurrentlyAccepting = A2(
+	_elm_lang$html$Html$div,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('currently-accepting'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('Keep an eye out for Volume V'),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Issues_About$viewLine = function () {
+	var styles = _elm_lang$html$Html_Attributes$style(
+		{
+			ctor: '::',
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'border',
+				_1: A2(_elm_lang$core$Basics_ops['++'], '1px solid ', _user$project$Issues_About$grey)
+			},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'height', _1: '0px'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'width', _1: '80%'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'margin', _1: '0 auto'},
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: styles,
+			_1: {ctor: '[]'}
+		},
+		{ctor: '[]'});
+}();
+var _user$project$Issues_About$viewChangingText = function (currentText) {
+	var styles = _elm_lang$html$Html_Attributes$style(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'padding-top', _1: '20px'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'font-size', _1: '26px'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'padding-bottom', _1: '8px'},
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+	return A2(
+		_elm_lang$html$Html$h3,
+		{
+			ctor: '::',
+			_0: styles,
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				_elm_lang$core$String$toUpper(currentText)),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Issues_About$viewLiteIs = A2(
+	_elm_lang$html$Html$span,
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('lite-italic'),
+		_1: {ctor: '[]'}
+	},
+	{
+		ctor: '::',
+		_0: _elm_lang$html$Html$text('IS'),
+		_1: {ctor: '[]'}
+	});
+var _user$project$Issues_About$viewHeader = function (model) {
+	var classes = _elm_lang$html$Html_Attributes$classList(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'about-header', _1: true},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'mid-screen',
+					_1: _user$project$Model$midScreen(model)
+				},
+				_1: {ctor: '[]'}
+			}
+		});
+	return A2(
+		_elm_lang$html$Html$h1,
+		{
+			ctor: '::',
+			_0: classes,
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('OTHERWHERES'),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Issues_About$view = function (model) {
+	var styles = _elm_lang$html$Html_Attributes$style(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'background-image', _1: 'url(assets/issues/about/bg.png)'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'background-size', _1: 'cover'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'background-position', _1: 'bottom'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'color', _1: 'white'},
+								_1: {ctor: '[]'}
+							}
+						}
+					}
+				}
+			}
+		});
+	var closeHandler = _elm_lang$html$Html_Events$onClick(
+		_user$project$Update$ExpandIssue(_user$project$Model$None));
+	var currentPhrase = A2(
+		_elm_lang$core$Maybe$withDefault,
+		'',
+		A2(_elm_lang$core$Array$get, model.currentPhraseIndex, model.phrases));
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('issue-content'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: styles,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('close-button about'),
+							_1: {
+								ctor: '::',
+								_0: closeHandler,
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Issues_About$viewHeader(model),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Issues_About$viewLiteIs,
+							_1: {
+								ctor: '::',
+								_0: _user$project$Issues_About$viewChangingText(currentPhrase),
+								_1: {
+									ctor: '::',
+									_0: _user$project$Issues_About$viewLine,
+									_1: {
+										ctor: '::',
+										_0: _user$project$Issues_About$viewCurrentlyAccepting,
+										_1: {
+											ctor: '::',
+											_0: _user$project$Issues_About$viewNextIssueInfo,
+											_1: {
+												ctor: '::',
+												_0: _user$project$Issues_About$viewContactButton,
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};

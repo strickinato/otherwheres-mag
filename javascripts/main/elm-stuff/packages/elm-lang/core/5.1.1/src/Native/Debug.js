@@ -1,0 +1,1 @@
+var _elm_lang$core$Native_Debug=function(){function t(t,r){var o=t+": "+_elm_lang$core$Native_Utils.toString(r),n=n||{};return n.stdout?n.stdout.write(o):console.log(o),r}function r(t){throw new Error(t)}return{crash:r,log:F2(t)}}();

@@ -1,0 +1,7 @@
+<h1 id="mess-with-the-dom">Mess with the DOM</h1>
+
+<p>Sometimes you want to manually set the <strong>focus</strong> to a particular input field.</p>
+
+<p>Other times you want to be able to control how things <strong>scroll</strong>.</p>
+
+<p>This library makes it possible to do these kinds of operations as tasks.</p>

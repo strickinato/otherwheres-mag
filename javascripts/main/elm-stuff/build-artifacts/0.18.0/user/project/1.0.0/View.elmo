@@ -1,0 +1,830 @@
+var _user$project$View$innerStyle = _elm_lang$html$Html_Attributes$style(
+	{
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'display', _1: 'flex'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'flex-direction', _1: 'column'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'align-items', _1: 'center'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'justify-content', _1: 'center'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
+	});
+var _user$project$View$closeHandler = _elm_lang$html$Html_Events$onClick(
+	_user$project$Update$ExpandIssue(_user$project$Model$None));
+var _user$project$View$makeExpandHandler = function (issueType) {
+	return _elm_lang$html$Html_Events$onClick(
+		_user$project$Update$ExpandIssue(issueType));
+};
+var _user$project$View$makeHoverHandler = function (issueType) {
+	return _elm_lang$html$Html_Events$onMouseOver(
+		_user$project$Update$HoverIssue(issueType));
+};
+var _user$project$View$issueStyle = F4(
+	function (issueState, issueClass, redify, closingAnimating) {
+		var _p0 = function () {
+			var _p1 = issueState;
+			switch (_p1.ctor) {
+				case 'MenuItem':
+					return {ctor: '_Tuple4', _0: 'visible', _1: '20%', _2: 'solid white 2px', _3: true};
+				case 'Hovered':
+					return {ctor: '_Tuple4', _0: 'visible', _1: '20%', _2: 'solid white 2px', _3: false};
+				case 'Selected':
+					return {ctor: '_Tuple4', _0: 'visible', _1: '20%', _2: 'none', _3: false};
+				default:
+					return closingAnimating ? {ctor: '_Tuple4', _0: 'visible', _1: '20%', _2: 'solid white 2px', _3: true} : {ctor: '_Tuple4', _0: 'hidden', _1: '0%', _2: 'none', _3: false};
+			}
+		}();
+		var visibility = _p0._0;
+		var width = _p0._1;
+		var border = _p0._2;
+		var redified = _p0._3;
+		var styles = _elm_lang$html$Html_Attributes$style(
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'width', _1: width},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'visibility', _1: visibility},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'float', _1: 'left'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'border-left', _1: border},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'border-right', _1: border},
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+		var classes = _elm_lang$html$Html_Attributes$classList(
+			{
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'issue', _1: true},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: issueClass, _1: true},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'redified', _1: redified && redify},
+						_1: {ctor: '[]'}
+					}
+				}
+			});
+		return {
+			ctor: '::',
+			_0: styles,
+			_1: {
+				ctor: '::',
+				_0: classes,
+				_1: {ctor: '[]'}
+			}
+		};
+	});
+var _user$project$View$getIssueState = F2(
+	function (specificIssue, model) {
+		return _user$project$Model$isShowingMenu(model) ? (_elm_lang$core$Native_Utils.eq(specificIssue, model.hoveredIssue) ? _user$project$Model$Hovered : _user$project$Model$MenuItem) : (_elm_lang$core$Native_Utils.eq(specificIssue, model.expandedIssue) ? _user$project$Model$Selected : _user$project$Model$Hidden);
+	});
+var _user$project$View$viewMenuInner = F2(
+	function (model, issue) {
+		var styles = _user$project$View$innerStyle;
+		var issueDisplay = function () {
+			var _p2 = A2(_user$project$View$getIssueState, issue.issueType, model);
+			switch (_p2.ctor) {
+				case 'MenuItem':
+					return A2(
+						_elm_lang$html$Html$h1,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('menu-issue-symbol'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(issue.symbol),
+							_1: {ctor: '[]'}
+						});
+				case 'Hovered':
+					return A2(
+						_elm_lang$html$Html$h3,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('menu-issue-title'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$String$toUpper(issue.title)),
+							_1: {ctor: '[]'}
+						});
+				case 'Selected':
+					return A2(
+						_elm_lang$html$Html$h3,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('menu-issue-title'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								_elm_lang$core$String$toUpper(issue.title)),
+							_1: {ctor: '[]'}
+						});
+				default:
+					return A2(
+						_elm_lang$html$Html$span,
+						{ctor: '[]'},
+						{ctor: '[]'});
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: styles,
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: issueDisplay,
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$View$handlersDependingOnState = F2(
+	function (state, issueType) {
+		var _p3 = state;
+		switch (_p3.ctor) {
+			case 'Hidden':
+				return {ctor: '[]'};
+			case 'Selected':
+				return {
+					ctor: '::',
+					_0: _user$project$View$closeHandler,
+					_1: {ctor: '[]'}
+				};
+			default:
+				return {
+					ctor: '::',
+					_0: _user$project$View$makeHoverHandler(issueType),
+					_1: {
+						ctor: '::',
+						_0: _user$project$View$makeExpandHandler(issueType),
+						_1: {ctor: '[]'}
+					}
+				};
+		}
+	});
+var _user$project$View$viewIssueMenuItem = F2(
+	function (model, issue) {
+		var issueState = A2(_user$project$View$getIssueState, issue.issueType, model);
+		var attributes = A4(_user$project$View$issueStyle, issueState, issue.$class, true, model.closingAnimating);
+		var handlers = A2(_user$project$View$handlersDependingOnState, issueState, issue.issueType);
+		return A2(
+			_elm_lang$html$Html$section,
+			A2(_elm_lang$core$List$append, handlers, attributes),
+			{
+				ctor: '::',
+				_0: A2(_user$project$View$viewMenuInner, model, issue),
+				_1: {ctor: '[]'}
+			});
+	});
+var _user$project$View$viewAboutMenuItem = function (model) {
+	var logoAttributes = F2(
+		function (name, link) {
+			return {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class(name),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$href(link),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$target('_blank'),
+						_1: {ctor: '[]'}
+					}
+				}
+			};
+		});
+	var issueState = A2(_user$project$View$getIssueState, _user$project$Model$About, model);
+	var attributes = A4(_user$project$View$issueStyle, issueState, 'about', false, model.closingAnimating);
+	var handlers = A2(_user$project$View$handlersDependingOnState, issueState, _user$project$Model$About);
+	var logoSpaceVisibility = function () {
+		var _p4 = issueState;
+		if (_p4.ctor === 'Selected') {
+			return model.closingAnimating ? '0' : '1';
+		} else {
+			return '0';
+		}
+	}();
+	var logos = A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('logo-space'),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'opacity', _1: logoSpaceVisibility},
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$a,
+				A2(logoAttributes, 'facebook', 'https://www.facebook.com/otherwheres'),
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$a,
+					A2(logoAttributes, 'twitter', 'https://twitter.com/otherwheresmag'),
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$a,
+						A2(logoAttributes, 'instagram', 'https://www.instagram.com/otherwheres_magazine/'),
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+	var hovered = function () {
+		var _p5 = issueState;
+		if (_p5.ctor === 'Hovered') {
+			return true;
+		} else {
+			return false;
+		}
+	}();
+	var logoTextClasses = _elm_lang$html$Html_Attributes$classList(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'logo-text', _1: true},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'mid-screen',
+					_1: _user$project$Model$midScreen(model)
+				},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'hovered', _1: hovered},
+					_1: {ctor: '[]'}
+				}
+			}
+		});
+	var logoClass = hovered ? _elm_lang$html$Html_Attributes$class('grey-logo') : _elm_lang$html$Html_Attributes$class('red-logo');
+	var subText = function () {
+		var _p6 = issueState;
+		switch (_p6.ctor) {
+			case 'MenuItem':
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('{ mostly } true'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$p,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('stories'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				};
+			case 'Hovered':
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('who are we'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				};
+			case 'Selected':
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('who are we'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				};
+			default:
+				return {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('{ mostly } true'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$p,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('stories'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				};
+		}
+	}();
+	return A2(
+		_elm_lang$html$Html$section,
+		A2(_elm_lang$core$List$append, handlers, attributes),
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _user$project$View$innerStyle,
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: logoClass,
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: logos,
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: logoTextClasses,
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('OTHERWHERES'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('tag-line-text'),
+									_1: {ctor: '[]'}
+								},
+								subText),
+							_1: {ctor: '[]'}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$View$issueContentAttributes = function () {
+	var styles = _elm_lang$html$Html_Attributes$style(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'width', _1: '80%'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'position', _1: 'absolute'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'display', _1: 'inline-block'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'float', _1: 'right'},
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		});
+	return {
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$class('issue-content'),
+		_1: {
+			ctor: '::',
+			_0: styles,
+			_1: {ctor: '[]'}
+		}
+	};
+}();
+var _user$project$View$issueImageView = F3(
+	function (images, displayImage, handler) {
+		var imageList = {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$img,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$src(images.left),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('small'),
+						_1: {
+							ctor: '::',
+							_0: handler(_user$project$Model$Left),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$img,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$src(images.middle),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('small'),
+							_1: {
+								ctor: '::',
+								_0: handler(_user$project$Model$Middle),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$img,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$src(images.right),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('small'),
+								_1: {
+									ctor: '::',
+									_0: handler(_user$project$Model$Right),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}
+			}
+		};
+		var bigImageConstructor = function (source) {
+			return A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('big-image-center-helper redified'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$img,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$src(source),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('big-image'),
+								_1: {
+									ctor: '::',
+									_0: handler(_user$project$Model$All),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				});
+		};
+		var allImages = function () {
+			var _p7 = displayImage;
+			switch (_p7.ctor) {
+				case 'All':
+					return imageList;
+				case 'Left':
+					return A2(
+						F2(
+							function (x, y) {
+								return {ctor: '::', _0: x, _1: y};
+							}),
+						bigImageConstructor(images.left),
+						imageList);
+				case 'Middle':
+					return A2(
+						F2(
+							function (x, y) {
+								return {ctor: '::', _0: x, _1: y};
+							}),
+						bigImageConstructor(images.middle),
+						imageList);
+				default:
+					return A2(
+						F2(
+							function (x, y) {
+								return {ctor: '::', _0: x, _1: y};
+							}),
+						bigImageConstructor(images.right),
+						imageList);
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('images'),
+				_1: {ctor: '[]'}
+			},
+			allImages);
+	});
+var _user$project$View$tictailHref = function (issue) {
+	return {
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$href(issue.actionButtonHref),
+		_1: {
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$target('_blank'),
+			_1: {ctor: '[]'}
+		}
+	};
+};
+var _user$project$View$actionButton = function (issue) {
+	return A2(
+		_elm_lang$html$Html$a,
+		_user$project$View$tictailHref(issue),
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('issue-content-action-button'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						_elm_lang$core$String$toUpper(issue.actionButtonText)),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$View$viewFromIssue = F4(
+	function (displayImage, imgHandler, closeHandler, issue) {
+		var closeButton = function () {
+			var _p8 = displayImage;
+			if (_p8.ctor === 'All') {
+				return A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('close-button'),
+						_1: {
+							ctor: '::',
+							_0: closeHandler,
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'});
+			} else {
+				return A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('minimize-button'),
+						_1: {
+							ctor: '::',
+							_0: imgHandler(_user$project$Model$All),
+							_1: {ctor: '[]'}
+						}
+					},
+					{ctor: '[]'});
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('issue-content'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: closeButton,
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('red-logo'),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h3,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('issue-number'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'VOLUME ',
+										A2(_elm_lang$core$Basics_ops['++'], issue.symbol, ':'))),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h3,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('issue-tagline'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										_elm_lang$core$String$toUpper(issue.tagline)),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A3(_user$project$View$issueImageView, issue.images, displayImage, imgHandler),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('issue-quote'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(issue.quote),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('issue-quote-credit'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text(
+													A2(
+														_elm_lang$core$Basics_ops['++'],
+														'From ',
+														A2(
+															_elm_lang$core$Basics_ops['++'],
+															issue.quoteStory,
+															A2(_elm_lang$core$Basics_ops['++'], ' by ', issue.quoteCredit)))),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _user$project$View$actionButton(issue),
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+	});
+var _user$project$View$viewSelectedIssue = function (model) {
+	var _p9 = model.expandedIssue;
+	switch (_p9.ctor) {
+		case 'About':
+			return _user$project$Issues_About$view(model);
+		case 'None':
+			return A2(
+				_elm_lang$html$Html$span,
+				{ctor: '[]'},
+				{ctor: '[]'});
+		default:
+			return A4(
+				_user$project$View$viewFromIssue,
+				model.displayImage,
+				function (displayImage) {
+					return _elm_lang$html$Html_Events$onClick(
+						_user$project$Update$ExpandImage(displayImage));
+				},
+				_user$project$View$closeHandler,
+				_user$project$Model$issueFromIssueType(_p9));
+	}
+};
+var _user$project$View$viewMenu = function (model) {
+	var issueMenuItems = A2(
+		_elm_lang$core$List$map,
+		_user$project$View$viewIssueMenuItem(model),
+		model.issues);
+	var aboutMenu = _user$project$View$viewAboutMenuItem(model);
+	return {ctor: '::', _0: aboutMenu, _1: issueMenuItems};
+};
+var _user$project$View$view = function (model) {
+	var _p10 = model.screen;
+	if (_p10.ctor === 'TooSmall') {
+		return _user$project$Mobile_View$view;
+	} else {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$id('wrapper'),
+				_1: {ctor: '[]'}
+			},
+			A2(
+				_elm_lang$core$List$append,
+				_user$project$View$viewMenu(model),
+				{
+					ctor: '::',
+					_0: _user$project$View$viewSelectedIssue(model),
+					_1: {ctor: '[]'}
+				}));
+	}
+};

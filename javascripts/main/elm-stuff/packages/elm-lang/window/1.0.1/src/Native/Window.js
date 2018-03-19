@@ -1,0 +1,1 @@
+var _elm_lang$window$Native_Window=function(){var e=_elm_lang$core$Native_Scheduler.nativeBinding(function(e){e(_elm_lang$core$Native_Scheduler.succeed({width:window.innerWidth,height:window.innerHeight}))});return{size:e}}();

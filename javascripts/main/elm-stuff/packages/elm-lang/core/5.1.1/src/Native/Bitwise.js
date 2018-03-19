@@ -1,0 +1,1 @@
+var _elm_lang$core$Native_Bitwise=function(){return{and:F2(function(n,t){return n&t}),or:F2(function(n,t){return n|t}),xor:F2(function(n,t){return n^t}),complement:function(n){return~n},shiftLeftBy:F2(function(n,t){return t<<n}),shiftRightBy:F2(function(n,t){return t>>n}),shiftRightZfBy:F2(function(n,t){return t>>>n})}}();

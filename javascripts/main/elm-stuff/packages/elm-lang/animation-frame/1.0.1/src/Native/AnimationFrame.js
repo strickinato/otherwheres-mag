@@ -1,0 +1,1 @@
+var _elm_lang$animation_frame$Native_AnimationFrame=function(){function n(){return _elm_lang$core$Native_Scheduler.nativeBinding(function(n){var e=requestAnimationFrame(function(){n(_elm_lang$core$Native_Scheduler.succeed(Date.now()))});return function(){cancelAnimationFrame(e)}})}return{create:n}}();

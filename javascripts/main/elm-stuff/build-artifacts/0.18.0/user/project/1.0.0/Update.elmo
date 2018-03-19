@@ -1,0 +1,116 @@
+var _user$project$Update$nextCurrentPhraseIndex = function (model) {
+	var newCurrentPhraseIndex = model.currentPhraseIndex + 1;
+	var length = _elm_lang$core$Array$length(model.phrases);
+	return A2(_elm_lang$core$Basics_ops['%'], newCurrentPhraseIndex, length);
+};
+var _user$project$Update$NoOp = {ctor: 'NoOp'};
+var _user$project$Update$AnimateClosing = function (a) {
+	return {ctor: 'AnimateClosing', _0: a};
+};
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'Tick':
+				var _p2 = _p0._0;
+				var _p1 = model.phraseAnimationState;
+				var elapsedTime = _p1.elapsedTime;
+				var prevClockTime = _p1.prevClockTime;
+				var newElapsedTime = elapsedTime + (_p2 - prevClockTime);
+				var newModel = (_elm_lang$core$Native_Utils.cmp(newElapsedTime, 1.5 * _elm_lang$core$Time$second) > 0) ? _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						currentPhraseIndex: _user$project$Update$nextCurrentPhraseIndex(model),
+						phraseAnimationState: {elapsedTime: 0, prevClockTime: _p2}
+					}) : _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						phraseAnimationState: {elapsedTime: newElapsedTime, prevClockTime: _p2}
+					});
+				return A2(_user$project$Util_ops['=>'], newModel, _elm_lang$core$Platform_Cmd$none);
+			case 'AnimateClosing':
+				var _p4 = _p0._0;
+				var newElapsedTime = function () {
+					var _p3 = model.closingAnimationState;
+					if (_p3.ctor === 'Nothing') {
+						return 0;
+					} else {
+						return _p3._0.elapsedTime + (_p4 - _p3._0.prevClockTime);
+					}
+				}();
+				return (_elm_lang$core$Native_Utils.cmp(newElapsedTime, _elm_lang$core$Time$second / 2.0) > 0) ? A2(
+					_user$project$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{expandedIssue: _user$project$Model$None, displayImage: _user$project$Model$All, closingAnimating: false, closingAnimationState: _elm_lang$core$Maybe$Nothing}),
+					_elm_lang$core$Platform_Cmd$none) : A2(
+					_user$project$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							closingAnimating: true,
+							closingAnimationState: _elm_lang$core$Maybe$Just(
+								{elapsedTime: newElapsedTime, prevClockTime: _p4})
+						}),
+					A2(_elm_lang$core$Task$perform, _user$project$Update$AnimateClosing, _elm_lang$core$Time$now));
+			case 'ExpandImage':
+				return A2(
+					_user$project$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{displayImage: _p0._0}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'ExpandIssue':
+				var _p5 = _p0._0;
+				if (_p5.ctor === 'None') {
+					return A2(
+						_user$project$Util_ops['=>'],
+						model,
+						A2(_elm_lang$core$Task$perform, _user$project$Update$AnimateClosing, _elm_lang$core$Time$now));
+				} else {
+					return A2(
+						_user$project$Util_ops['=>'],
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								expandedIssue: _p5,
+								currentPhraseIndex: 0,
+								phraseAnimationState: _user$project$Model$resetTime(model.phraseAnimationState)
+							}),
+						_elm_lang$core$Platform_Cmd$none);
+				}
+			case 'HoverIssue':
+				return A2(
+					_user$project$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{hoveredIssue: _p0._0}),
+					_elm_lang$core$Platform_Cmd$none);
+			case 'Viewport':
+				var _p6 = _p0._0.width;
+				var screenType = (_elm_lang$core$Native_Utils.cmp(_p6, 1250) > 0) ? _user$project$Model$Big : ((_elm_lang$core$Native_Utils.cmp(_p6, 1023) > 0) ? _user$project$Model$Medium : _user$project$Model$TooSmall);
+				return A2(
+					_user$project$Util_ops['=>'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{screen: screenType}),
+					_elm_lang$core$Platform_Cmd$none);
+			default:
+				return A2(_user$project$Util_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);
+		}
+	});
+var _user$project$Update$Tick = function (a) {
+	return {ctor: 'Tick', _0: a};
+};
+var _user$project$Update$Viewport = function (a) {
+	return {ctor: 'Viewport', _0: a};
+};
+var _user$project$Update$ExpandImage = function (a) {
+	return {ctor: 'ExpandImage', _0: a};
+};
+var _user$project$Update$HoverIssue = function (a) {
+	return {ctor: 'HoverIssue', _0: a};
+};
+var _user$project$Update$ExpandIssue = function (a) {
+	return {ctor: 'ExpandIssue', _0: a};
+};

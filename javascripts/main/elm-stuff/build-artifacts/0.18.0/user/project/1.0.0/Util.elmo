@@ -1,0 +1,15 @@
+var _user$project$Util_ops = _user$project$Util_ops || {};
+_user$project$Util_ops['?=='] = F2(
+	function (item, maybeItem) {
+		var _p0 = maybeItem;
+		if (_p0.ctor === 'Just') {
+			return _elm_lang$core$Native_Utils.eq(item, _p0._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Util_ops = _user$project$Util_ops || {};
+_user$project$Util_ops['=>'] = F2(
+	function (v0, v1) {
+		return {ctor: '_Tuple2', _0: v0, _1: v1};
+	});

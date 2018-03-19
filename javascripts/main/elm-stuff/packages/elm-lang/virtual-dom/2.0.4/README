@@ -1,0 +1,5 @@
+<h1 id="virtual-dom-for-elm">Virtual DOM for Elm</h1>
+
+<p>A virtual DOM implementation that backs Elm's core libraries for <a href="http://package.elm-lang.org/packages/elm-lang/html/latest/">HTML</a> and <a href="http://package.elm-lang.org/packages/elm-lang/svg/latest/">SVG</a>. You should almost certainly use those higher-level libraries directly.</p>
+
+<p>It is pretty fast! You can read about that <a href="http://elm-lang.org/blog/blazing-fast-html-round-two">here</a>.</p>

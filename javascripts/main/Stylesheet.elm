@@ -1,7 +1,6 @@
-module Stylesheet where
+module Stylesheet exposing (..)
 
 import Css exposing (..)
-
 import Html
 import Html.Attributes exposing (style)
 
@@ -22,11 +21,13 @@ wrapper =
         , backgroundColor black
         ]
 
+
 chatSection : Html.Attribute
 chatSection =
     styleDeclaration
         [ flex (int 2)
         ]
+
 
 inputSection : Html.Attribute
 inputSection =
@@ -37,4 +38,5 @@ inputSection =
 
 
 black : Color
-black = (rgb 0 0 0)
+black =
+    rgb 0 0 0
