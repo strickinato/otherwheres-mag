@@ -11,6 +11,8 @@ var _user$project$Issue$slug = function (issueType) {
 			return '#/volume-1-truth-or-fiction';
 		case 'About':
 			return '#/about';
+		case 'Featured':
+			return '#/featured';
 		default:
 			return ' ';
 	}
@@ -62,6 +64,7 @@ var _user$project$Issue$Selected = {ctor: 'Selected'};
 var _user$project$Issue$Hovered = {ctor: 'Hovered'};
 var _user$project$Issue$MenuItem = {ctor: 'MenuItem'};
 var _user$project$Issue$None = {ctor: 'None'};
+var _user$project$Issue$Featured = {ctor: 'Featured'};
 var _user$project$Issue$About = {ctor: 'About'};
 var _user$project$Issue$TruthOrFiction = {ctor: 'TruthOrFiction'};
 var _user$project$Issue$truthOrFiction = {
@@ -117,7 +120,9 @@ var _user$project$Issue$fromHash = function (hash) {
 		hash,
 		_user$project$Issue$slug(_user$project$Issue$TruthOrFiction)) ? _user$project$Issue$TruthOrFiction : (_elm_lang$core$Native_Utils.eq(
 		hash,
-		_user$project$Issue$slug(_user$project$Issue$About)) ? _user$project$Issue$About : _user$project$Issue$None))));
+		_user$project$Issue$slug(_user$project$Issue$About)) ? _user$project$Issue$About : (_elm_lang$core$Native_Utils.eq(
+		hash,
+		_user$project$Issue$slug(_user$project$Issue$Featured)) ? _user$project$Issue$Featured : _user$project$Issue$None)))));
 };
 var _user$project$Issue$fromLocation = function (_p1) {
 	var _p2 = _p1;

@@ -44,6 +44,9 @@ viewSelectedIssue model =
         About ->
             Issues.About.view model
 
+        Featured ->
+            span [] []
+
         None ->
             span [] []
 

@@ -96,22 +96,3 @@ var _user$project$Model$AnimationState = F2(
 var _user$project$Model$TooSmall = {ctor: 'TooSmall'};
 var _user$project$Model$Medium = {ctor: 'Medium'};
 var _user$project$Model$Big = {ctor: 'Big'};
-var _user$project$Model$init = function (location) {
-	return {
-		issues: _user$project$Issue$allIssues,
-		expandedIssue: _user$project$Issue$fromLocation(location),
-		hoveredIssue: _user$project$Issue$None,
-		phraseAnimationState: _user$project$Model$initialAnimation,
-		currentPhraseIndex: 0,
-		phrases: _user$project$Model$otherwheresPhrases,
-		closingAnimating: false,
-		closingAnimationState: _elm_lang$core$Maybe$Nothing,
-		displayImage: _user$project$Issue$All,
-		history: {
-			ctor: '::',
-			_0: location,
-			_1: {ctor: '[]'}
-		},
-		screen: _user$project$Model$Big
-	};
-};

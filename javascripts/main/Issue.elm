@@ -54,6 +54,7 @@ type SpecificIssue
     | Travel
     | TruthOrFiction
     | About
+    | Featured
     | None
 
 
@@ -69,6 +70,8 @@ fromHash hash =
         TruthOrFiction
     else if hash == slug About then
         About
+    else if hash == slug Featured then
+        Featured
     else
         None
 
@@ -127,6 +130,9 @@ slug issueType =
 
         About ->
             "#/about"
+
+        Featured ->
+            "#/featured"
 
         None ->
             " "

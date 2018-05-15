@@ -1,4 +1,4 @@
-module Update exposing (..)
+port module Update exposing (..)
 
 import Array
 import Issue exposing (DisplayImage(..), SpecificIssue(..))
@@ -19,6 +19,7 @@ type Msg
     | Tick Time
     | SetClosing Time
     | UrlChanged Navigation.Location
+    | OpenGallery
     | NoOp
 
 
@@ -70,13 +71,27 @@ update msg model =
                 => Cmd.none
 
         UrlChanged location ->
+            let
+                commands =
+                    [ Task.perform ExpandIssue (Task.succeed <| Issue.fromLocation location)
+                    , case Issue.fromLocation location of
+                        Featured ->
+                            openGallery ()
+
+                        _ ->
+                            closeGallery ()
+                    ]
+            in
             ( { model | history = location :: model.history }
-            , Task.perform ExpandIssue (Task.succeed <| Issue.fromLocation location)
+            , Cmd.batch commands
             )
 
         GoTo specificIssue ->
             {- This is simply used to change the URL, and ChangeUrl listens -}
             ( model, Navigation.newUrl <| Issue.slug specificIssue )
+
+        OpenGallery ->
+            ( model, openGallery () )
 
         NoOp ->
             model => Cmd.none
@@ -152,3 +167,9 @@ advanceClosingAnimation time model =
         |> Maybe.map (advanceAnimation time (second / 2.0))
         |> Maybe.map updater
         |> Maybe.withDefault model
+
+
+port openGallery : () -> Cmd msg
+
+
+port closeGallery : () -> Cmd msg

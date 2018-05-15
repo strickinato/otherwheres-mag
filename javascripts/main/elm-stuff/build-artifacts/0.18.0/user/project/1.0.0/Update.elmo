@@ -69,7 +69,18 @@ var _user$project$Update$resetPhrases = function (model) {
 			phraseAnimationState: _user$project$Model$resetTime(model.phraseAnimationState)
 		});
 };
+var _user$project$Update$openGallery = _elm_lang$core$Native_Platform.outgoingPort(
+	'openGallery',
+	function (v) {
+		return null;
+	});
+var _user$project$Update$closeGallery = _elm_lang$core$Native_Platform.outgoingPort(
+	'closeGallery',
+	function (v) {
+		return null;
+	});
 var _user$project$Update$NoOp = {ctor: 'NoOp'};
+var _user$project$Update$OpenGallery = {ctor: 'OpenGallery'};
 var _user$project$Update$UrlChanged = function (a) {
 	return {ctor: 'UrlChanged', _0: a};
 };
@@ -159,19 +170,37 @@ var _user$project$Update$update = F2(
 						{screen: screenType}),
 					_elm_lang$core$Platform_Cmd$none);
 			case 'UrlChanged':
-				var _p8 = _p4._0;
+				var _p9 = _p4._0;
+				var commands = {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$core$Task$perform,
+						_user$project$Update$ExpandIssue,
+						_elm_lang$core$Task$succeed(
+							_user$project$Issue$fromLocation(_p9))),
+					_1: {
+						ctor: '::',
+						_0: function () {
+							var _p8 = _user$project$Issue$fromLocation(_p9);
+							if (_p8.ctor === 'Featured') {
+								return _user$project$Update$openGallery(
+									{ctor: '_Tuple0'});
+							} else {
+								return _user$project$Update$closeGallery(
+									{ctor: '_Tuple0'});
+							}
+						}(),
+						_1: {ctor: '[]'}
+					}
+				};
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							history: {ctor: '::', _0: _p8, _1: model.history}
+							history: {ctor: '::', _0: _p9, _1: model.history}
 						}),
-					_1: A2(
-						_elm_lang$core$Task$perform,
-						_user$project$Update$ExpandIssue,
-						_elm_lang$core$Task$succeed(
-							_user$project$Issue$fromLocation(_p8)))
+					_1: _elm_lang$core$Platform_Cmd$batch(commands)
 				};
 			case 'GoTo':
 				return {
@@ -179,6 +208,13 @@ var _user$project$Update$update = F2(
 					_0: model,
 					_1: _elm_lang$navigation$Navigation$newUrl(
 						_user$project$Issue$slug(_p4._0))
+				};
+			case 'OpenGallery':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$Update$openGallery(
+						{ctor: '_Tuple0'})
 				};
 			default:
 				return A2(_user$project$Util_ops['=>'], model, _elm_lang$core$Platform_Cmd$none);

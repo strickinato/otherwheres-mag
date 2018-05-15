@@ -1,4 +1,35 @@
-var _user$project$Main$subscriptions = function (_p0) {
+var _user$project$Main$init = function (location) {
+	return {
+		ctor: '_Tuple2',
+		_0: {
+			issues: _user$project$Issue$allIssues,
+			expandedIssue: _user$project$Issue$fromLocation(location),
+			hoveredIssue: _user$project$Issue$None,
+			phraseAnimationState: _user$project$Model$initialAnimation,
+			currentPhraseIndex: 0,
+			phrases: _user$project$Model$otherwheresPhrases,
+			closingAnimating: false,
+			closingAnimationState: _elm_lang$core$Maybe$Nothing,
+			displayImage: _user$project$Issue$All,
+			history: {
+				ctor: '::',
+				_0: location,
+				_1: {ctor: '[]'}
+			},
+			screen: _user$project$Model$Big
+		},
+		_1: function () {
+			var _p0 = _user$project$Issue$fromLocation(location);
+			if (_p0.ctor === 'Featured') {
+				return _user$project$Update$openGallery(
+					{ctor: '_Tuple0'});
+			} else {
+				return _elm_lang$core$Platform_Cmd$none;
+			}
+		}()
+	};
+};
+var _user$project$Main$subscriptions = function (_p1) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
@@ -13,15 +44,4 @@ var _user$project$Main$subscriptions = function (_p0) {
 var _user$project$Main$main = A2(
 	_elm_lang$navigation$Navigation$program,
 	_user$project$Update$UrlChanged,
-	{
-		init: function (a) {
-			return {
-				ctor: '_Tuple2',
-				_0: _user$project$Model$init(a),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		},
-		update: _user$project$Update$update,
-		view: _user$project$View$view,
-		subscriptions: _user$project$Main$subscriptions
-	})();
+	{init: _user$project$Main$init, update: _user$project$Update$update, view: _user$project$View$view, subscriptions: _user$project$Main$subscriptions})();

@@ -776,6 +776,11 @@ var _user$project$View$viewSelectedIssue = function (model) {
 	switch (_p9.ctor) {
 		case 'About':
 			return _user$project$Issues_About$view(model);
+		case 'Featured':
+			return A2(
+				_elm_lang$html$Html$span,
+				{ctor: '[]'},
+				{ctor: '[]'});
 		case 'None':
 			return A2(
 				_elm_lang$html$Html$span,

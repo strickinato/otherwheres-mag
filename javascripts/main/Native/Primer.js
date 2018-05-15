@@ -1,1 +1,0 @@
-Elm.Native.Primer=Elm.Native.Primer||{},Elm.Native.Primer.make=function(e){if(e.Native=e.Native||{},e.Native.Primer=e.Native.Primer||{},e.Native.Primer.values)return e.Native.Primer.values;Elm.Native.Signal.make(e);return e.Native.Primer.values={prime:function(i){return setTimeout(function(){e.notify(i.id,i.value)},1),i}}};
