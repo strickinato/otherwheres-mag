@@ -38,22 +38,6 @@ midScreen model =
             False
 
 
-init : Navigation.Location -> Model
-init location =
-    { issues = allIssues
-    , expandedIssue = Issue.fromLocation location
-    , hoveredIssue = None
-    , phraseAnimationState = initialAnimation
-    , currentPhraseIndex = 0
-    , phrases = otherwheresPhrases
-    , closingAnimating = False
-    , closingAnimationState = Nothing
-    , displayImage = All
-    , history = [ location ]
-    , screen = Big
-    }
-
-
 type alias AnimationState =
     { prevClockTime : Time
     , elapsedTime : Time
